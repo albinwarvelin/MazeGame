@@ -18,7 +18,8 @@ namespace MazeGame
         static Level level; //Games level
 
         static Texture2D tileTexture;
-        static Texture2D dividerTexture;
+        static Texture2D hDivTexture;
+        static Texture2D vDivTexture;
 
         public static void Initialize()
         {
@@ -28,6 +29,8 @@ namespace MazeGame
         public static void LoadContent(ContentManager content, GameWindow window)
         {
             tileTexture = content.Load<Texture2D>("assets/level/grassTexture");
+            hDivTexture = content.Load<Texture2D>("assets/level/horizontalHedge");
+            vDivTexture = content.Load<Texture2D>("assets/level/verticalHedge");
         }
 
         public static State MenuUpdate() //Updates menu state
@@ -52,7 +55,7 @@ namespace MazeGame
 
         public static State Reset(GameWindow window) //Resets level then sets state to run
         {
-            level = new Level(tileTexture, dividerTexture, 5, window, 0, 0);
+            level = new Level(tileTexture, hDivTexture, vDivTexture, 5, window, 0, 0); //TODO change speed to player speed
 
             return State.Run;
         }

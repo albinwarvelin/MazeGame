@@ -20,7 +20,8 @@ namespace MazeGame.Classes
         /// <param name="size"></param>
         public Level(Texture2D tileTexture, Texture2D hDivTexture, Texture2D vDivTexture, int size, GameWindow window, double x_Speed, double y_Speed) : base(tileTexture, 0, 0, x_Speed, y_Speed) //Position Overwritten in level initialization
         {
-            Random rnd = new Random();
+            Random rnd = new Random(); //Used throughout method
+
             startTile = new Vector2((int)(rnd.Next() * 4 + (size / 2 - 2)), (int)(rnd.Next() * 4 + (size / 2 - 2)));
 
             int x_Start = (int)((window.ClientBounds.Width / 2) + 150 - (startTile.X * 300));
@@ -96,6 +97,39 @@ namespace MazeGame.Classes
 
 
                     tiles[y, x].Neighbors = temp;
+                }
+            }
+
+            /* Generates level */
+            List<Tile> neighbors = new List<Tile>();
+            for(int i = 0; i < 3; i++) //First neighbors, initializes generation
+            {
+                Tile currentTile = tiles[(int)startTile.Y, (int)startTile.X];
+                neighbors.Add(currentTile.Neighbors[i]);
+                switch (i)
+                {
+                    case 0:
+                        currentTile.Neighbors[i].OriginTile.Add(currentTile);
+                        break;
+                    case 1:
+                        currentTile.Neighbors[i].OriginTile.Add(currentTile);
+                        break;
+                    case 2:
+                        currentTile.Neighbors[i].OriginTile.Add(currentTile);
+                        break;
+                    case 3:
+                        currentTile.Neighbors[i].OriginTile.Add(currentTile);
+                        break;
+                }
+            }
+
+            while (neighbors.Count != 0)
+            {
+                Tile currentTile = neighbors[rnd.Next(0, neighbors.Count)];
+
+                if(!currentTile.BeenChecked)
+                {
+
                 }
             }
         }
