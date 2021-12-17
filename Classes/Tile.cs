@@ -15,8 +15,8 @@ namespace MazeGame.Classes
         List<Tile> originTile = new List<Tile>(); 
 
         protected bool beenChecked = false;
-        protected TileDivider hDiv;
-        protected TileDivider vDiv;
+        protected TileDivider hDiv; //Top
+        protected TileDivider vDiv; //Left
 
         protected Tile[] neighbors; //0 = Top, 1 = Right, 2 = Left, 3 = Bottom
 

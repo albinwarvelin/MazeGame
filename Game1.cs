@@ -52,7 +52,33 @@ namespace MazeGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            switch (GameElements.currentState)
+            {
+                case GameElements.State.Menu:
+                    GameElements.MenuUpdate();
+                    break;
+                case GameElements.State.HighScore:
+                    GameElements.HighScoreUpdate();
+                    break;
+                case GameElements.State.Reset:
+                    GameElements.Reset(Window);
+                    break;
+                case GameElements.State.Run:
+                    GameElements.RunUpdate();
+                    break;
+                case GameElements.State.Paused:
+                    GameElements.PausedUpdate();
+                    break;
+                case GameElements.State.Cleared:
+                    GameElements.ClearedUpdate();
+                    break;
+                case GameElements.State.Failed:
+                    GameElements.FailedUpdate();
+                    break;
+                case GameElements.State.Quit:
+                    this.Exit();
+                    break;
+            }
 
             base.Update(gameTime);
         }
@@ -88,9 +114,6 @@ namespace MazeGame
                     break;
                 case GameElements.State.Failed:
                     GameElements.FailedDraw(_spriteBatch);
-                    break;
-                case GameElements.State.Quit:
-                    this.Exit();
                     break;
             }
 

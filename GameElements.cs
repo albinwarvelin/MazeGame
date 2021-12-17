@@ -67,7 +67,7 @@ namespace MazeGame
 
         public static void RunDraw(SpriteBatch spriteBatch) //Draws run
         {
-
+            level.Draw(spriteBatch);
         }
 
         public static State PausedUpdate() //Updates paused
