@@ -26,6 +26,6 @@ namespace MazeGame.Classes
         {
             speed.X = (float)x_Speed;
             speed.Y = (float)y_Speed;
-        }
+        }       
     }
 }

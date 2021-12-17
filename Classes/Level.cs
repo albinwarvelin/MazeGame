@@ -10,6 +10,7 @@ namespace MazeGame.Classes
     class Level : MovingObject
     {
         protected Tile[,] tiles; //Two dimensional array
+        protected int size;
 
         /// <summary>
         /// Generates new random level. Size shall not be less than 4.
@@ -17,8 +18,9 @@ namespace MazeGame.Classes
         /// <param name="tileTexture"></param>
         /// <param name="dividerTexture"></param>
         /// <param name="size"></param>
-        public Level(Texture2D tileTexture, Texture2D hDivTexture, Texture2D vDivTexture, int size, GameWindow window, double x_Speed, double y_Speed) : base(tileTexture, 0, 0, x_Speed, y_Speed) //Position Overwritten in level initialization
+        public Level(Texture2D tileTexture, Texture2D hDivTexture, Texture2D vDivTexture, int size, GameWindow window, double x_Speed, double y_Speed) : base(null, 0, 0, x_Speed, y_Speed) //Position Overwritten in level initialization
         {
+            this.size = size;
             Random rnd = new Random(); //Used throughout method
 
             Vector2 startTile = new Vector2((int)(rnd.NextDouble() * 4 + (size / 2 - 2)), (int)(rnd.NextDouble() * 4 + (size / 2 - 2))); //Start tile position
@@ -32,7 +34,7 @@ namespace MazeGame.Classes
             {
                 for(int x = 0; x < size; x++)
                 {
-                    tiles[y, x] = new Tile(tileTexture, hDivTexture, vDivTexture, x_Start + (x * 300), y_Start + (y * 300), 0, 0);
+                    tiles[y, x] = new Tile(tileTexture, hDivTexture, vDivTexture, x_Start + (x * 300), y_Start + (y * 300), x_Speed, y_Speed);
                 }
             }
 
@@ -105,8 +107,11 @@ namespace MazeGame.Classes
             for (int i = 0; i < 4; i++)
             {
                 Tile targetTile = tiles[(int)startTile.Y, (int)startTile.X];
-                neighbors.Add(targetTile.Neighbors[i]);
-                targetTile.Neighbors[i].OriginTile.Add(targetTile);
+                if(targetTile.Neighbors[i] != null)
+                {
+                    neighbors.Add(targetTile.Neighbors[i]);
+                    targetTile.Neighbors[i].OriginTile.Add(targetTile);
+                }
             }
 
             /* Random generation */
@@ -137,24 +142,53 @@ namespace MazeGame.Classes
 
                     for(int i = 0; i < 4; i++)
                     {
-                        neighbors.Add(targetTile.Neighbors[i]); //Adds neighbors to list
-                        targetTile.Neighbors[i].OriginTile.Add(targetTile); //Adds origin tile to neighbor
+                        if (targetTile.Neighbors[i] != null)
+                        {
+                            neighbors.Add(targetTile.Neighbors[i]); //Adds neighbors to list
+                            targetTile.Neighbors[i].OriginTile.Add(targetTile); //Adds origin tile to neighbor
+                        }
                     }
 
                     targetTile.BeenChecked = true;
-
-                    neighbors.Remove(targetTile);
                 }
+
+                neighbors.Remove(targetTile);
             }
         }
 
         public void Update()
         {
-            foreach(Tile tile in tiles)
+            /*==========Temporary controls==========*/
+            KeyboardState keyboardInput = Keyboard.GetState();
+            if (keyboardInput.IsKeyDown(Keys.A))
+            {
+                position.X += speed.X;
+            }
+            if (keyboardInput.IsKeyDown(Keys.W))
+            {
+                position.Y += speed.Y;
+            }
+            if (keyboardInput.IsKeyDown(Keys.S))
+            {
+                position.Y -= speed.Y;
+            }
+            if (keyboardInput.IsKeyDown(Keys.D))
+            {
+                position.X -= speed.X;
+            }
+            /*======================================*/
+
+            foreach (Tile tile in tiles)
             {
                 tile.Update();
-                tile.HDiv.Update();
-                tile.VDiv.Update();
+                if (tile.HDiv != null)
+                {
+                    tile.HDiv.Update();
+                }
+                if (tile.VDiv != null)
+                {
+                    tile.VDiv.Update();
+                }
             }
         }
 
@@ -165,15 +199,21 @@ namespace MazeGame.Classes
                 tile.Draw(spriteBatch);
             }
 
-            foreach(Tile tile in tiles)
+            for(int y = 0; y < size; y++)
             {
-                if(tile.VDiv != null)
+                for(int x = 0; x < size; x++)
                 {
-                    tile.VDiv.Draw(spriteBatch);
+                    if(tiles[y, x].VDiv != null)
+                    {
+                        tiles[y, x].VDiv.Draw(spriteBatch);
+                    }
                 }
-                if(tile.HDiv != null)
+                for (int x = 0; x < size; x++)
                 {
-                    tile.HDiv.Draw(spriteBatch);
+                    if (tiles[y, x].HDiv != null)
+                    {
+                        tiles[y, x].HDiv.Draw(spriteBatch);
+                    }
                 }
             }
         }

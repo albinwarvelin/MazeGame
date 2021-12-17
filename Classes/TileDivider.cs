@@ -23,6 +23,26 @@ namespace MazeGame.Classes
 
         public void Update()
         {
+            /*==========Temporary controls==========*/
+            KeyboardState keyboardInput = Keyboard.GetState();
+            if (keyboardInput.IsKeyDown(Keys.A))
+            {
+                position.X += speed.X;
+            }
+            if (keyboardInput.IsKeyDown(Keys.W))
+            {
+                position.Y += speed.Y;
+            }
+            if (keyboardInput.IsKeyDown(Keys.S))
+            {
+                position.Y -= speed.Y;
+            }
+            if (keyboardInput.IsKeyDown(Keys.D))
+            {
+                position.X -= speed.X;
+            }
+            /*======================================*/
+
             //Add logic to update when player moves
         }
     }

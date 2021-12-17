@@ -24,8 +24,8 @@ namespace MazeGame
         /// </summary>
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferWidth = 1280; //Window width
-            _graphics.PreferredBackBufferHeight = 720; //Window height
+            _graphics.PreferredBackBufferWidth = 1920; //Window width
+            _graphics.PreferredBackBufferHeight = 1080; //Window height
             _graphics.ApplyChanges();
 
             GameElements.currentState = GameElements.State.Reset;
@@ -55,25 +55,25 @@ namespace MazeGame
             switch (GameElements.currentState)
             {
                 case GameElements.State.Menu:
-                    GameElements.MenuUpdate();
+                    GameElements.currentState = GameElements.MenuUpdate();
                     break;
                 case GameElements.State.HighScore:
-                    GameElements.HighScoreUpdate();
+                    GameElements.currentState = GameElements.HighScoreUpdate();
                     break;
                 case GameElements.State.Reset:
-                    GameElements.Reset(Window);
+                    GameElements.currentState = GameElements.Reset(Window);
                     break;
                 case GameElements.State.Run:
-                    GameElements.RunUpdate();
+                    GameElements.currentState = GameElements.RunUpdate();
                     break;
                 case GameElements.State.Paused:
-                    GameElements.PausedUpdate();
+                    GameElements.currentState = GameElements.PausedUpdate();
                     break;
                 case GameElements.State.Cleared:
-                    GameElements.ClearedUpdate();
+                    GameElements.currentState = GameElements.ClearedUpdate();
                     break;
                 case GameElements.State.Failed:
-                    GameElements.FailedUpdate();
+                    GameElements.currentState = GameElements.FailedUpdate();
                     break;
                 case GameElements.State.Quit:
                     this.Exit();
