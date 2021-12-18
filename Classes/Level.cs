@@ -23,10 +23,10 @@ namespace MazeGame.Classes
             this.size = size;
             Random rnd = new Random(); //Used throughout method
 
-            Vector2 startTile = new Vector2((int)(rnd.NextDouble() * 4 + (size / 2 - 2)), (int)(rnd.NextDouble() * 4 + (size / 2 - 2))); //Start tile position
+            Vector2 startTilePos = new Vector2((int)(rnd.NextDouble() * 4 + (size / 2 - 2)), (int)(rnd.NextDouble() * 4 + (size / 2 - 2))); //Start tile position
 
-            int x_Start = (int)((window.ClientBounds.Width / 2) + 150 - (startTile.X * 300));
-            int y_Start = (int)((window.ClientBounds.Height / 2) + 150 - (startTile.Y * 300));
+            int x_Start = (int)((window.ClientBounds.Width / 2) + 150 - (startTilePos.X * 300));
+            int y_Start = (int)((window.ClientBounds.Height / 2) + 150 - (startTilePos.Y * 300));
             tiles = new Tile[size, size];
 
             /* Assigns tiles to all values in tiles array */
@@ -101,58 +101,210 @@ namespace MazeGame.Classes
                 }
             }
 
+
+            ///* Generates first tile and it's neighbors */
+            //List<Tile> neighbors = new List<Tile>();
+            //tiles[(int)startTilePos.Y, (int)startTilePos.X].BeenChecked = true;
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    Tile targetTile = tiles[(int)startTilePos.Y, (int)startTilePos.X];
+            //    if (targetTile.Neighbors[i] != null)
+            //    {
+            //        neighbors.Add(targetTile.Neighbors[i]);
+            //        targetTile.Neighbors[i].OriginTile.Add(targetTile);
+            //    }
+            //}
+
+            ///* Random generation */
+            //while (neighbors.Count != 0)
+            //{
+            //    Tile targetTile = neighbors[rnd.Next(0, neighbors.Count)];
+
+            //    if (!targetTile.BeenChecked)
+            //    {
+            //        Tile originTile = targetTile.OriginTile[rnd.Next(0, targetTile.OriginTile.Count)];
+
+            //        if (targetTile.Neighbors[0] == originTile) //Top
+            //        {
+            //            targetTile.HDiv = null; //Removes top divider of current tile
+            //        }
+            //        else if (targetTile.Neighbors[1] == originTile) //Right
+            //        {
+            //            originTile.VDiv = null; //Removes left divider of origin tile
+            //        }
+            //        else if (targetTile.Neighbors[2] == originTile) //Left
+            //        {
+            //            targetTile.VDiv = null; //Removes left divider of current tile
+            //        }
+            //        else if (targetTile.Neighbors[3] == originTile) //Bottom
+            //        {
+            //            originTile.HDiv = null; //Removes top divider of origin tile
+            //        }
+
+            //        for (int i = 0; i < 4; i++)
+            //        {
+            //            if (targetTile.Neighbors[i] != null)
+            //            {
+            //                neighbors.Add(targetTile.Neighbors[i]); //Adds neighbors to list
+            //                targetTile.Neighbors[i].OriginTile.Add(targetTile); //Adds origin tile to neighbor
+            //            }
+            //        }
+
+            //        targetTile.BeenChecked = true;
+            //    }
+
+            //    neighbors.Remove(targetTile);
+            //}
+
+
             /* Generates first tile and it's neighbors */
-            List<Tile> neighbors = new List<Tile>();
-            tiles[(int)startTile.Y, (int)startTile.X].BeenChecked = true;
+            List<Tile> straightNeighbors = new List<Tile>();
+            List<Tile> rightNeighbors = new List<Tile>();
+            List<Tile> leftNeighbors = new List<Tile>();
+            double straightChance = 0.10;
+            double leftChance = 0.45;
+
+            Tile startTile = tiles[(int)startTilePos.Y, (int)startTilePos.X];
+            startTile.BeenChecked = true;
+
+            straightNeighbors.Add(startTile.Neighbors[0]);
+            straightNeighbors.Add(startTile.Neighbors[3]); //Put in straight neighbors, only "back-neighbor" to be added to list
+            rightNeighbors.Add(startTile.Neighbors[1]);
+            leftNeighbors.Add(startTile.Neighbors[2]);
+
             for (int i = 0; i < 4; i++)
             {
-                Tile targetTile = tiles[(int)startTile.Y, (int)startTile.X];
-                if(targetTile.Neighbors[i] != null)
-                {
-                    neighbors.Add(targetTile.Neighbors[i]);
-                    targetTile.Neighbors[i].OriginTile.Add(targetTile);
-                }
+                startTile.Neighbors[i].OriginTile.Add(startTile);
             }
 
             /* Random generation */
-            while (neighbors.Count != 0)
+            while (straightNeighbors.Count + rightNeighbors.Count + leftNeighbors.Count != 0)
             {
-                Tile targetTile = neighbors[rnd.Next(0, neighbors.Count)];
+                double rndDouble = rnd.NextDouble();
+                Tile targetTile;
 
-                if(!targetTile.BeenChecked)
+                if (rndDouble < straightChance)
+                {
+                    if (straightNeighbors.Count != 0)
+                    {
+                        targetTile = straightNeighbors[rnd.Next(0, straightNeighbors.Count)];
+                        straightNeighbors.Remove(targetTile);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                else if (rndDouble < straightChance + leftChance)
+                {
+                    if (leftNeighbors.Count != 0)
+                    {
+                        targetTile = leftNeighbors[rnd.Next(0, leftNeighbors.Count)];
+                        leftNeighbors.Remove(targetTile);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    if (rightNeighbors.Count != 0)
+                    {
+                        targetTile = rightNeighbors[rnd.Next(0, rightNeighbors.Count)];
+                        rightNeighbors.Remove(targetTile);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+
+                if (!targetTile.BeenChecked)
                 {
                     Tile originTile = targetTile.OriginTile[rnd.Next(0, targetTile.OriginTile.Count)];
 
                     if (targetTile.Neighbors[0] == originTile) //Top
                     {
                         targetTile.HDiv = null; //Removes top divider of current tile
+
+                        if (targetTile.Neighbors[3] != null) //Adds straight neighbor
+                        {
+                            straightNeighbors.Add(targetTile.Neighbors[3]);
+                        }
+                        if (targetTile.Neighbors[1] != null) //Adds left neighbor
+                        {
+                            leftNeighbors.Add(targetTile.Neighbors[1]);
+                        }
+                        if (targetTile.Neighbors[2] != null) //Adds right neighbor
+                        {
+                            rightNeighbors.Add(targetTile.Neighbors[2]);
+                        }
                     }
                     else if (targetTile.Neighbors[1] == originTile) //Right
                     {
                         originTile.VDiv = null; //Removes left divider of origin tile
+
+                        if (targetTile.Neighbors[2] != null) //Adds straight neighbor
+                        {
+                            straightNeighbors.Add(targetTile.Neighbors[2]);
+                        }
+                        if (targetTile.Neighbors[3] != null) //Adds left neighbor
+                        {
+                            leftNeighbors.Add(targetTile.Neighbors[3]);
+                        }
+                        if (targetTile.Neighbors[0] != null) //Adds right neighbor
+                        {
+                            rightNeighbors.Add(targetTile.Neighbors[0]);
+                        }
                     }
                     else if (targetTile.Neighbors[2] == originTile) //Left
                     {
                         targetTile.VDiv = null; //Removes left divider of current tile
+
+                        if (targetTile.Neighbors[1] != null) //Adds straight neighbor
+                        {
+                            straightNeighbors.Add(targetTile.Neighbors[1]);
+                        }
+                        if (targetTile.Neighbors[0] != null) //Adds left neighbor
+                        {
+                            leftNeighbors.Add(targetTile.Neighbors[0]);
+                        }
+                        if (targetTile.Neighbors[3] != null) //Adds right neighbor
+                        {
+                            rightNeighbors.Add(targetTile.Neighbors[3]);
+                        }
                     }
                     else if (targetTile.Neighbors[3] == originTile) //Bottom
                     {
                         originTile.HDiv = null; //Removes top divider of origin tile
+
+                        if (targetTile.Neighbors[0] != null) //Adds straight neighbor
+                        {
+                            straightNeighbors.Add(targetTile.Neighbors[0]);
+                        }
+                        if (targetTile.Neighbors[2] != null) //Adds left neighbor
+                        {
+                            leftNeighbors.Add(targetTile.Neighbors[2]);
+                        }
+                        if (targetTile.Neighbors[1] != null) //Adds right neighbor
+                        {
+                            rightNeighbors.Add(targetTile.Neighbors[1]);
+                        }
                     }
 
-                    for(int i = 0; i < 4; i++)
+                    for (int i = 0; i < 4; i++)
                     {
                         if (targetTile.Neighbors[i] != null)
                         {
-                            neighbors.Add(targetTile.Neighbors[i]); //Adds neighbors to list
                             targetTile.Neighbors[i].OriginTile.Add(targetTile); //Adds origin tile to neighbor
                         }
                     }
 
+
+
                     targetTile.BeenChecked = true;
                 }
-
-                neighbors.Remove(targetTile);
             }
         }
 
