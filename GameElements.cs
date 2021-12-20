@@ -17,9 +17,9 @@ namespace MazeGame
 
         static Level level; //Games level
 
-        static Texture2D tileTexture;
-        static Texture2D hDivTexture;
-        static Texture2D vDivTexture;
+        static Texture2D[] tileTextures = new Texture2D[9];
+        static Texture2D[] hDivTextures = new Texture2D[4];
+        static Texture2D[] vDivTextures = new Texture2D[4];
 
         public static void Initialize()
         {
@@ -28,9 +28,23 @@ namespace MazeGame
 
         public static void LoadContent(ContentManager content, GameWindow window)
         {
-            tileTexture = content.Load<Texture2D>("assets/level/grassTexture");
-            hDivTexture = content.Load<Texture2D>("assets/level/horizontalHedge");
-            vDivTexture = content.Load<Texture2D>("assets/level/verticalHedge");
+            tileTextures[0] = content.Load<Texture2D>("assets/level/grassTexture1");
+            tileTextures[1] = content.Load<Texture2D>("assets/level/grassTexture2");
+            tileTextures[2] = content.Load<Texture2D>("assets/level/grassTexture3");
+            tileTextures[3] = content.Load<Texture2D>("assets/level/grassTexture4");
+            tileTextures[4] = content.Load<Texture2D>("assets/level/grassTexture5");
+            tileTextures[5] = content.Load<Texture2D>("assets/level/grassTexture6");
+            tileTextures[6] = content.Load<Texture2D>("assets/level/grassTexture7");
+            tileTextures[7] = content.Load<Texture2D>("assets/level/grassTexture8");
+            tileTextures[8] = content.Load<Texture2D>("assets/level/grassTexture9");
+            hDivTextures[0] = content.Load<Texture2D>("assets/level/horizontalHedge1");
+            hDivTextures[1] = content.Load<Texture2D>("assets/level/horizontalHedge2");
+            hDivTextures[2] = content.Load<Texture2D>("assets/level/horizontalHedge3");
+            hDivTextures[3] = content.Load<Texture2D>("assets/level/horizontalHedge4");
+            vDivTextures[0] = content.Load<Texture2D>("assets/level/verticalHedge1");
+            vDivTextures[1] = content.Load<Texture2D>("assets/level/verticalHedge2");
+            vDivTextures[2] = content.Load<Texture2D>("assets/level/verticalHedge3");
+            vDivTextures[3] = content.Load<Texture2D>("assets/level/verticalHedge4");
         }
 
         public static State MenuUpdate() //Updates menu state
@@ -55,7 +69,7 @@ namespace MazeGame
 
         public static State Reset(GameWindow window) //Resets level then sets state to run
         {
-            level = new Level(tileTexture, hDivTexture, vDivTexture, 100, window, 10, 10); //TODO change speed to player speed
+            level = new Level(tileTextures, hDivTextures, vDivTextures, 10, window, 10, 10); //TODO change speed to player speed
 
             return State.Run;
         }

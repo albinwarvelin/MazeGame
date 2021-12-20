@@ -14,9 +14,13 @@ namespace MazeGame.Classes
         When removing a wall, a random direction is chosen. */
         List<Tile> originTile = new List<Tile>(); 
 
+        public enum TileType { Standard, Right, Bottom, Corner }
+
         protected bool beenChecked = false;
         protected TileDivider hDiv; //Top
         protected TileDivider vDiv; //Left
+        protected TileDivider rDiv; //Right, only used for right side tiles
+        protected TileDivider bDiv; //Bottom, only used for bottom tiles
 
         protected Tile[] neighbors; //0 = Top, 1 = Right, 2 = Left, 3 = Bottom
 
@@ -30,10 +34,25 @@ namespace MazeGame.Classes
         /// <param name="y_Pos"></param>
         /// <param name="x_Speed"></param>
         /// <param name="y_Speed"></param>
-        public Tile(Texture2D tileTexture, Texture2D hDivTexture, Texture2D vDivTexture, double x_Pos, double y_Pos, double x_Speed, double y_Speed):base(tileTexture, x_Pos, y_Pos, x_Speed, y_Speed)
+        public Tile(Texture2D tileTexture, Texture2D hDivTexture, Texture2D vDivTexture, TileType tileType, double x_Pos, double y_Pos, double x_Speed, double y_Speed):base(tileTexture, x_Pos, y_Pos, x_Speed, y_Speed)
         {
             hDiv = new TileDivider(hDivTexture, x_Pos, y_Pos - 25, x_Speed, y_Speed);
             vDiv = new TileDivider(vDivTexture, x_Pos - 25, y_Pos, x_Speed, y_Speed);
+
+            switch (tileType)
+            {
+                case TileType.Right:
+                    rDiv = new TileDivider(vDivTexture, x_Pos + 275, y_Pos, x_Speed, y_Speed);
+                    break;
+                case TileType.Bottom:
+                    bDiv = new TileDivider(hDivTexture, x_Pos, y_Pos + 275, x_Speed, y_Speed);
+                    break;
+                case TileType.Corner:
+                    rDiv = new TileDivider(vDivTexture, x_Pos + 275, y_Pos, x_Speed, y_Speed);
+                    bDiv = new TileDivider(hDivTexture, x_Pos, y_Pos + 275, x_Speed, y_Speed);
+                    break;
+            }
+            
         }
 
         public void Update()
@@ -88,12 +107,36 @@ namespace MazeGame.Classes
             set { vDiv = value; }
         }
 
+        /// <summary>
+        /// Right side divider property, returns TileDivider
+        /// </summary>
+        public TileDivider RDiv
+        {
+            get { return rDiv; }
+            set { rDiv = value; }
+        }
+
+        /// <summary>
+        /// Bottom divider, returns TileDivider
+        /// </summary>
+        public TileDivider BDiv
+        {
+            get { return bDiv; }
+            set { bDiv = value; }
+        }
+
+        /// <summary>
+        /// Neighbors list property, used in level generation by using linking a list. Contains up to four neighbors.
+        /// </summary>
         public Tile[] Neighbors
         {
             get { return neighbors; }
             set { neighbors = value; }
         }
 
+        /// <summary>
+        /// OriginTile list property, used in level generation. Contains tile that added current tile to neighbor list
+        /// </summary>
         public List<Tile> OriginTile
         {
             get { return originTile; }

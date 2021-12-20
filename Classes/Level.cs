@@ -15,10 +15,14 @@ namespace MazeGame.Classes
         /// <summary>
         /// Generates new random level. Size shall not be less than 4.
         /// </summary>
-        /// <param name="tileTexture"></param>
-        /// <param name="dividerTexture"></param>
+        /// <param name="tileTextures"></param>
+        /// <param name="hDivTextures"></param>
+        /// <param name="vDivTexture"></param>
         /// <param name="size"></param>
-        public Level(Texture2D tileTexture, Texture2D hDivTexture, Texture2D vDivTexture, int size, GameWindow window, double x_Speed, double y_Speed) : base(null, 0, 0, x_Speed, y_Speed) //Position Overwritten in level initialization
+        /// <param name="window"></param>
+        /// <param name="x_Speed"></param>
+        /// <param name="y_Speed"></param>
+        public Level(Texture2D[] tileTextures, Texture2D[] hDivTextures, Texture2D[] vDivTexture, int size, GameWindow window, double x_Speed, double y_Speed) : base(null, 0, 0, x_Speed, y_Speed) //Position Overwritten in level initialization
         {
             this.size = size;
             Random rnd = new Random(); //Used throughout method
@@ -34,7 +38,22 @@ namespace MazeGame.Classes
             {
                 for(int x = 0; x < size; x++)
                 {
-                    tiles[y, x] = new Tile(tileTexture, hDivTexture, vDivTexture, x_Start + (x * 300), y_Start + (y * 300), x_Speed, y_Speed);
+                    if(y == size - 1 && x == size - 1) //Bottom corner tile
+                    {
+                        tiles[y, x] = new Tile(tileTextures[rnd.Next(0, tileTextures.Length)], hDivTextures[rnd.Next(0, hDivTextures.Length)], vDivTexture[rnd.Next(0, vDivTexture.Length)], Tile.TileType.Corner, x_Start + (x * 300), y_Start + (y * 300), x_Speed, y_Speed);
+                    }
+                    else if (x == size - 1)
+                    {
+                        tiles[y, x] = new Tile(tileTextures[rnd.Next(0, tileTextures.Length)], hDivTextures[rnd.Next(0, hDivTextures.Length)], vDivTexture[rnd.Next(0, vDivTexture.Length)], Tile.TileType.Right, x_Start + (x * 300), y_Start + (y * 300), x_Speed, y_Speed);
+                    }
+                    else if (y == size - 1)
+                    {
+                        tiles[y, x] = new Tile(tileTextures[rnd.Next(0, tileTextures.Length)], hDivTextures[rnd.Next(0, hDivTextures.Length)], vDivTexture[rnd.Next(0, vDivTexture.Length)], Tile.TileType.Bottom, x_Start + (x * 300), y_Start + (y * 300), x_Speed, y_Speed);
+                    }
+                    else
+                    {
+                        tiles[y, x] = new Tile(tileTextures[rnd.Next(0, tileTextures.Length)], hDivTextures[rnd.Next(0, hDivTextures.Length)], vDivTexture[rnd.Next(0, vDivTexture.Length)], Tile.TileType.Standard, x_Start + (x * 300), y_Start + (y * 300), x_Speed, y_Speed);
+                    }
                 }
             }
 
@@ -100,62 +119,6 @@ namespace MazeGame.Classes
                     tiles[y, x].Neighbors = temp;
                 }
             }
-
-
-            ///* Generates first tile and it's neighbors */
-            //List<Tile> neighbors = new List<Tile>();
-            //tiles[(int)startTilePos.Y, (int)startTilePos.X].BeenChecked = true;
-            //for (int i = 0; i < 4; i++)
-            //{
-            //    Tile targetTile = tiles[(int)startTilePos.Y, (int)startTilePos.X];
-            //    if (targetTile.Neighbors[i] != null)
-            //    {
-            //        neighbors.Add(targetTile.Neighbors[i]);
-            //        targetTile.Neighbors[i].OriginTile.Add(targetTile);
-            //    }
-            //}
-
-            ///* Random generation */
-            //while (neighbors.Count != 0)
-            //{
-            //    Tile targetTile = neighbors[rnd.Next(0, neighbors.Count)];
-
-            //    if (!targetTile.BeenChecked)
-            //    {
-            //        Tile originTile = targetTile.OriginTile[rnd.Next(0, targetTile.OriginTile.Count)];
-
-            //        if (targetTile.Neighbors[0] == originTile) //Top
-            //        {
-            //            targetTile.HDiv = null; //Removes top divider of current tile
-            //        }
-            //        else if (targetTile.Neighbors[1] == originTile) //Right
-            //        {
-            //            originTile.VDiv = null; //Removes left divider of origin tile
-            //        }
-            //        else if (targetTile.Neighbors[2] == originTile) //Left
-            //        {
-            //            targetTile.VDiv = null; //Removes left divider of current tile
-            //        }
-            //        else if (targetTile.Neighbors[3] == originTile) //Bottom
-            //        {
-            //            originTile.HDiv = null; //Removes top divider of origin tile
-            //        }
-
-            //        for (int i = 0; i < 4; i++)
-            //        {
-            //            if (targetTile.Neighbors[i] != null)
-            //            {
-            //                neighbors.Add(targetTile.Neighbors[i]); //Adds neighbors to list
-            //                targetTile.Neighbors[i].OriginTile.Add(targetTile); //Adds origin tile to neighbor
-            //            }
-            //        }
-
-            //        targetTile.BeenChecked = true;
-            //    }
-
-            //    neighbors.Remove(targetTile);
-            //}
-
 
             /* Generates first tile and it's neighbors */
             List<Tile> straightNeighbors = new List<Tile>();
@@ -341,6 +304,14 @@ namespace MazeGame.Classes
                 {
                     tile.VDiv.Update();
                 }
+                if (tile.RDiv != null)
+                {
+                    tile.RDiv.Update();
+                }
+                if (tile.BDiv != null)
+                {
+                    tile.BDiv.Update();
+                }
             }
         }
 
@@ -355,16 +326,24 @@ namespace MazeGame.Classes
             {
                 for(int x = 0; x < size; x++)
                 {
-                    if(tiles[y, x].VDiv != null)
-                    {
-                        tiles[y, x].VDiv.Draw(spriteBatch);
-                    }
-                }
-                for (int x = 0; x < size; x++)
-                {
                     if (tiles[y, x].HDiv != null)
                     {
                         tiles[y, x].HDiv.Draw(spriteBatch);
+                    }
+                    if (tiles[y, x].VDiv != null)
+                    {
+                        tiles[y, x].VDiv.Draw(spriteBatch);
+                    }
+                    if (tiles[y, x].RDiv != null)
+                    {
+                        tiles[y, x].RDiv.Draw(spriteBatch);
+                    }
+                }
+                for(int x = 0; x < size; x++)
+                {
+                    if (tiles[y, x].BDiv != null)
+                    {
+                        tiles[y, x].BDiv.Draw(spriteBatch);
                     }
                 }
             }
