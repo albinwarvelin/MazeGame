@@ -23,7 +23,7 @@ namespace MazeGame.Classes
         /// <param name="window"></param>
         /// <param name="x_Speed"></param>
         /// <param name="y_Speed"></param>
-        public Level(Texture2D[] tileTextures, Texture2D[] hDivTextures, Texture2D[] vDivTexture, int size, GameWindow window, double x_Speed, double y_Speed) : base(null, 0, 0, x_Speed, y_Speed) //Position Overwritten in level initialization
+        public Level(Texture2D[] tileTextures, Texture2D[] hDivTextures, Texture2D[] vDivTexture, int size, GameWindow window, double x_Speed, double y_Speed) : base(null, 0, 0, x_Speed, y_Speed) //Level position not used, each tile has its own position
         {
             this.size = size;
             Random rnd = new Random(); //Used throughout method
@@ -289,46 +289,26 @@ namespace MazeGame.Classes
 
         public void Update()
         {
-            /*==========Temporary controls==========*/
-            KeyboardState keyboardInput = Keyboard.GetState();
-            if (keyboardInput.IsKeyDown(Keys.A))
-            {
-                position.X += speed.X;
-            }
-            if (keyboardInput.IsKeyDown(Keys.W))
-            {
-                position.Y += speed.Y;
-            }
-            if (keyboardInput.IsKeyDown(Keys.S))
-            {
-                position.Y -= speed.Y;
-            }
-            if (keyboardInput.IsKeyDown(Keys.D))
-            {
-                position.X -= speed.X;
-            }
-            /*======================================*/
-
-            foreach (Tile tile in tiles)
-            {
-                tile.Update();
-                if (tile.HDiv != null)
-                {
-                    tile.HDiv.Update();
-                }
-                if (tile.VDiv != null)
-                {
-                    tile.VDiv.Update();
-                }
-                if (tile.RDiv != null)
-                {
-                    tile.RDiv.Update();
-                }
-                if (tile.BDiv != null)
-                {
-                    tile.BDiv.Update();
-                }
-            }
+            //foreach (Tile tile in tiles)
+            //{
+            //    tile.Update();
+            //    if (tile.HDiv != null)
+            //    {
+            //        tile.HDiv.Update();
+            //    }
+            //    if (tile.VDiv != null)
+            //    {
+            //        tile.VDiv.Update();
+            //    }
+            //    if (tile.RDiv != null)
+            //    {
+            //        tile.RDiv.Update();
+            //    }
+            //    if (tile.BDiv != null)
+            //    {
+            //        tile.BDiv.Update();
+            //    }
+            //}
         }
 
         public override void Draw(SpriteBatch spriteBatch, GameWindow window)
