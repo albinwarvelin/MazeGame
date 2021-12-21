@@ -38,6 +38,16 @@ namespace MazeGame
             spriteBatch.Draw(texture, position, Color.White);
         }
 
+        /// <summary>
+        /// Draws gameObject in position, overload is used in cases when windowborders are needed to optimize game.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="window"></param>
+        public virtual void Draw(SpriteBatch spriteBatch, GameWindow window)
+        {
+            spriteBatch.Draw(texture, position, Color.White);
+        }
+
         //Properties
         public double X_Pos { get { return position.X; } }
         public double Y_Pos { get { return position.Y; } }

@@ -104,7 +104,7 @@ namespace MazeGame
                     GameElements.MenuDraw(_spriteBatch);
                     break;
                 case GameElements.State.Run:
-                    GameElements.RunDraw(_spriteBatch);
+                    GameElements.RunDraw(_spriteBatch, Window);
                     break;
                 case GameElements.State.Paused:
                     GameElements.PausedDraw(_spriteBatch);

@@ -32,7 +32,7 @@ namespace MazeGame
             tileTextures[1] = content.Load<Texture2D>("assets/level/grassTexture2");
             tileTextures[2] = content.Load<Texture2D>("assets/level/grassTexture3");
             tileTextures[3] = content.Load<Texture2D>("assets/level/grassTexture4");
-            tileTextures[4] = content.Load<Texture2D>("assets/level/grassTexture5");
+            tileTextures[4] = content.Load<Texture2D>("assets/level/grassTexture5"); //Tree tile
             tileTextures[5] = content.Load<Texture2D>("assets/level/grassTexture6");
             tileTextures[6] = content.Load<Texture2D>("assets/level/grassTexture7");
             tileTextures[7] = content.Load<Texture2D>("assets/level/grassTexture8");
@@ -80,9 +80,9 @@ namespace MazeGame
             return State.Run;
         }
 
-        public static void RunDraw(SpriteBatch spriteBatch) //Draws run
+        public static void RunDraw(SpriteBatch spriteBatch, GameWindow window) //Draws run
         {
-            level.Draw(spriteBatch);
+            level.Draw(spriteBatch, window);
         }
 
         public static State PausedUpdate() //Updates paused

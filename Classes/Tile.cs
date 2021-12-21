@@ -14,7 +14,7 @@ namespace MazeGame.Classes
         When removing a wall, a random direction is chosen. */
         List<Tile> originTile = new List<Tile>(); 
 
-        public enum TileType { Standard, Right, Bottom, Corner }
+        public enum TileType { Standard, Right, Bottom, Corner } //Used when determining if tile needs divider in bottom or right position
 
         protected bool beenChecked = false;
         protected TileDivider hDiv; //Top
@@ -90,7 +90,16 @@ namespace MazeGame.Classes
         }
 
         /// <summary>
-        /// Horizontal divider property, returns TileDivider
+        /// Tile texture property.
+        /// </summary>
+        public Texture2D TileTexture
+        {
+            get { return this.texture; }
+            set { this.texture = value; }
+        }
+
+        /// <summary>
+        /// Horizontal divider property, returns TileDivider.
         /// </summary>
         public TileDivider HDiv
         {
@@ -99,7 +108,7 @@ namespace MazeGame.Classes
         }
 
         /// <summary>
-        /// Vertical divider property, returns TileDivider
+        /// Vertical divider property, returns TileDivider.
         /// </summary>
         public TileDivider VDiv
         {
@@ -108,7 +117,7 @@ namespace MazeGame.Classes
         }
 
         /// <summary>
-        /// Right side divider property, returns TileDivider
+        /// Right side divider property, returns TileDivider.
         /// </summary>
         public TileDivider RDiv
         {
@@ -117,7 +126,7 @@ namespace MazeGame.Classes
         }
 
         /// <summary>
-        /// Bottom divider, returns TileDivider
+        /// Bottom divider, returns TileDivider.
         /// </summary>
         public TileDivider BDiv
         {
@@ -135,7 +144,7 @@ namespace MazeGame.Classes
         }
 
         /// <summary>
-        /// OriginTile list property, used in level generation. Contains tile that added current tile to neighbor list
+        /// OriginTile list property, used in level generation. Contains tile that added current tile to neighbor list.
         /// </summary>
         public List<Tile> OriginTile
         {

@@ -11,6 +11,7 @@ namespace MazeGame.Classes
     {
         protected Tile[,] tiles; //Two dimensional array
         protected int size;
+        
 
         /// <summary>
         /// Generates new random level. Size shall not be less than 4.
@@ -269,6 +270,21 @@ namespace MazeGame.Classes
                     targetTile.BeenChecked = true;
                 }
             }
+
+            /* Removes tree tile */
+            tileTextures[4] = tileTextures[0]; //Removes tree tile from list
+
+            for (int y = 0; y < size -1; y++)
+            {
+                for(int x = 0; x < size; x++)
+                {
+                    if(tiles[y + 1, x].HDiv == null)
+                    {
+                        tiles[y, x].TileTexture = tileTextures[rnd.Next(0, tileTextures.Length)]; //Replaces texture with non tree texture if tile doesnt have any 
+                    }
+                }
+            }
+
         }
 
         public void Update()
@@ -315,35 +331,44 @@ namespace MazeGame.Classes
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, GameWindow window)
         {
             foreach(Tile tile in tiles)
             {
-                tile.Draw(spriteBatch);
+                if (tile.X_Pos > -300 && tile.Y_Pos > -300 && tile.X_Pos < window.ClientBounds.Width && tile.Y_Pos < window.ClientBounds.Height) //Does not draw tiles outside window to optimize game
+                {
+                    tile.Draw(spriteBatch);
+                }
             }
 
-            for(int y = 0; y < size; y++)
+            for (int y = 0; y < size; y++)
             {
-                for(int x = 0; x < size; x++)
+                for (int x = 0; x < size; x++)
                 {
-                    if (tiles[y, x].HDiv != null)
+                    if (tiles[y, x].X_Pos > -300 && tiles[y, x].Y_Pos > -300 && tiles[y, x].X_Pos < window.ClientBounds.Width && tiles[y, x].Y_Pos < window.ClientBounds.Height) //Does not draw tiles outside window to optimize game
                     {
-                        tiles[y, x].HDiv.Draw(spriteBatch);
-                    }
-                    if (tiles[y, x].VDiv != null)
-                    {
-                        tiles[y, x].VDiv.Draw(spriteBatch);
-                    }
-                    if (tiles[y, x].RDiv != null)
-                    {
-                        tiles[y, x].RDiv.Draw(spriteBatch);
+                        if (tiles[y, x].HDiv != null)
+                        {
+                            tiles[y, x].HDiv.Draw(spriteBatch);
+                        }
+                        if (tiles[y, x].VDiv != null)
+                        {
+                            tiles[y, x].VDiv.Draw(spriteBatch);
+                        }
+                        if (tiles[y, x].RDiv != null)
+                        {
+                            tiles[y, x].RDiv.Draw(spriteBatch);
+                        }
                     }
                 }
                 for(int x = 0; x < size; x++)
                 {
-                    if (tiles[y, x].BDiv != null)
+                    if (tiles[y, x].X_Pos > -300 && tiles[y, x].Y_Pos > -300 && tiles[y, x].X_Pos < window.ClientBounds.Width && tiles[y, x].Y_Pos < window.ClientBounds.Height) //Does not draw tiles outside window to optimize game
                     {
-                        tiles[y, x].BDiv.Draw(spriteBatch);
+                        if (tiles[y, x].BDiv != null)
+                        {
+                            tiles[y, x].BDiv.Draw(spriteBatch);
+                        }
                     }
                 }
             }
