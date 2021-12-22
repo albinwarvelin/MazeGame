@@ -15,36 +15,39 @@ namespace MazeGame
 
         public static State currentState; //Current gamestate
 
+        static int x_Sp_Player; //General speed for game
+        static int y_Sp_Player; //General speed for game
+
         static Level level; //Games level
+        static Player player; //Player
 
         static Texture2D[] tileTextures = new Texture2D[9];
         static Texture2D[] hDivTextures = new Texture2D[4];
         static Texture2D[] vDivTextures = new Texture2D[4];
+        static Texture2D[] playerTextures = new Texture2D[4];
 
         public static void Initialize()
         {
-
+            x_Sp_Player = 5;
+            y_Sp_Player = 5;
         }
 
         public static void LoadContent(ContentManager content, GameWindow window)
         {
-            tileTextures[0] = content.Load<Texture2D>("assets/level/grassTexture1");
-            tileTextures[1] = content.Load<Texture2D>("assets/level/grassTexture2");
-            tileTextures[2] = content.Load<Texture2D>("assets/level/grassTexture3");
-            tileTextures[3] = content.Load<Texture2D>("assets/level/grassTexture4");
-            tileTextures[4] = content.Load<Texture2D>("assets/level/grassTexture5"); //Tree tile
-            tileTextures[5] = content.Load<Texture2D>("assets/level/grassTexture6");
-            tileTextures[6] = content.Load<Texture2D>("assets/level/grassTexture7");
-            tileTextures[7] = content.Load<Texture2D>("assets/level/grassTexture8");
-            tileTextures[8] = content.Load<Texture2D>("assets/level/grassTexture9");
-            hDivTextures[0] = content.Load<Texture2D>("assets/level/horizontalHedge1");
-            hDivTextures[1] = content.Load<Texture2D>("assets/level/horizontalHedge2");
-            hDivTextures[2] = content.Load<Texture2D>("assets/level/horizontalHedge3");
-            hDivTextures[3] = content.Load<Texture2D>("assets/level/horizontalHedge4");
-            vDivTextures[0] = content.Load<Texture2D>("assets/level/verticalHedge1");
-            vDivTextures[1] = content.Load<Texture2D>("assets/level/verticalHedge2");
-            vDivTextures[2] = content.Load<Texture2D>("assets/level/verticalHedge3");
-            vDivTextures[3] = content.Load<Texture2D>("assets/level/verticalHedge4");
+            for(int i = 0; i < 9; i++) //Loads tiles
+            {
+                tileTextures[i] = content.Load<Texture2D>("assets/level/grassTexture" + (i + 1));
+            }
+            for(int i = 0; i < 4; i++) //Loads horizontal dividers
+            {
+                hDivTextures[i] = content.Load<Texture2D>("assets/level/horizontalHedge" + (i + 1));
+            }
+            for(int i = 0; i < 4; i++) //Loads vertical dividers
+            {
+                vDivTextures[i] = content.Load<Texture2D>("assets/level/verticalHedge" + (i + 1));
+            }
+
+            playerTextures[0] = content.Load<Texture2D>("assets/player/player");
         }
 
         public static State MenuUpdate() //Updates menu state
@@ -69,20 +72,21 @@ namespace MazeGame
 
         public static State Reset(GameWindow window) //Resets level then sets state to run
         {
-            level = new Level(tileTextures, hDivTextures, vDivTextures, 10, window, 10, 10); //TODO change speed to player speed
-
+            level = new Level(tileTextures, hDivTextures, vDivTextures, 10, window, x_Sp_Player, y_Sp_Player); //TODO change speed to player speed
+            player = new Player(playerTextures[0], (window.ClientBounds.Width / 2) - (playerTextures[0].Width / 2), (window.ClientBounds.Height / 2) - (playerTextures[0].Height / 2), x_Sp_Player, y_Sp_Player); //Change texture
             return State.Run;
         }
 
-        public static State RunUpdate() //Updates run state
+        public static State RunUpdate(GameWindow window) //Updates run state
         {
-            level.Update();
+            level.Update(player.Update(window), player); //Updates player first, then uses the enum list provided by method to update 
             return State.Run;
         }
 
         public static void RunDraw(SpriteBatch spriteBatch, GameWindow window) //Draws run
         {
             level.Draw(spriteBatch, window);
+            player.Draw(spriteBatch);
         }
 
         public static State PausedUpdate() //Updates paused

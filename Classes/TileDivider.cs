@@ -21,29 +21,24 @@ namespace MazeGame.Classes
 
         }
 
-        public void Update()
+        public void Update(List<Player.Direction> toMove)
         {
-            /*==========Temporary controls==========*/
-            KeyboardState keyboardInput = Keyboard.GetState();
-            if (keyboardInput.IsKeyDown(Keys.A))
-            {
-                position.X += speed.X;
-            }
-            if (keyboardInput.IsKeyDown(Keys.W))
-            {
-                position.Y += speed.Y;
-            }
-            if (keyboardInput.IsKeyDown(Keys.S))
+            if (toMove.Contains(Player.Direction.Up))
             {
                 position.Y -= speed.Y;
             }
-            if (keyboardInput.IsKeyDown(Keys.D))
+            if (toMove.Contains(Player.Direction.Right))
+            {
+                position.X += speed.X;
+            }
+            if (toMove.Contains(Player.Direction.Left))
             {
                 position.X -= speed.X;
             }
-            /*======================================*/
-
-            //Add logic to update when player moves
+            if (toMove.Contains(Player.Direction.Down))
+            {
+                position.Y += speed.Y;
+            }
         }
     }
 }

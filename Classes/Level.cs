@@ -11,7 +11,6 @@ namespace MazeGame.Classes
     {
         protected Tile[,] tiles; //Two dimensional array
         protected int size;
-        
 
         /// <summary>
         /// Generates new random level. Size shall not be less than 4.
@@ -287,28 +286,56 @@ namespace MazeGame.Classes
 
         }
 
-        public void Update()
+        public void Update(List<Player.Direction> toMove, Player player)
         {
-            //foreach (Tile tile in tiles)
-            //{
-            //    tile.Update();
-            //    if (tile.HDiv != null)
-            //    {
-            //        tile.HDiv.Update();
-            //    }
-            //    if (tile.VDiv != null)
-            //    {
-            //        tile.VDiv.Update();
-            //    }
-            //    if (tile.RDiv != null)
-            //    {
-            //        tile.RDiv.Update();
-            //    }
-            //    if (tile.BDiv != null)
-            //    {
-            //        tile.BDiv.Update();
-            //    }
-            //}
+            List<TileDivider> surroundingDividers = new List<TileDivider>();
+
+            foreach (Tile tile in tiles)
+            {
+                tile.Update(toMove);
+                if (tile.HDiv != null)
+                {
+                    tile.HDiv.Update(toMove);
+
+                    /* Used for collison checking player optimally */
+                    if(tile.HDiv.X_Pos > player.X_Pos - tile.HDiv.Width - 100 && tile.HDiv.X_Pos < player.X_Pos + tile.HDiv.Width + 100 && tile.HDiv.Y_Pos > player.Y_Pos - tile.HDiv.Height - 100 && tile.HDiv.Y_Pos < player.Y_Pos + tile.HDiv.Height + 100)
+                    {
+                        surroundingDividers.Add(tile.HDiv);
+                    }
+                }
+                if (tile.VDiv != null)
+                {
+                    tile.VDiv.Update(toMove);
+
+                    /* Used for collison checking player optimally */
+                    if (tile.VDiv.X_Pos > player.X_Pos - tile.VDiv.Width - 100 && tile.VDiv.X_Pos < player.X_Pos + tile.VDiv.Width + 100 && tile.VDiv.Y_Pos > player.Y_Pos - tile.VDiv.Height - 100 && tile.VDiv.Y_Pos < player.Y_Pos + tile.VDiv.Height + 100)
+                    {
+                        surroundingDividers.Add(tile.VDiv);
+                    }
+                }
+                if (tile.RDiv != null)
+                {
+                    tile.RDiv.Update(toMove);
+
+                    /* Used for collison checking player optimally */
+                    if (tile.RDiv.X_Pos > player.X_Pos - tile.RDiv.Width - 100 && tile.RDiv.X_Pos < player.X_Pos + tile.RDiv.Width + 100 && tile.RDiv.Y_Pos > player.Y_Pos - tile.RDiv.Height - 100 && tile.RDiv.Y_Pos < player.Y_Pos + tile.RDiv.Height + 100)
+                    {
+                        surroundingDividers.Add(tile.RDiv);
+                    }
+                }
+                if (tile.BDiv != null)
+                {
+                    tile.BDiv.Update(toMove);
+
+                    /* Used for collison checking player optimally */
+                    if (tile.BDiv.X_Pos > player.X_Pos - tile.BDiv.Width - 100 && tile.BDiv.X_Pos < player.X_Pos + tile.BDiv.Width + 100 && tile.BDiv.Y_Pos > player.Y_Pos - tile.BDiv.Height - 100 && tile.BDiv.Y_Pos < player.Y_Pos + tile.BDiv.Height + 100)
+                    {
+                        surroundingDividers.Add(tile.BDiv);
+                    }
+                }
+            }
+
+            player.SurroundingDividers = surroundingDividers;
         }
 
         public override void Draw(SpriteBatch spriteBatch, GameWindow window)
