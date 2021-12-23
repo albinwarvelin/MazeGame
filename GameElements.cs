@@ -72,7 +72,7 @@ namespace MazeGame
 
         public static State Reset(GameWindow window) //Resets level then sets state to run
         {
-            level = new Level(tileTextures, hDivTextures, vDivTextures, 100, window, x_Sp_Player, y_Sp_Player); //TODO change speed to player speed
+            level = new Level(tileTextures, hDivTextures, vDivTextures, 10, window, x_Sp_Player, y_Sp_Player); //TODO change speed to player speed
             player = new Player(playerTextures[0], (window.ClientBounds.Width / 2) - (playerTextures[0].Width / 2), (window.ClientBounds.Height / 2) - (playerTextures[0].Height / 2), x_Sp_Player, y_Sp_Player); //Change texture
             return State.Run;
         }

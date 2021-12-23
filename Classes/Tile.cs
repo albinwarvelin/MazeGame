@@ -16,11 +16,13 @@ namespace MazeGame.Classes
 
         public enum TileType { Standard, Right, Bottom, Corner } //Used when determining if tile needs divider in bottom or right position
 
-        protected bool beenChecked = false;
-        protected TileDivider hDiv; //Top
-        protected TileDivider vDiv; //Left
-        protected TileDivider rDiv; //Right, only used for right side tiles
-        protected TileDivider bDiv; //Bottom, only used for bottom tiles
+        private bool beenChecked = false;
+        private bool voidTile = false; //If tile is void it doesn't have any ground (texture), and player shall not be able to
+
+        private TileDivider hDiv; //Top
+        private TileDivider vDiv; //Left
+        private TileDivider rDiv; //Right, only used for right side tiles
+        private TileDivider bDiv; //Bottom, only used for bottom tiles
 
         protected Tile[] neighbors; //0 = Top, 1 = Right, 2 = Left, 3 = Bottom
 
@@ -74,6 +76,14 @@ namespace MazeGame.Classes
             }
         }
 
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if(!voidTile)
+            {
+                base.Draw(spriteBatch);
+            }
+        }
+
         /// <summary>
         /// Checked property, returns bool.
         /// </summary>
@@ -81,6 +91,12 @@ namespace MazeGame.Classes
         {
             get { return beenChecked; }
             set { beenChecked = value; }
+        }
+
+        public bool VoidTile
+        {
+            get { return voidTile; }
+            set { voidTile = value; }
         }
 
         /// <summary>

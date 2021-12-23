@@ -57,6 +57,28 @@ namespace MazeGame.Classes
                 }
             }
 
+            int[] xCoords = new int[size];
+            int[] yCoords = new int[size];
+
+            /* Assigns voidtiles */
+            for (int i = 0; i < size * size * 0.15; i++)
+            {
+                int rndX = rnd.Next(0, size);
+                int rndY = rnd.Next(0, size);
+
+                xCoords[rndX] += 1;
+                yCoords[rndY] += 1;
+
+                if(xCoords[rndX] < size / 1.5 && yCoords[rndY] < size / 1.5 && tiles[rndY, rndX].VoidTile == false) // To make sure void tiles don't split level
+                {
+                    tiles[rndY, rndX].VoidTile = true;
+                }
+                else
+                {
+                    i--;
+                }
+            }
+
             /* Assigns neighbors to all tiles in tiles array */
             for (int y = 0; y < size; y++)
             {
@@ -101,20 +123,19 @@ namespace MazeGame.Classes
                         temp[1] = tiles[y, x + 1]; //Right
                         temp[3] = tiles[y + 1, x]; //Bottom
                     }
-                    else if(y == size - 1)
+                    else if(y == size - 1) //Bottom edge
                     {
                         temp[0] = tiles[y - 1, x]; //Top
                         temp[1] = tiles[y, x + 1]; //Right
                         temp[2] = tiles[y, x - 1]; //Left
                     }
-                    else
+                    else //All else
                     {
                         temp[0] = tiles[y - 1, x]; //Top
                         temp[1] = tiles[y, x + 1]; //Right
                         temp[2] = tiles[y, x - 1]; //Left
                         temp[3] = tiles[y + 1, x]; //Bottom
                     }
-
 
                     tiles[y, x].Neighbors = temp;
                 }
@@ -140,7 +161,7 @@ namespace MazeGame.Classes
                 startTile.Neighbors[i].OriginTile.Add(startTile);
             }
 
-            /* Random generation */
+            /* Random generation. Works by adding neighbors to lists then picking random neighbor to remove wall between it and it's origin */
             while (straightNeighbors.Count + rightNeighbors.Count + leftNeighbors.Count != 0)
             {
                 double rndDouble = rnd.NextDouble();
@@ -182,8 +203,57 @@ namespace MazeGame.Classes
                         continue;
                     }
                 }
+                
+                if(targetTile.VoidTile) //Removes divider between voidtiles
+                {
+                    for(int x = 0; x < size; x++) //Removes divider if tile is on top edge
+                    {
+                        if(targetTile == tiles[0, x])
+                        {
+                            targetTile.HDiv = null;
+                        }
+                    }
+                    for(int y = 0; y < size; y++) //Removes divider if tile is on left edge
+                    {
+                        if(targetTile == tiles[y, 0]) 
+                        {
+                            targetTile.VDiv = null;
+                        }
+                    }
 
-                if (!targetTile.BeenChecked)
+                    targetTile.RDiv = null; //Removes right divider, only when on right edge
+                    targetTile.BDiv = null; //Removes bottom divider, only when on bottom edge
+
+                    if (targetTile.Neighbors[0] != null)
+                    {
+                        if(targetTile.Neighbors[0].VoidTile)
+                        {
+                            targetTile.HDiv = null;
+                        }
+                    }
+                    if (targetTile.Neighbors[1] != null)
+                    {
+                        if (targetTile.Neighbors[1].VoidTile)
+                        {
+                            targetTile.Neighbors[1].VDiv = null;
+                        }
+                    }
+                    if (targetTile.Neighbors[2] != null)
+                    {
+                        if (targetTile.Neighbors[2].VoidTile)
+                        {
+                            targetTile.VDiv = null;
+                        }
+                    }
+                    if (targetTile.Neighbors[3] != null)
+                    {
+                        if (targetTile.Neighbors[3].VoidTile)
+                        {
+                            targetTile.Neighbors[3].HDiv = null;
+                        }
+                    }
+                }
+                else if (!targetTile.BeenChecked) //Adds neighbors to neighbor list
                 {
                     Tile originTile = targetTile.OriginTile[rnd.Next(0, targetTile.OriginTile.Count)];
 
@@ -264,8 +334,6 @@ namespace MazeGame.Classes
                         }
                     }
 
-
-
                     targetTile.BeenChecked = true;
                 }
             }
@@ -279,7 +347,7 @@ namespace MazeGame.Classes
                 {
                     if(tiles[y + 1, x].HDiv == null)
                     {
-                        tiles[y, x].TileTexture = tileTextures[rnd.Next(0, tileTextures.Length)]; //Replaces texture with non tree texture if tile doesnt have any 
+                        tiles[y, x].TileTexture = tileTextures[rnd.Next(0, tileTextures.Length)]; //Replaces texture with non tree texture if tile doesnt have any divider under it 
                     }
                 }
             }
