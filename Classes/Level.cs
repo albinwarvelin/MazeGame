@@ -298,7 +298,7 @@ namespace MazeGame.Classes
                     tile.HDiv.Update(toMove);
 
                     /* Used for collison checking player optimally */
-                    if(tile.HDiv.X_Pos > player.X_Pos - tile.HDiv.Width - 100 && tile.HDiv.X_Pos < player.X_Pos + tile.HDiv.Width + 100 && tile.HDiv.Y_Pos > player.Y_Pos - tile.HDiv.Height - 100 && tile.HDiv.Y_Pos < player.Y_Pos + tile.HDiv.Height + 100)
+                    if(tile.HDiv.X_Pos > player.X_Pos - tile.HDiv.Width - player.Width && tile.HDiv.X_Pos < player.X_Pos + tile.HDiv.Width + player.Width && tile.HDiv.Y_Pos > player.Y_Pos - tile.HDiv.Height - player.Height && tile.HDiv.Y_Pos < player.Y_Pos + tile.HDiv.Height + player.Height)
                     {
                         surroundingDividers.Add(tile.HDiv);
                     }
@@ -308,7 +308,7 @@ namespace MazeGame.Classes
                     tile.VDiv.Update(toMove);
 
                     /* Used for collison checking player optimally */
-                    if (tile.VDiv.X_Pos > player.X_Pos - tile.VDiv.Width - 100 && tile.VDiv.X_Pos < player.X_Pos + tile.VDiv.Width + 100 && tile.VDiv.Y_Pos > player.Y_Pos - tile.VDiv.Height - 100 && tile.VDiv.Y_Pos < player.Y_Pos + tile.VDiv.Height + 100)
+                    if (tile.VDiv.X_Pos > player.X_Pos - tile.VDiv.Width - player.Width && tile.VDiv.X_Pos < player.X_Pos + tile.VDiv.Width + player.Width && tile.VDiv.Y_Pos > player.Y_Pos - tile.VDiv.Height - player.Height && tile.VDiv.Y_Pos < player.Y_Pos + tile.VDiv.Height + player.Height)
                     {
                         surroundingDividers.Add(tile.VDiv);
                     }
@@ -318,7 +318,7 @@ namespace MazeGame.Classes
                     tile.RDiv.Update(toMove);
 
                     /* Used for collison checking player optimally */
-                    if (tile.RDiv.X_Pos > player.X_Pos - tile.RDiv.Width - 100 && tile.RDiv.X_Pos < player.X_Pos + tile.RDiv.Width + 100 && tile.RDiv.Y_Pos > player.Y_Pos - tile.RDiv.Height - 100 && tile.RDiv.Y_Pos < player.Y_Pos + tile.RDiv.Height + 100)
+                    if (tile.RDiv.X_Pos > player.X_Pos - tile.RDiv.Width - player.Width && tile.RDiv.X_Pos < player.X_Pos + tile.RDiv.Width + player.Width && tile.RDiv.Y_Pos > player.Y_Pos - tile.RDiv.Height - player.Height && tile.RDiv.Y_Pos < player.Y_Pos + tile.RDiv.Height + player.Height)
                     {
                         surroundingDividers.Add(tile.RDiv);
                     }
@@ -328,7 +328,7 @@ namespace MazeGame.Classes
                     tile.BDiv.Update(toMove);
 
                     /* Used for collison checking player optimally */
-                    if (tile.BDiv.X_Pos > player.X_Pos - tile.BDiv.Width - 100 && tile.BDiv.X_Pos < player.X_Pos + tile.BDiv.Width + 100 && tile.BDiv.Y_Pos > player.Y_Pos - tile.BDiv.Height - 100 && tile.BDiv.Y_Pos < player.Y_Pos + tile.BDiv.Height + 100)
+                    if (tile.BDiv.X_Pos > player.X_Pos - tile.BDiv.Width - player.Width && tile.BDiv.X_Pos < player.X_Pos + tile.BDiv.Width + player.Width && tile.BDiv.Y_Pos > player.Y_Pos - tile.BDiv.Height - player.Height && tile.BDiv.Y_Pos < player.Y_Pos + tile.BDiv.Height + player.Height)
                     {
                         surroundingDividers.Add(tile.BDiv);
                     }

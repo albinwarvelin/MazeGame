@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 namespace MazeGame.Classes
 {
-    class TileDivider : MovingObject
+    class TileDivider : PhysicalObject
     {
         /// <summary>
         /// Constructor, passes variables to Moving object
