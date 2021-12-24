@@ -79,6 +79,9 @@ namespace MazeGame.Classes
                 }
             }
 
+            /* Set start tile to non-void, so player doesn't spawn in voidtile */
+            tiles[(int)startTilePos.Y, (int)startTilePos.X].VoidTile = false;
+
             /* Assigns neighbors to all tiles in tiles array */
             for (int y = 0; y < size; y++)
             {
