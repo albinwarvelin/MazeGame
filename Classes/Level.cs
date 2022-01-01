@@ -29,8 +29,8 @@ namespace MazeGame.Classes
 
             Vector2 startTilePos = new Vector2((int)(rnd.NextDouble() * 4 + (size / 2 - 2)), (int)(rnd.NextDouble() * 4 + (size / 2 - 2))); //Start tile position
 
-            int x_Start = (int)((window.ClientBounds.Width / 2) + 150 - (startTilePos.X * 300));
-            int y_Start = (int)((window.ClientBounds.Height / 2) + 150 - (startTilePos.Y * 300));
+            int x_Start = (int)((window.ClientBounds.Width / 2) - 150 - (startTilePos.X * 300));
+            int y_Start = (int)((window.ClientBounds.Height / 2) - 150 - (startTilePos.Y * 300));
             tiles = new Tile[size, size];
 
             /* Assigns tiles to all values in tiles array */
@@ -57,8 +57,8 @@ namespace MazeGame.Classes
                 }
             }
 
-            int[] xCoords = new int[size];
-            int[] yCoords = new int[size];
+            int[] xCoords = new int[size]; //Amount of tiles in row that are voidtiles
+            int[] yCoords = new int[size]; //Amount of tiles in column that are voidtiles
 
             /* Assigns voidtiles */
             for (int i = 0; i < size * size * 0.15; i++)
@@ -66,10 +66,10 @@ namespace MazeGame.Classes
                 int rndX = rnd.Next(0, size);
                 int rndY = rnd.Next(0, size);
 
-                xCoords[rndX] += 1;
-                yCoords[rndY] += 1;
+                xCoords[rndX] += 1; //Amount of tiles in row that are voidtiles
+                yCoords[rndY] += 1; //Amount of tiles in column that are voidtiles
 
-                if(xCoords[rndX] < size / 1.5 && yCoords[rndY] < size / 1.5 && tiles[rndY, rndX].VoidTile == false) // To make sure void tiles don't split level
+                if (xCoords[rndX] < size / 1.5 && yCoords[rndY] < size / 1.5 && tiles[rndY, rndX].VoidTile == false && rndX != (int)startTilePos.X && rndY != (int)startTilePos.Y) // To make sure void tiles don't split level and starttile isn't voidtile
                 {
                     tiles[rndY, rndX].VoidTile = true;
                 }
@@ -78,9 +78,6 @@ namespace MazeGame.Classes
                     i--;
                 }
             }
-
-            /* Set start tile to non-void, so player doesn't spawn in voidtile */
-            tiles[(int)startTilePos.Y, (int)startTilePos.X].VoidTile = false;
 
             /* Assigns neighbors to all tiles in tiles array */
             for (int y = 0; y < size; y++)
@@ -357,7 +354,7 @@ namespace MazeGame.Classes
 
         }
 
-        public void Update(List<Player.Direction> toMove, Player player)
+        public void Update(List<Player.LevelDirection> toMove, Player player)
         {
             List<TileDivider> surroundingDividers = new List<TileDivider>();
 
