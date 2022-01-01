@@ -213,13 +213,34 @@ namespace MazeGame.Classes
                     textureSwitchTimer--;
                     break;
                 case PlayerDirection.Up:
-                    textureSwitchTimer = 10; //Resets timer
+                    if (texture == textures[4])
+                    {
+                        if (textureSwitchTimer == 0)
+                        {
+                            texture = textures[5];
+                            textureSwitchTimer = 10;
+                        }
+                    }
+                    else if (texture == textures[5])
+                    {
+                        if (textureSwitchTimer == 0)
+                        {
+                            texture = textures[4];
+                            textureSwitchTimer = 10;
+                        }
+                    }
+                    else
+                    {
+                        texture = textures[4];
+                        textureSwitchTimer = 10;
+                    }
+
+                    textureSwitchTimer--;
                     break;
                 case PlayerDirection.Down:
                     textureSwitchTimer = 10; //Resets timer
                     break;
                 case PlayerDirection.Still:
-                    textureSwitchTimer = 10; //Resets timer
                     break;
             }
 
