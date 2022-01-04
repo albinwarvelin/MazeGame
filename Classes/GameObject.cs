@@ -49,6 +49,11 @@ namespace MazeGame
         }
 
         //Properties
+        public Texture2D Texture 
+        {
+            get { return texture; }
+            set { texture = value; }
+        }
         public double X_Pos { get { return position.X; } }
         public double Y_Pos { get { return position.Y; } }
         public double Width { get { return texture.Width; } }

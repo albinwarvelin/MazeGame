@@ -61,7 +61,7 @@ namespace MazeGame
                     GameElements.currentState = GameElements.HighScoreUpdate();
                     break;
                 case GameElements.State.Reset:
-                    GameElements.currentState = GameElements.Reset(Window);
+                    GameElements.currentState = GameElements.Reset(Window, gameTime);
                     break;
                 case GameElements.State.Run:
                     GameElements.currentState = GameElements.RunUpdate(Window);

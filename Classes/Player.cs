@@ -10,20 +10,20 @@ namespace MazeGame.Classes
     class Player : PhysicalObject
     {
         public enum LevelDirection { Up, Down, Left, Right }; //Used to return what direction level should move
-
         public enum PlayerDirection { Up, Down, Left, Right, Still }; //Used to determine texture
-        private Texture2D[] textures;
-        private int textureSwitchTimer = 10;
+
+        private InfiniteAnimation up, down, left, right;
         private PlayerDirection currentDir = PlayerDirection.Right; //Default, overwritten in first frame.
-        private PlayerDirection lastDir = PlayerDirection.Right; //Default, overwritten in first frame.
         
         private List<TileDivider> surroundingDividers; //Updated every frame to contain current surrounding dividers
 
-        public Player(Texture2D[] textures, double x_Pos, double y_Pos, double x_Speed, double y_Speed) : base(textures[0], x_Pos, y_Pos, x_Speed, y_Speed)
+        public Player(Texture2D[] textures, GameTime gameTime, double x_Pos, double y_Pos, double x_Speed, double y_Speed) : base(textures[0], x_Pos, y_Pos, x_Speed, y_Speed)
         {
-            this.textures = textures;
+            up = new InfiniteAnimation(this, gameTime, new Texture2D[] { textures[4], textures[5] }, 10);
+            right = new InfiniteAnimation(this, gameTime, new Texture2D[] { textures[1], textures[2] }, 10);
+            left = new InfiniteAnimation(this, gameTime, new Texture2D[] { textures[0], textures[3] }, 10);
         }
-
+         
         /// <summary>
         /// Updates player. Checks if player collides with any dividers and stops player if there's collission, if
         /// player moves outside of specified window area level is given new direction to move. If player moves moveDir
@@ -53,7 +53,7 @@ namespace MazeGame.Classes
                 }
                 if (collider != null)
                 {
-                    position.Y = (float)(collider.Y_Pos + collider.Height);
+                    position.Y = (float)(collider.Y_Pos + collider.Height - 10);
                 }
                 else
                 {
@@ -81,7 +81,7 @@ namespace MazeGame.Classes
                 }
                 if (collider != null)
                 {
-                    position.Y = (float)(collider.Y_Pos - texture.Height);
+                    position.Y = (float)(collider.Y_Pos - texture.Height + 10);
                 }
                 else
                 {
@@ -109,7 +109,7 @@ namespace MazeGame.Classes
                 }
                 if (collider != null)
                 {
-                    position.X = (float)(collider.X_Pos + collider.Width); //Reverse effect of position change
+                    position.X = (float)(collider.X_Pos + collider.Width - 10); //Reverse effect of position change
                 }
                 else
                 {
@@ -137,7 +137,7 @@ namespace MazeGame.Classes
                 }
                 if (collider != null)
                 {
-                    position.X = (float)(collider.X_Pos - texture.Width); //Reverse effect of position change
+                    position.X = (float)(collider.X_Pos - texture.Width + 10); //Reverse effect of position change
                 }
                 else
                 {
@@ -153,7 +153,15 @@ namespace MazeGame.Classes
 
             return directions;
         }
-        
+
+        public override bool checkCollision(PhysicalObject other)
+        {
+            Rectangle myRect = new Rectangle(Convert.ToInt32(position.X + 10) , Convert.ToInt32(position.Y + 10), Convert.ToInt32(texture.Width - 20), Convert.ToInt32(texture.Height - 20)); //Own object, with 10 pixel room on each side.
+            Rectangle otherRect = new Rectangle(Convert.ToInt32(other.X_Pos), Convert.ToInt32(other.Y_Pos), Convert.ToInt32(other.Width), Convert.ToInt32(other.Height)); //Other object
+
+            return myRect.Intersects(otherRect);
+        }
+
         /// <summary>
         /// Updates texture before drawing.
         /// </summary>
@@ -163,82 +171,15 @@ namespace MazeGame.Classes
             switch(currentDir)
             {
                 case PlayerDirection.Left: //Uses textures 0 and 3
-                    if(texture == textures[3])
-                    {
-                        if(textureSwitchTimer == 0)
-                        {
-                            texture = textures[0];
-                            textureSwitchTimer = 10;
-                        }
-                    }
-                    else if(texture == textures[0])
-                    {
-                        if (textureSwitchTimer == 0)
-                        {
-                            texture = textures[3];
-                            textureSwitchTimer = 10;
-                        }
-                    }
-                    else
-                    {
-                        texture = textures[3];
-                        textureSwitchTimer = 10;
-                    }
-
-                    textureSwitchTimer--;
+                    left.Update(spriteBatch);
                     break;
                 case PlayerDirection.Right: //Uses textires 1 and 2
-                    if(texture == textures[2])
-                    {
-                        if (textureSwitchTimer == 0)
-                        {
-                            texture = textures[1];
-                            textureSwitchTimer = 10;
-                        }
-                    }
-                    else if (texture == textures[1])
-                    {
-                        if (textureSwitchTimer == 0)
-                        {
-                            texture = textures[2];
-                            textureSwitchTimer = 10;
-                        }
-                    }
-                    else
-                    {
-                        texture = textures[2];
-                        textureSwitchTimer = 10;
-                    }
-
-                    textureSwitchTimer--;
+                    right.Update(spriteBatch);
                     break;
                 case PlayerDirection.Up:
-                    if (texture == textures[4])
-                    {
-                        if (textureSwitchTimer == 0)
-                        {
-                            texture = textures[5];
-                            textureSwitchTimer = 10;
-                        }
-                    }
-                    else if (texture == textures[5])
-                    {
-                        if (textureSwitchTimer == 0)
-                        {
-                            texture = textures[4];
-                            textureSwitchTimer = 10;
-                        }
-                    }
-                    else
-                    {
-                        texture = textures[4];
-                        textureSwitchTimer = 10;
-                    }
-
-                    textureSwitchTimer--;
+                    up.Update(spriteBatch);
                     break;
                 case PlayerDirection.Down:
-                    textureSwitchTimer = 10; //Resets timer
                     break;
                 case PlayerDirection.Still:
                     break;
