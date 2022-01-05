@@ -12,11 +12,12 @@ namespace MazeGame.Classes
         public enum LevelDirection { Up, Down, Left, Right }; //Used to return what direction level should move
         public enum PlayerDirection { Up, Down, Left, Right, Still }; //Used to determine texture
 
+        private List<TileDivider> surroundingDividers; //Updated every frame to contain current surrounding dividers
+        private int colliderMargin = 15; //How much player should be allowed to overlap dividers, makes collission rectangle smaller.
+
         private InfiniteAnimation up, down, left, right;
         private PlayerDirection currentDir = PlayerDirection.Right; //Default, overwritten in first frame.
         
-        private List<TileDivider> surroundingDividers; //Updated every frame to contain current surrounding dividers
-
         public Player(Texture2D[] textures, GameTime gameTime, double x_Pos, double y_Pos, double x_Speed, double y_Speed) : base(textures[0], x_Pos, y_Pos, x_Speed, y_Speed)
         {
             up = new InfiniteAnimation(this, gameTime, new Texture2D[] { textures[4], textures[5] }, 10);
@@ -53,7 +54,7 @@ namespace MazeGame.Classes
                 }
                 if (collider != null)
                 {
-                    position.Y = (float)(collider.Y_Pos + collider.Height - 10);
+                    position.Y = (float)(collider.Y_Pos + collider.Height - colliderMargin);
                 }
                 else
                 {
@@ -81,7 +82,7 @@ namespace MazeGame.Classes
                 }
                 if (collider != null)
                 {
-                    position.Y = (float)(collider.Y_Pos - texture.Height + 10);
+                    position.Y = (float)(collider.Y_Pos - texture.Height + colliderMargin);
                 }
                 else
                 {
@@ -109,7 +110,7 @@ namespace MazeGame.Classes
                 }
                 if (collider != null)
                 {
-                    position.X = (float)(collider.X_Pos + collider.Width - 10); //Reverse effect of position change
+                    position.X = (float)(collider.X_Pos + collider.Width - colliderMargin); //Reverse effect of position change
                 }
                 else
                 {
@@ -137,7 +138,7 @@ namespace MazeGame.Classes
                 }
                 if (collider != null)
                 {
-                    position.X = (float)(collider.X_Pos - texture.Width + 10); //Reverse effect of position change
+                    position.X = (float)(collider.X_Pos - texture.Width + colliderMargin); //Reverse effect of position change
                 }
                 else
                 {
@@ -156,7 +157,7 @@ namespace MazeGame.Classes
 
         public override bool checkCollision(PhysicalObject other)
         {
-            Rectangle myRect = new Rectangle(Convert.ToInt32(position.X + 10) , Convert.ToInt32(position.Y + 10), Convert.ToInt32(texture.Width - 20), Convert.ToInt32(texture.Height - 20)); //Own object, with 10 pixel room on each side.
+            Rectangle myRect = new Rectangle(Convert.ToInt32(position.X + colliderMargin) , Convert.ToInt32(position.Y + colliderMargin), Convert.ToInt32(texture.Width - (colliderMargin * 2)), Convert.ToInt32(texture.Height - (colliderMargin * 2))); //Own object, with 10 pixel room on each side.
             Rectangle otherRect = new Rectangle(Convert.ToInt32(other.X_Pos), Convert.ToInt32(other.Y_Pos), Convert.ToInt32(other.Width), Convert.ToInt32(other.Height)); //Other object
 
             return myRect.Intersects(otherRect);

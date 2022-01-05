@@ -85,45 +85,45 @@ namespace MazeGame.Classes
                 for (int x = 0; x < size; x++)
                 {
                     Tile[] temp = new Tile[4];
-                    if(y == 0 && x == 0) //Top left corner
+                    if (y == 0 && x == 0) //Top left corner
                     {
                         temp[1] = tiles[y, x + 1]; //Right
                         temp[3] = tiles[y + 1, x]; //Bottom
                     }
-                    else if(y == 0 && x == size - 1) //Top right corner
+                    else if (y == 0 && x == size - 1) //Top right corner
                     {
                         temp[2] = tiles[y, x - 1]; //Left
                         temp[3] = tiles[y + 1, x]; //Bottom
                     }
-                    else if(y == size - 1 && x == 0) //Bottom left corner
+                    else if (y == size - 1 && x == 0) //Bottom left corner
                     {
                         temp[0] = tiles[y - 1, x]; //Top
                         temp[1] = tiles[y, x + 1]; //Right
                     }
-                    else if(y == size - 1 && x == size - 1) //Bottom right corner
+                    else if (y == size - 1 && x == size - 1) //Bottom right corner
                     {
                         temp[0] = tiles[y - 1, x]; //Top
                         temp[2] = tiles[y, x - 1]; //Left
                     }
-                    else if(y == 0) //Top edge
+                    else if (y == 0) //Top edge
                     {
                         temp[1] = tiles[y, x + 1]; //Right
                         temp[2] = tiles[y, x - 1]; //Left
                         temp[3] = tiles[y + 1, x]; //Bottom
                     }
-                    else if(x == size - 1) //Right edge
+                    else if (x == size - 1) //Right edge
                     {
                         temp[0] = tiles[y - 1, x]; //Top
                         temp[2] = tiles[y, x - 1]; //Left
                         temp[3] = tiles[y + 1, x]; //Bottom
                     }
-                    else if(x == 0) //Left edge
+                    else if (x == 0) //Left edge
                     {
                         temp[0] = tiles[y - 1, x]; //Top
                         temp[1] = tiles[y, x + 1]; //Right
                         temp[3] = tiles[y + 1, x]; //Bottom
                     }
-                    else if(y == size - 1) //Bottom edge
+                    else if (y == size - 1) //Bottom edge
                     {
                         temp[0] = tiles[y - 1, x]; //Top
                         temp[1] = tiles[y, x + 1]; //Right
@@ -141,12 +141,42 @@ namespace MazeGame.Classes
                 }
             }
 
+            /* Checks so no tile is completely surrounded by voidtiles */
+            for (int y = 0; y < size; y++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+                    Tile lastNonNull = null; //Always overwritten
+                    int count = 0;
+                    
+                    for(int i = 0; i < 4; i++)
+                    {
+                        if(tiles[y, x].Neighbors[i] == null)
+                        {
+                            count++;
+                        }
+                        else if (tiles[y, x].Neighbors[i].VoidTile == true)
+                        {
+                            count++;
+                            lastNonNull = tiles[y, x].Neighbors[i];
+                        }
+                    }
+
+                    if(count == 4)
+                    {
+                        lastNonNull.VoidTile = false;
+                        y = -1; //Restart
+                        x = -1; //Restart
+                    }
+                }
+            }
+
             /* Generates first tile and it's neighbors */
             List<Tile> straightNeighbors = new List<Tile>();
             List<Tile> rightNeighbors = new List<Tile>();
             List<Tile> leftNeighbors = new List<Tile>();
             double straightChance = 0.10;
-            double leftChance = 0.45;
+            double leftChance = 0.45; //Rightchance is 1.00 - straightchance - leftchance
 
             Tile startTile = tiles[(int)startTilePos.Y, (int)startTilePos.X];
             startTile.BeenChecked = true;
