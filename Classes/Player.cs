@@ -13,9 +13,10 @@ namespace MazeGame.Classes
         public enum PlayerDirection { Up, Down, Left, Right, Still }; //Used to determine texture
 
         private List<TileDivider> surroundingDividers; //Updated every frame to contain current surrounding dividers
-        private int colliderMargin = 15; //How much player should be allowed to overlap dividers, makes collission rectangle smaller.
+        private const int colliderMargin = 15; //How much player should be allowed to overlap dividers, makes collission rectangle smaller.
 
-        private InfiniteAnimation up, down, left, right;
+        private readonly InfiniteAnimation up, down, left, right;
+        private readonly Texture2D stillTexture;
         private PlayerDirection currentDir = PlayerDirection.Right; //Default, overwritten in first frame.
         
         public Player(Texture2D[] textures, GameTime gameTime, double x_Pos, double y_Pos, double x_Speed, double y_Speed) : base(textures[0], x_Pos, y_Pos, x_Speed, y_Speed)
@@ -23,6 +24,8 @@ namespace MazeGame.Classes
             up = new InfiniteAnimation(this, gameTime, new Texture2D[] { textures[4], textures[5] }, 10);
             right = new InfiniteAnimation(this, gameTime, new Texture2D[] { textures[1], textures[2] }, 10);
             left = new InfiniteAnimation(this, gameTime, new Texture2D[] { textures[0], textures[3] }, 10);
+            down = new InfiniteAnimation(this, gameTime, new Texture2D[] { textures[7], textures[8] }, 10);
+            stillTexture = textures[6];
         }
          
         /// <summary>
@@ -181,8 +184,10 @@ namespace MazeGame.Classes
                     up.Update(spriteBatch);
                     break;
                 case PlayerDirection.Down:
+                    down.Update(spriteBatch);
                     break;
                 case PlayerDirection.Still:
+                    texture = stillTexture;
                     break;
             }
 

@@ -21,7 +21,7 @@ namespace MazeGame.Classes
         protected int elapsedFrames = 0;
         
         /// <summary>
-        /// Base animation class, cycles through textures with specified interval by calling play().
+        /// Base animation class, cycles through textures with specified interval by calling update(). Only changes texture, does not draw texture..
         /// </summary>
         /// <param name="gameObject"></param>
         /// <param name="gameTime"></param>

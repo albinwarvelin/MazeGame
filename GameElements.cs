@@ -24,7 +24,7 @@ namespace MazeGame
         static Texture2D[] tileTextures = new Texture2D[9];
         static Texture2D[] hDivTextures = new Texture2D[4];
         static Texture2D[] vDivTextures = new Texture2D[4];
-        static Texture2D[] playerTextures = new Texture2D[6];
+        static Texture2D[] playerTextures = new Texture2D[9];
 
         public static void Initialize()
         {
@@ -36,17 +36,17 @@ namespace MazeGame
         {
             for(int i = 0; i < 9; i++) //Loads tiles
             {
-                tileTextures[i] = content.Load<Texture2D>("assets/level/grassTexture" + (i + 1));
+                tileTextures[i] = content.Load<Texture2D>("assets/level/grassTexture" + i);
             }
             for(int i = 0; i < 4; i++) //Loads horizontal dividers
             {
-                hDivTextures[i] = content.Load<Texture2D>("assets/level/horizontalHedge" + (i + 1));
+                hDivTextures[i] = content.Load<Texture2D>("assets/level/horizontalHedge" + i);
             }
             for(int i = 0; i < 4; i++) //Loads vertical dividers
             {
-                vDivTextures[i] = content.Load<Texture2D>("assets/level/verticalHedge" + (i + 1));
+                vDivTextures[i] = content.Load<Texture2D>("assets/level/verticalHedge" + i);
             }
-            for(int i = 0; i < 6; i++) //Loads player textures
+            for(int i = 0; i < 9; i++) //Loads player textures
             {
                 playerTextures[i] = content.Load<Texture2D>("assets/player/player" + i);
             }

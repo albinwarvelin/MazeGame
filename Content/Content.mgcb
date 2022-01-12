@@ -23,7 +23,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:assets/level/grassTexture1.png
+/build:assets/level/grassTexture1.png;assets/level/grassTexture0.png
 
 #begin assets/level/grassTexture2.png
 /importer:TextureImporter
@@ -35,7 +35,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:assets/level/grassTexture2.png
+/build:assets/level/grassTexture2.png;assets/level/grassTexture1.png
 
 #begin assets/level/grassTexture3.png
 /importer:TextureImporter
@@ -47,7 +47,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:assets/level/grassTexture3.png
+/build:assets/level/grassTexture3.png;assets/level/grassTexture2.png
 
 #begin assets/level/grassTexture4.png
 /importer:TextureImporter
@@ -59,7 +59,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:assets/level/grassTexture4.png
+/build:assets/level/grassTexture4.png;assets/level/grassTexture3.png
 
 #begin assets/level/grassTexture5.png
 /importer:TextureImporter
@@ -71,7 +71,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:assets/level/grassTexture5.png
+/build:assets/level/grassTexture5.png;assets/level/grassTexture4.png
 
 #begin assets/level/grassTexture6.png
 /importer:TextureImporter
@@ -83,7 +83,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:assets/level/grassTexture6.png
+/build:assets/level/grassTexture6.png;assets/level/grassTexture5.png
 
 #begin assets/level/grassTexture7.png
 /importer:TextureImporter
@@ -95,7 +95,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:assets/level/grassTexture7.png
+/build:assets/level/grassTexture7.png;assets/level/grassTexture6.png
 
 #begin assets/level/grassTexture8.png
 /importer:TextureImporter
@@ -107,7 +107,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:assets/level/grassTexture8.png
+/build:assets/level/grassTexture8.png;assets/level/grassTexture7.png
 
 #begin assets/level/grassTexture9.png
 /importer:TextureImporter
@@ -119,7 +119,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:assets/level/grassTexture9.png
+/build:assets/level/grassTexture9.png;assets/level/grassTexture8.png
 
 #begin assets/level/horizontalHedge1.png
 /importer:TextureImporter
@@ -131,7 +131,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:assets/level/horizontalHedge1.png
+/build:assets/level/horizontalHedge1.png;assets/level/horizontalHedge0.png
 
 #begin assets/level/horizontalHedge2.png
 /importer:TextureImporter
@@ -143,7 +143,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:assets/level/horizontalHedge2.png
+/build:assets/level/horizontalHedge2.png;assets/level/horizontalHedge1.png
 
 #begin assets/level/horizontalHedge3.png
 /importer:TextureImporter
@@ -155,7 +155,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:assets/level/horizontalHedge3.png
+/build:assets/level/horizontalHedge3.png;assets/level/horizontalHedge2.png
 
 #begin assets/level/horizontalHedge4.png
 /importer:TextureImporter
@@ -167,7 +167,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:assets/level/horizontalHedge4.png
+/build:assets/level/horizontalHedge4.png;assets/level/horizontalHedge3.png
 
 #begin assets/level/verticalHedge1.png
 /importer:TextureImporter
@@ -179,7 +179,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:assets/level/verticalHedge1.png
+/build:assets/level/verticalHedge1.png;assets/level/verticalHedge0.png
 
 #begin assets/level/verticalHedge2.png
 /importer:TextureImporter
@@ -191,7 +191,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:assets/level/verticalHedge2.png
+/build:assets/level/verticalHedge2.png;assets/level/verticalHedge1.png
 
 #begin assets/level/verticalHedge3.png
 /importer:TextureImporter
@@ -203,7 +203,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:assets/level/verticalHedge3.png
+/build:assets/level/verticalHedge3.png;assets/level/verticalHedge2.png
 
 #begin assets/level/verticalHedge4.png
 /importer:TextureImporter
@@ -215,7 +215,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:assets/level/verticalHedge4.png
+/build:assets/level/verticalHedge4.png;assets/level/verticalHedge3.png
 
 #begin assets/player/player0.png
 /importer:TextureImporter
@@ -288,4 +288,40 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:assets/player/player5.png
+
+#begin assets/player/player6.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:assets/player/player6.png
+
+#begin assets/player/player7.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:assets/player/player7.png
+
+#begin assets/player/player8.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:assets/player/player8.png
 

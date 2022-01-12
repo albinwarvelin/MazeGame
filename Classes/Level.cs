@@ -150,7 +150,7 @@ namespace MazeGame.Classes
                     Tile lastNonNull = null; //Always overwritten
                     int count = 0;
                     
-                    for(int i = 0; i < 4; i++)
+                    for(int i = 0; i < 4; i++) //Checks how many of surrounding tiles are voidtiles or edges
                     {
                         if(tiles[y, x].Neighbors[i] == null)
                         {
@@ -163,13 +163,12 @@ namespace MazeGame.Classes
                         }
                     }
 
+                    //If all surrounding tiles are void or edge the last tile to be checked is set to real tile
                     if(count == 4)
                     {
                         lastNonNull.VoidTile = false;
-                        y = -1; //Restart
-                        x = -1; //Restart
 
-                        goto outerloop;
+                        goto outerloop; //Resets loop
                     }
                 }
             }
@@ -370,6 +369,8 @@ namespace MazeGame.Classes
                     targetTile.BeenChecked = true;
                 }
             }
+
+            //TO ADD: If not all tiles have been checked, redo process with neighboring voidtile of any non-checked tile converted. Do until all tiles are checked in level generating process.
 
             /* Removes tree tile */
             tileTextures[4] = tileTextures[0]; //Removes tree tile from list
