@@ -142,6 +142,7 @@ namespace MazeGame.Classes
             }
 
             /* Checks so no tile is completely surrounded by voidtiles */
+            outerloop:
             for (int y = 0; y < size; y++)
             {
                 for (int x = 0; x < size; x++)
@@ -167,6 +168,8 @@ namespace MazeGame.Classes
                         lastNonNull.VoidTile = false;
                         y = -1; //Restart
                         x = -1; //Restart
+
+                        goto outerloop;
                     }
                 }
             }
