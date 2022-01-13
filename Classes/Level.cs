@@ -173,6 +173,41 @@ namespace MazeGame.Classes
                 }
             }
 
+            RandomPathGen(startTilePos);
+
+            //If not all tiles have been checked, redo process with neighboring voidtile of any non-checked tile converted.
+            //Do until all tiles are checked in level generating process. This is done to prevent any lone islands in specific cases.
+            for (int y = 0; y < size; y++)
+            {
+                for (int x = 0; )
+            }
+
+            /* Removes tree tile */
+            tileTextures[4] = tileTextures[0]; //Removes tree tile from list
+
+            for (int y = 0; y < size -1; y++)
+            {
+                for(int x = 0; x < size; x++)
+                {
+                    if(tiles[y + 1, x].HDiv == null)
+                    {
+                        tiles[y, x].TileTexture = tileTextures[rnd.Next(0, tileTextures.Length)]; //Replaces texture with non tree texture if tile doesnt have any divider under it 
+                    }
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Generates random maze through all available tiles. Works by adding tiles neighbors to common list then picking a random tile which is added to maze with an
+        /// opening in the direction of origintile. Neighbors of this tile is then added to common list. If tile has been checked it's not processed and removed from list.
+        /// Runs until list is empty.
+        /// </summary>
+        /// <param name="startTilePos"></param>
+        public void RandomPathGen(Vector2 startTilePos)
+        {
+            Random rnd = new Random();
+
             /* Generates first tile and it's neighbors */
             List<Tile> straightNeighbors = new List<Tile>();
             List<Tile> rightNeighbors = new List<Tile>();
@@ -235,19 +270,19 @@ namespace MazeGame.Classes
                         continue;
                     }
                 }
-                
-                if(targetTile.VoidTile) //Removes divider between voidtiles
+
+                if (targetTile.VoidTile) //Removes divider between voidtiles
                 {
-                    for(int x = 0; x < size; x++) //Removes divider if tile is on top edge
+                    for (int x = 0; x < size; x++) //Removes divider if tile is on top edge
                     {
-                        if(targetTile == tiles[0, x])
+                        if (targetTile == tiles[0, x])
                         {
                             targetTile.HDiv = null;
                         }
                     }
-                    for(int y = 0; y < size; y++) //Removes divider if tile is on left edge
+                    for (int y = 0; y < size; y++) //Removes divider if tile is on left edge
                     {
-                        if(targetTile == tiles[y, 0]) 
+                        if (targetTile == tiles[y, 0])
                         {
                             targetTile.VDiv = null;
                         }
@@ -258,7 +293,7 @@ namespace MazeGame.Classes
 
                     if (targetTile.Neighbors[0] != null)
                     {
-                        if(targetTile.Neighbors[0].VoidTile)
+                        if (targetTile.Neighbors[0].VoidTile)
                         {
                             targetTile.HDiv = null;
                         }
@@ -369,23 +404,6 @@ namespace MazeGame.Classes
                     targetTile.BeenChecked = true;
                 }
             }
-
-            //TO ADD: If not all tiles have been checked, redo process with neighboring voidtile of any non-checked tile converted. Do until all tiles are checked in level generating process.
-
-            /* Removes tree tile */
-            tileTextures[4] = tileTextures[0]; //Removes tree tile from list
-
-            for (int y = 0; y < size -1; y++)
-            {
-                for(int x = 0; x < size; x++)
-                {
-                    if(tiles[y + 1, x].HDiv == null)
-                    {
-                        tiles[y, x].TileTexture = tileTextures[rnd.Next(0, tileTextures.Length)]; //Replaces texture with non tree texture if tile doesnt have any divider under it 
-                    }
-                }
-            }
-
         }
 
         public void Update(List<Player.LevelDirection> toMove, Player player)
