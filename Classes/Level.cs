@@ -141,49 +141,50 @@ namespace MazeGame.Classes
                 }
             }
 
-            /* Checks so no tile is completely surrounded by voidtiles */
-            outerloop:
-            for (int y = 0; y < size; y++)
+            /* Calls random-path-generator, if not all tiles have been checked in generation checked booleans are reset, neighboring voidtile of any non-checked tile is set
+             * normal tile and process is repeated until all tiles are checked in level generating process. This is done to prevent any lone islands in specific cases. */
+            List<Tile> nonCheckedTiles = new List<Tile>();
+            do
             {
-                for (int x = 0; x < size; x++)
+                nonCheckedTiles = new List<Tile>(); //Resets list
+
+                RandomPathGen(startTilePos);
+                
+                for (int y = 0; y < size; y++)
                 {
-                    Tile lastNonNull = null; //Always overwritten
-                    int count = 0;
-                    
-                    for(int i = 0; i < 4; i++) //Checks how many of surrounding tiles are voidtiles or edges
+                    for (int x = 0; x < size; x++)
                     {
-                        if(tiles[y, x].Neighbors[i] == null)
+                        if (!tiles[y, x].BeenChecked && !tiles[y, x].VoidTile)
                         {
-                            count++;
+                            nonCheckedTiles.Add(tiles[y, x]);
                         }
-                        else if (tiles[y, x].Neighbors[i].VoidTile == true)
-                        {
-                            count++;
-                            lastNonNull = tiles[y, x].Neighbors[i];
-                        }
-                    }
-
-                    //If all surrounding tiles are void or edge the last tile to be checked is set to real tile
-                    if(count == 4)
-                    {
-                        lastNonNull.VoidTile = false;
-
-                        goto outerloop; //Resets loop
                     }
                 }
-            }
 
-            RandomPathGen(startTilePos);
+                if(nonCheckedTiles.Count != 0)
+                {
+                    foreach(Tile tile in tiles)
+                    {
+                        tile.BeenChecked = false;
+                    }
 
-            //If not all tiles have been checked, redo process with neighboring voidtile of any non-checked tile converted.
-            //Do until all tiles are checked in level generating process. This is done to prevent any lone islands in specific cases.
-            for (int y = 0; y < size; y++)
-            {
-                for (int x = 0; )
-            }
+                    for(;;)
+                    {
+                        if(nonCheckedTiles[rnd.Next(0, nonCheckedTiles.Count)].Neighbors[rnd.Next(0, nonCheckedTiles.Count)] != null)
+                        {
+                            if (nonCheckedTiles[rnd.Next(0, nonCheckedTiles.Count)].Neighbors[rnd.Next(0, nonCheckedTiles.Count)].VoidTile)
+                            {
+                                nonCheckedTiles[rnd.Next(0, nonCheckedTiles.Count)].Neighbors[rnd.Next(0, nonCheckedTiles.Count)].VoidTile = false;
+                                break;
+                            }
+                        }
+                    }     
+                }
 
-            /* Removes tree tile */
-            tileTextures[4] = tileTextures[0]; //Removes tree tile from list
+            } while (nonCheckedTiles.Count != 0);
+
+            /* Removes treetile */
+            tileTextures[4] = tileTextures[0]; //Removes treetile from list of texturechoices, treetile has index 4.
 
             for (int y = 0; y < size -1; y++)
             {
@@ -191,7 +192,7 @@ namespace MazeGame.Classes
                 {
                     if(tiles[y + 1, x].HDiv == null)
                     {
-                        tiles[y, x].TileTexture = tileTextures[rnd.Next(0, tileTextures.Length)]; //Replaces texture with non tree texture if tile doesnt have any divider under it 
+                        tiles[y, x].TileTexture = tileTextures[rnd.Next(0, tileTextures.Length)]; //Replaces texture with any non tree texture if tile doesnt have any divider under it 
                     }
                 }
             }
