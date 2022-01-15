@@ -22,7 +22,7 @@ namespace MazeGame.Classes
         /// <param name="window"></param>
         /// <param name="x_Speed"></param>
         /// <param name="y_Speed"></param>
-        public Level(Texture2D[] tileTextures, Texture2D[] hDivTextures, Texture2D[] vDivTexture, int size, GameWindow window, double x_Speed, double y_Speed) : base(null, 0, 0, x_Speed, y_Speed) //Level position not used, each tile has its own position
+        public Level(Texture2D[] tileTextures, Texture2D[] hDivTextures, Texture2D[] vDivTexture, int size, double voidTilePercentage, GameWindow window, double x_Speed, double y_Speed) : base(null, 0, 0, x_Speed, y_Speed) //Level position not used, each tile has its own position
         {
             this.size = size;
             Random rnd = new Random(); //Used throughout method
@@ -57,19 +57,13 @@ namespace MazeGame.Classes
                 }
             }
 
-            int[] xCoords = new int[size]; //Amount of tiles in row that are voidtiles
-            int[] yCoords = new int[size]; //Amount of tiles in column that are voidtiles
-
             /* Assigns voidtiles */
-            for (int i = 0; i < size * size * 0.15; i++)
+            for (int i = 0; i < size * size * voidTilePercentage; i++)
             {
                 int rndX = rnd.Next(0, size);
                 int rndY = rnd.Next(0, size);
 
-                xCoords[rndX] += 1; //Amount of tiles in row that are voidtiles
-                yCoords[rndY] += 1; //Amount of tiles in column that are voidtiles
-
-                if (xCoords[rndX] < size / 1.5 && yCoords[rndY] < size / 1.5 && tiles[rndY, rndX].VoidTile == false && rndX != (int)startTilePos.X && rndY != (int)startTilePos.Y) // To make sure void tiles don't split level and starttile isn't voidtile
+                if (tiles[rndY, rndX].VoidTile == false && !(rndX == (int)startTilePos.X && rndY == (int)startTilePos.Y)) // To make sure void tiles don't split level and starttile isn't voidtile
                 {
                     tiles[rndY, rndX].VoidTile = true;
                 }
@@ -163,22 +157,19 @@ namespace MazeGame.Classes
 
                 if(nonCheckedTiles.Count != 0)
                 {
-                    foreach(Tile tile in tiles)
-                    {
-                        tile.BeenChecked = false;
-                    }
-
                     for(;;)
                     {
-                        if(nonCheckedTiles[rnd.Next(0, nonCheckedTiles.Count)].Neighbors[rnd.Next(0, nonCheckedTiles.Count)] != null)
+                        Tile temp = nonCheckedTiles[rnd.Next(0, nonCheckedTiles.Count)].Neighbors[rnd.Next(0, 4)];
+
+                        if (temp != null)
                         {
-                            if (nonCheckedTiles[rnd.Next(0, nonCheckedTiles.Count)].Neighbors[rnd.Next(0, nonCheckedTiles.Count)].VoidTile)
+                            if (temp.VoidTile)
                             {
-                                nonCheckedTiles[rnd.Next(0, nonCheckedTiles.Count)].Neighbors[rnd.Next(0, nonCheckedTiles.Count)].VoidTile = false;
+                                temp.VoidTile = false;
                                 break;
                             }
                         }
-                    }     
+                    }
                 }
 
             } while (nonCheckedTiles.Count != 0);
@@ -207,14 +198,22 @@ namespace MazeGame.Classes
         /// <param name="startTilePos"></param>
         public void RandomPathGen(Vector2 startTilePos)
         {
+            /* Resets from previous run */
+            foreach (Tile tile in tiles)
+            {
+                tile.BeenChecked = false;
+                tile.ResetDividers();
+                tile.OriginTile = new List<Tile>();
+            }
+
             Random rnd = new Random();
 
             /* Generates first tile and it's neighbors */
             List<Tile> straightNeighbors = new List<Tile>();
             List<Tile> rightNeighbors = new List<Tile>();
             List<Tile> leftNeighbors = new List<Tile>();
-            double straightChance = 0.10;
-            double leftChance = 0.45; //Rightchance is 1.00 - straightchance - leftchance
+            double straightChance = 0.20;
+            double leftChance = 0.40; //Rightchance is 1.00 - straightchance - leftchance
 
             Tile startTile = tiles[(int)startTilePos.Y, (int)startTilePos.X];
             startTile.BeenChecked = true;

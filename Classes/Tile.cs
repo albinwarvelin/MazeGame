@@ -9,12 +9,17 @@ namespace MazeGame.Classes
 {
     class Tile : MovingObject
     {
+        public enum TileType { Standard, Right, Bottom, Corner } //Used when determining if tile needs divider in bottom or right position
+
+        /* Parameters, stored to use if tile is reset */
+        private Texture2D hDivTexture;
+        private Texture2D vDivTexture;
+        private TileType tileType;
+
         /* When neighbor is added to list, its origin direction is also added.
         If neighbor is added multiple times multiple origin directions are added. 
         When removing a wall, a random direction is chosen. */
         List<Tile> originTile = new List<Tile>(); 
-
-        public enum TileType { Standard, Right, Bottom, Corner } //Used when determining if tile needs divider in bottom or right position
 
         private bool beenChecked = false;
         private bool voidTile = false; //If tile is void it doesn't have any ground (texture), and player shall not be able to
@@ -27,7 +32,7 @@ namespace MazeGame.Classes
         protected Tile[] neighbors; //0 = Top, 1 = Right, 2 = Left, 3 = Bottom
 
         /// <summary>
-        /// Constructor, creates horizontal and vertical dividers in top and left positions
+        /// Constructor, assigns dividers to tile according to parameters. Stores parameters if needed for resetting tile.
         /// </summary>
         /// <param name="tileTexture"></param>
         /// <param name="hDivTexture"></param>
@@ -38,22 +43,34 @@ namespace MazeGame.Classes
         /// <param name="y_Speed"></param>
         public Tile(Texture2D tileTexture, Texture2D hDivTexture, Texture2D vDivTexture, TileType tileType, double x_Pos, double y_Pos, double x_Speed, double y_Speed):base(tileTexture, x_Pos, y_Pos, x_Speed, y_Speed)
         {
-            hDiv = new TileDivider(hDivTexture, x_Pos, y_Pos - 25, x_Speed, y_Speed);
-            vDiv = new TileDivider(vDivTexture, x_Pos - 25, y_Pos, x_Speed, y_Speed);
+            this.hDivTexture = hDivTexture;
+            this.vDivTexture = vDivTexture;
+            this.tileType = tileType;
+
+            ResetDividers();
+        }
+
+        /// <summary>
+        /// Resets all dividers to state specified by parameters in construction
+        /// </summary>
+        public void ResetDividers()
+        {
+            hDiv = new TileDivider(hDivTexture, position.X, position.Y - 25, speed.X, speed.Y);
+            vDiv = new TileDivider(vDivTexture, position.X - 25, position.Y, speed.X, speed.Y);
 
             switch (tileType)
             {
                 case TileType.Right:
-                    rDiv = new TileDivider(vDivTexture, x_Pos + 275, y_Pos, x_Speed, y_Speed);
+                    rDiv = new TileDivider(vDivTexture, position.X + 275, position.Y, speed.X, speed.Y);
                     break;
                 case TileType.Bottom:
-                    bDiv = new TileDivider(hDivTexture, x_Pos, y_Pos + 275, x_Speed, y_Speed);
+                    bDiv = new TileDivider(hDivTexture, position.X, position.Y + 275, speed.X, speed.Y);
                     break;
                 case TileType.Corner:
-                    rDiv = new TileDivider(vDivTexture, x_Pos + 275, y_Pos, x_Speed, y_Speed);
-                    bDiv = new TileDivider(hDivTexture, x_Pos, y_Pos + 275, x_Speed, y_Speed);
+                    rDiv = new TileDivider(vDivTexture, position.X + 275, position.Y, speed.X, speed.Y);
+                    bDiv = new TileDivider(hDivTexture, position.X, position.Y + 275, speed.X, speed.Y);
                     break;
-            }  
+            }
         }
 
         public void Update(List<Player.LevelDirection> toMove) //toMove contains enums for direction level should move, opposite to player movement
@@ -93,6 +110,9 @@ namespace MazeGame.Classes
             set { beenChecked = value; }
         }
 
+        /// <summary>
+        /// Voidtile property, returns bool
+        /// </summary>
         public bool VoidTile
         {
             get { return voidTile; }
@@ -100,7 +120,7 @@ namespace MazeGame.Classes
         }
 
         /// <summary>
-        /// Tile texture property.
+        /// Tile texture property, returns Texture2D.
         /// </summary>
         public Texture2D TileTexture
         {
