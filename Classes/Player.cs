@@ -9,15 +9,14 @@ namespace MazeGame.Classes
 {
     class Player : PhysicalObject
     {
-        public enum LevelDirection { Up, Down, Left, Right }; //Used to return what direction level should move
-        public enum PlayerDirection { Up, Down, Left, Right, Still }; //Used to determine texture
+        private enum Direction { Up, Down, Left, Right, Still }; //Used to determine texture
 
         private List<TileDivider> surroundingDividers; //Updated every frame to contain current surrounding dividers
         private const int colliderMargin = 15; //How much player should be allowed to overlap dividers, makes collission rectangle smaller.
 
         private readonly InfiniteAnimation up, down, left, right;
         private readonly Texture2D stillTexture;
-        private PlayerDirection currentDir = PlayerDirection.Right; //Default, overwritten in first frame.
+        private Direction currentDir = Direction.Right; //Default, overwritten in first frame.
         
         public Player(Texture2D[] textures, GameTime gameTime, double x_Pos, double y_Pos, double x_Speed, double y_Speed) : base(textures[0], x_Pos, y_Pos, x_Speed, y_Speed)
         {
@@ -35,11 +34,11 @@ namespace MazeGame.Classes
         /// </summary>
         /// <param name="window"></param>
         /// <returns></returns>
-        public List<LevelDirection> Update(GameWindow window)
+        public List<Level.Direction> Update(GameWindow window)
         {
-            List<LevelDirection> directions = new List<LevelDirection>();
+            List<Level.Direction> directions = new List<Level.Direction>();
 
-            currentDir = PlayerDirection.Still; //Direction is set to still if there's no movement.
+            currentDir = Direction.Still; //Direction is set to still if there's no movement.
 
             KeyboardState keyboardInput = Keyboard.GetState();
             if (keyboardInput.IsKeyDown(Keys.W) && !keyboardInput.IsKeyDown(Keys.S))
@@ -64,10 +63,10 @@ namespace MazeGame.Classes
                     if (position.Y < window.ClientBounds.Height * 0.30)
                     {
                         position.Y += speed.Y;
-                        directions.Add(LevelDirection.Down); //Direction that level should move, inverted to player movement
+                        directions.Add(Level.Direction.Down); //Direction that level should move, inverted to player movement
                     }
 
-                    currentDir = PlayerDirection.Up;
+                    currentDir = Direction.Up;
                 }
             }
             if (keyboardInput.IsKeyDown(Keys.S) && !keyboardInput.IsKeyDown(Keys.W))
@@ -92,10 +91,10 @@ namespace MazeGame.Classes
                     if (position.Y > window.ClientBounds.Height * 0.70 - texture.Width)
                     {
                         position.Y -= speed.Y;
-                        directions.Add(LevelDirection.Up); //Direction that level should move, inverted to player movement
+                        directions.Add(Level.Direction.Up); //Direction that level should move, inverted to player movement
                     }
 
-                    currentDir = PlayerDirection.Down;
+                    currentDir = Direction.Down;
                 }
             }
             if (keyboardInput.IsKeyDown(Keys.A) && !keyboardInput.IsKeyDown(Keys.D))
@@ -120,10 +119,10 @@ namespace MazeGame.Classes
                     if (position.X < window.ClientBounds.Width * 0.20)
                     {
                         position.X += speed.X;
-                        directions.Add(LevelDirection.Right); //Direction that level should move, inverted to player movement
+                        directions.Add(Level.Direction.Right); //Direction that level should move, inverted to player movement
                     }
 
-                    currentDir = PlayerDirection.Left;
+                    currentDir = Direction.Left;
                 }
             }
             if (keyboardInput.IsKeyDown(Keys.D) && !keyboardInput.IsKeyDown(Keys.A))
@@ -148,10 +147,10 @@ namespace MazeGame.Classes
                     if (position.X > window.ClientBounds.Width * 0.80 - texture.Height)
                     {
                         position.X -= speed.X;
-                        directions.Add(LevelDirection.Left); //Direction that level should move, inverted to player movement
+                        directions.Add(Level.Direction.Left); //Direction that level should move, inverted to player movement
                     }
 
-                    currentDir = PlayerDirection.Right;
+                    currentDir = Direction.Right;
                 }
             }
 
@@ -174,19 +173,19 @@ namespace MazeGame.Classes
         {
             switch(currentDir)
             {
-                case PlayerDirection.Left: //Uses textures 0 and 3
+                case Direction.Left: //Uses textures 0 and 3
                     left.Update(spriteBatch);
                     break;
-                case PlayerDirection.Right: //Uses textires 1 and 2
+                case Direction.Right: //Uses textires 1 and 2
                     right.Update(spriteBatch);
                     break;
-                case PlayerDirection.Up:
+                case Direction.Up:
                     up.Update(spriteBatch);
                     break;
-                case PlayerDirection.Down:
+                case Direction.Down:
                     down.Update(spriteBatch);
                     break;
-                case PlayerDirection.Still:
+                case Direction.Still:
                     texture = stillTexture;
                     break;
             }

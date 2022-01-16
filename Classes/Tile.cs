@@ -73,21 +73,21 @@ namespace MazeGame.Classes
             }
         }
 
-        public void Update(List<Player.LevelDirection> toMove) //toMove contains enums for direction level should move, opposite to player movement
+        public void Update(List<Level.Direction> toMove) //toMove contains enums for direction level should move, opposite to player movement
         {
-            if(toMove.Contains(Player.LevelDirection.Up))
+            if(toMove.Contains(Level.Direction.Up))
             {
                 position.Y -= speed.Y;
             }
-            if (toMove.Contains(Player.LevelDirection.Right))
+            if (toMove.Contains(Level.Direction.Right))
             {
                 position.X += speed.X;
             }
-            if (toMove.Contains(Player.LevelDirection.Left))
+            if (toMove.Contains(Level.Direction.Left))
             {
                 position.X -= speed.X;
             }
-            if (toMove.Contains(Player.LevelDirection.Down))
+            if (toMove.Contains(Level.Direction.Down))
             {
                 position.Y += speed.Y;
             }

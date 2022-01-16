@@ -9,8 +9,10 @@ namespace MazeGame.Classes
 {
     class Level : MovingObject
     {
-        protected Tile[,] tiles; //Two dimensional array
-        protected int size;
+        public enum Direction { Up, Down, Left, Right }; //Used to return what direction level should move
+
+        private Tile[,] tiles; //Two dimensional array: y, x
+        private int size;
 
         /// <summary>
         /// Generates new random level. Size shall not be less than 4.
@@ -406,7 +408,12 @@ namespace MazeGame.Classes
             }
         }
 
-        public void Update(List<Player.LevelDirection> toMove, Player player)
+        /// <summary>
+        /// Updates level.
+        /// </summary>
+        /// <param name="toMove"></param>
+        /// <param name="player"></param>
+        public void Update(List<Direction> toMove, Player player)
         {
             List<TileDivider> surroundingDividers = new List<TileDivider>();
 
@@ -458,6 +465,11 @@ namespace MazeGame.Classes
             player.SurroundingDividers = surroundingDividers;
         }
 
+        /// <summary>
+        /// Draws level, overrides method in gameobject.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="window"></param>
         public override void Draw(SpriteBatch spriteBatch, GameWindow window)
         {
             foreach(Tile tile in tiles)

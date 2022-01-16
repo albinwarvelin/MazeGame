@@ -18,13 +18,15 @@ namespace MazeGame
         static int x_Sp_Player; //General speed for game
         static int y_Sp_Player; //General speed for game
 
-        static Level level; //Games level
-        static Player player; //Player
+        private static Background background;
+        private static Level level; //Games level
+        private static Player player; //Player
 
-        static Texture2D[] tileTextures = new Texture2D[9];
-        static Texture2D[] hDivTextures = new Texture2D[4];
-        static Texture2D[] vDivTextures = new Texture2D[4];
-        static Texture2D[] playerTextures = new Texture2D[9];
+        private static Texture2D skyTexture;
+        private static Texture2D[] tileTextures = new Texture2D[9];
+        private static Texture2D[] hDivTextures = new Texture2D[4];
+        private static Texture2D[] vDivTextures = new Texture2D[4];
+        private static Texture2D[] playerTextures = new Texture2D[9];
 
         public static void Initialize()
         {
@@ -34,6 +36,8 @@ namespace MazeGame
 
         public static void LoadContent(ContentManager content, GameWindow window)
         {
+            skyTexture = content.Load<Texture2D>("assets/background/sky1");
+
             for(int i = 0; i < 9; i++) //Loads tiles
             {
                 tileTextures[i] = content.Load<Texture2D>("assets/level/grassTexture" + i);
@@ -74,19 +78,23 @@ namespace MazeGame
 
         public static State Reset(GameWindow window, GameTime gameTime) //Resets level then sets state to run
         {
-            level = new Level(tileTextures, hDivTextures, vDivTextures, 10, 0.17, window, x_Sp_Player, y_Sp_Player); //TODO change speed to player speed
+            background = new Background(window, skyTexture, 9, 9);
+            level = new Level(tileTextures, hDivTextures, vDivTextures, 5, 0.17, window, x_Sp_Player, y_Sp_Player); //TODO change speed to player speed
             player = new Player(playerTextures, gameTime, (window.ClientBounds.Width / 2) - (playerTextures[0].Width / 2), (window.ClientBounds.Height / 2) - (playerTextures[0].Height / 2), x_Sp_Player, y_Sp_Player); //Change texture
             return State.Run;
         }
 
         public static State RunUpdate(GameWindow window) //Updates run state
         {
-            level.Update(player.Update(window), player); //Updates player first, then uses the enum list provided by method to update 
+            List<Level.Direction> directions = player.Update(window);
+            level.Update(directions, player); //Updates player first, then uses the enum list provided by method to update 
+            background.Update(directions);
             return State.Run;
         }
 
         public static void RunDraw(SpriteBatch spriteBatch, GameWindow window) //Draws run
         {
+            background.Draw(spriteBatch);
             level.Draw(spriteBatch, window);
             player.Draw(spriteBatch);
         }
