@@ -219,15 +219,19 @@ namespace MazeGame.Classes
 
             Tile startTile = tiles[(int)startTilePos.Y, (int)startTilePos.X];
             startTile.BeenChecked = true;
-
-            straightNeighbors.Add(startTile.Neighbors[0]);
-            straightNeighbors.Add(startTile.Neighbors[3]); //Put in straight neighbors, only "back-neighbor" to be added to list
-            rightNeighbors.Add(startTile.Neighbors[1]);
+ 
             leftNeighbors.Add(startTile.Neighbors[2]);
+            rightNeighbors.Add(startTile.Neighbors[1]);
+            straightNeighbors.Add(startTile.Neighbors[3]); //Put in straight neighbors, only "back-neighbor" to be added to list
+            straightNeighbors.Add(startTile.Neighbors[0]);
+            
 
             for (int i = 0; i < 4; i++)
             {
-                startTile.Neighbors[i].OriginTile.Add(startTile);
+                if(startTile.Neighbors[i] != null)
+                {
+                    startTile.Neighbors[i].OriginTile.Add(startTile);
+                }
             }
 
             /* Random generation. Works by adding neighbors to lists then picking random neighbor to remove wall between it and it's origin */
@@ -271,6 +275,11 @@ namespace MazeGame.Classes
                     {
                         continue;
                     }
+                }
+
+                if(targetTile == null)
+                {
+                    continue;
                 }
 
                 if (targetTile.VoidTile) //Removes divider between voidtiles
