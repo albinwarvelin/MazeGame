@@ -27,6 +27,7 @@ namespace MazeGame
         private static Texture2D[] hDivTextures = new Texture2D[4];
         private static Texture2D[] vDivTextures = new Texture2D[4];
         private static Texture2D[] playerTextures = new Texture2D[9];
+        private static Texture2D[] endPortalTextures = new Texture2D[7];
 
         public static void Initialize()
         {
@@ -36,7 +37,7 @@ namespace MazeGame
 
         public static void LoadContent(ContentManager content, GameWindow window)
         {
-            skyTexture = content.Load<Texture2D>("assets/background/sky1");
+            skyTexture = content.Load<Texture2D>("assets/background/sky");
 
             for(int i = 0; i < 9; i++) //Loads tiles
             {
@@ -54,6 +55,11 @@ namespace MazeGame
             {
                 playerTextures[i] = content.Load<Texture2D>("assets/player/player" + i);
             }
+            for(int i = 0; i < 7; i++)
+            {
+                endPortalTextures[i] = content.Load<Texture2D>("assets/level/endPortal" + i);
+            }
+            
         }
 
         public static State MenuUpdate() //Updates menu state
@@ -79,7 +85,7 @@ namespace MazeGame
         public static State Reset(GameWindow window, GameTime gameTime) //Resets level then sets state to run
         {
             background = new Background(window, skyTexture, 9, 9);
-            level = new Level(tileTextures, hDivTextures, vDivTextures, 5, 0.17, window, x_Sp_Player, y_Sp_Player); //TODO change speed to player speed
+            level = new Level(tileTextures, hDivTextures, vDivTextures,endPortalTextures, 7, 0.17, window, x_Sp_Player, y_Sp_Player); //TODO change speed to player speed
             player = new Player(playerTextures, gameTime, (window.ClientBounds.Width / 2) - (playerTextures[0].Width / 2), (window.ClientBounds.Height / 2) - (playerTextures[0].Height / 2), x_Sp_Player, y_Sp_Player); //Change texture
             return State.Run;
         }
@@ -97,6 +103,7 @@ namespace MazeGame
             background.Draw(spriteBatch);
             level.Draw(spriteBatch, window);
             player.Draw(spriteBatch);
+            level.EndPortal.DrawTop(spriteBatch);
         }
 
         public static State PausedUpdate() //Updates paused
@@ -127,6 +134,11 @@ namespace MazeGame
         public static void FailedDraw(SpriteBatch spriteBatch) //Draws failed
         {
 
+        }
+
+        public static Level Level
+        {
+            get { return level; }   
         }
     }
 }

@@ -29,8 +29,8 @@ namespace MazeGame.Classes
          
         /// <summary>
         /// Updates player. Checks if player collides with any dividers and stops player if there's collission, if
-        /// player moves outside of specified window area level is given new direction to move. If player moves moveDir
-        /// direction is set a new direction which draw-method later uses to determine texture.
+        /// player moves outside of specified window area level is given new direction to move. If player moves 
+        /// directions are returned which draw-method later uses to determine texture.
         /// </summary>
         /// <param name="window"></param>
         /// <returns></returns>
@@ -48,13 +48,17 @@ namespace MazeGame.Classes
 
                 foreach (TileDivider tileDivider in surroundingDividers)
                 {
-                    if (checkCollision(tileDivider))
+                    if (CheckCollision(tileDivider))
                     {
                         collider = tileDivider;
                         break;
                     }
                 }
-                if (collider != null)
+                if (collider == GameElements.Level.EndPortal) //Easier solution but not the most elegant. Player tends not not end up exactly 15 pixels within portal.
+                {
+                    position.Y += speed.Y;
+                }
+                else if (collider != null)
                 {
                     position.Y = (float)(collider.Y_Pos + collider.Height - colliderMargin);
                 }
@@ -76,13 +80,17 @@ namespace MazeGame.Classes
 
                 foreach (TileDivider tileDivider in surroundingDividers)
                 {
-                    if (checkCollision(tileDivider))
+                    if (CheckCollision(tileDivider))
                     {
                         collider = tileDivider;
                         break;
                     }
                 }
-                if (collider != null)
+                if (collider == GameElements.Level.EndPortal) //Easier solution but not the most elegant. Player tends not not end up exactly 15 pixels within portal.
+                {
+                    position.Y -= speed.Y;
+                }
+                else if (collider != null)
                 {
                     position.Y = (float)(collider.Y_Pos - texture.Height + colliderMargin);
                 }
@@ -104,13 +112,17 @@ namespace MazeGame.Classes
 
                 foreach (TileDivider tileDivider in surroundingDividers)
                 {
-                    if (checkCollision(tileDivider))
+                    if (CheckCollision(tileDivider))
                     {
                         collider = tileDivider;
                         break;
                     }
                 }
-                if (collider != null)
+                if(collider == GameElements.Level.EndPortal) //Easier solution but not the most elegant. Player tends not not end up exactly 15 pixels within portal.
+                {
+                    position.X += speed.X;
+                }
+                else if (collider != null)
                 {
                     position.X = (float)(collider.X_Pos + collider.Width - colliderMargin); //Reverse effect of position change
                 }
@@ -132,13 +144,17 @@ namespace MazeGame.Classes
 
                 foreach (TileDivider tileDivider in surroundingDividers)
                 {
-                    if (checkCollision(tileDivider))
+                    if (CheckCollision(tileDivider))
                     {
                         collider = tileDivider;
                         break;
                     }
                 }
-                if (collider != null)
+                if (collider == GameElements.Level.EndPortal) //Easier solution but not the most elegant. Player tends not not end up exactly 15 pixels within portal.
+                {
+                    position.X -= speed.X;
+                }
+                else if (collider != null)
                 {
                     position.X = (float)(collider.X_Pos - texture.Width + colliderMargin); //Reverse effect of position change
                 }
@@ -157,12 +173,42 @@ namespace MazeGame.Classes
             return directions;
         }
 
-        public override bool checkCollision(PhysicalObject other)
+        public override bool CheckCollision(PhysicalObject other)
         {
-            Rectangle myRect = new Rectangle(Convert.ToInt32(position.X + colliderMargin) , Convert.ToInt32(position.Y + colliderMargin), Convert.ToInt32(texture.Width - (colliderMargin * 2)), Convert.ToInt32(texture.Height - (colliderMargin * 2))); //Own object, with 10 pixel room on each side.
-            Rectangle otherRect = new Rectangle(Convert.ToInt32(other.X_Pos), Convert.ToInt32(other.Y_Pos), Convert.ToInt32(other.Width), Convert.ToInt32(other.Height)); //Other object
+            Rectangle myRect = new Rectangle(Convert.ToInt32(position.X + colliderMargin), Convert.ToInt32(position.Y + colliderMargin), Convert.ToInt32(texture.Width - (colliderMargin * 2)), Convert.ToInt32(texture.Height - (colliderMargin * 2))); //Own object, with room on each side.
+            if (other == GameElements.Level.EndPortal)
+            {
+                Rectangle otherRect1 = new Rectangle();
+                Rectangle otherRect2 = new Rectangle();
+                switch (GameElements.Level.EndPortal.PortalType)
+                {
+                    case EndPortal.Type.Top:
+                        otherRect1 = new Rectangle(Convert.ToInt32(other.X_Pos), Convert.ToInt32(other.Y_Pos), Convert.ToInt32(60), Convert.ToInt32(other.Height)); //Other object
+                        otherRect2 = new Rectangle(Convert.ToInt32(other.X_Pos + 240), Convert.ToInt32(other.Y_Pos), Convert.ToInt32(60), Convert.ToInt32(other.Height)); //Other object
+                        break;
 
-            return myRect.Intersects(otherRect);
+                    case EndPortal.Type.Right:
+                        otherRect1 = new Rectangle(Convert.ToInt32(other.X_Pos), Convert.ToInt32(other.Y_Pos + 100), Convert.ToInt32(other.Width), Convert.ToInt32(60)); //Other object
+                        otherRect2 = new Rectangle(Convert.ToInt32(other.X_Pos), Convert.ToInt32(other.Y_Pos + 340), Convert.ToInt32(other.Width), Convert.ToInt32(60)); //Other object
+                        break;
+
+                    case EndPortal.Type.Left:
+                        otherRect1 = new Rectangle(Convert.ToInt32(other.X_Pos), Convert.ToInt32(other.Y_Pos + 100), Convert.ToInt32(other.Width), Convert.ToInt32(60)); //Other object
+                        otherRect2 = new Rectangle(Convert.ToInt32(other.X_Pos), Convert.ToInt32(other.Y_Pos + 340), Convert.ToInt32(other.Width), Convert.ToInt32(60)); //Other object
+                        break;
+
+                    case EndPortal.Type.Bottom:
+                        otherRect1 = new Rectangle(Convert.ToInt32(other.X_Pos), Convert.ToInt32(other.Y_Pos), Convert.ToInt32(60), Convert.ToInt32(other.Height)); //Other object
+                        otherRect2 = new Rectangle(Convert.ToInt32(other.X_Pos + 240), Convert.ToInt32(other.Y_Pos), Convert.ToInt32(60), Convert.ToInt32(other.Height)); //Other object
+                        break;
+                }
+                return myRect.Intersects(otherRect1) || myRect.Intersects(otherRect2);
+            }
+            else
+            {
+                Rectangle otherRect = new Rectangle(Convert.ToInt32(other.X_Pos), Convert.ToInt32(other.Y_Pos), Convert.ToInt32(other.Width), Convert.ToInt32(other.Height)); //Other object
+                return myRect.Intersects(otherRect);
+            }
         }
 
         /// <summary>

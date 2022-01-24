@@ -21,7 +21,11 @@ namespace MazeGame.Classes
 
         }
 
-        public void Update(List<Level.Direction> toMove)
+        /// <summary>
+        /// Updates object, moves in given direcitons.
+        /// </summary>
+        /// <param name="toMove"></param>
+        public virtual void Update(List<Level.Direction> toMove)
         {
             if (toMove.Contains(Level.Direction.Up))
             {

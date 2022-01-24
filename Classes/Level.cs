@@ -13,6 +13,7 @@ namespace MazeGame.Classes
 
         private Tile[,] tiles; //Two dimensional array: y, x
         private int size;
+        private EndPortal endPortal;
 
         /// <summary>
         /// Generates new random level. Size shall not be less than 4.
@@ -24,7 +25,7 @@ namespace MazeGame.Classes
         /// <param name="window"></param>
         /// <param name="x_Speed"></param>
         /// <param name="y_Speed"></param>
-        public Level(Texture2D[] tileTextures, Texture2D[] hDivTextures, Texture2D[] vDivTexture, int size, double voidTilePercentage, GameWindow window, double x_Speed, double y_Speed) : base(null, 0, 0, x_Speed, y_Speed) //Level position not used, each tile has its own position
+        public Level(Texture2D[] tileTextures, Texture2D[] hDivTextures, Texture2D[] vDivTexture, Texture2D[] endPortalTextures, int size, double voidTilePercentage, GameWindow window, double x_Speed, double y_Speed) : base(null, 0, 0, x_Speed, y_Speed) //Level position not used, each tile has its own position
         {
             this.size = size;
             Random rnd = new Random(); //Used throughout method
@@ -190,6 +191,59 @@ namespace MazeGame.Classes
                 }
             }
 
+            /* Sets random border to endPortal */
+            bool continueLoop = true;
+            while(continueLoop)
+            {
+                int index = rnd.Next(size);
+                switch (rnd.Next(4))
+                {
+                    case 0: //Top
+                        if (!tiles[0, index].VoidTile)
+                        {
+                            TileDivider previous = tiles[0, index].HDiv;
+                            EndPortal temp = new EndPortal(new Texture2D[] { endPortalTextures[2], endPortalTextures[3] }, EndPortal.Type.Top, previous.X_Pos, previous.Y_Pos - 375, x_Speed, y_Speed);
+                            
+                            tiles[0, index].HDiv = temp;
+                            endPortal = temp;
+                            continueLoop = false;
+                        }
+                        break;
+                    case 1: //Right
+                        if (!tiles[index, size - 1].VoidTile)
+                        {
+                            TileDivider previous = tiles[index, size - 1].RDiv;
+                            EndPortal temp = new EndPortal(new Texture2D[] { endPortalTextures[4], endPortalTextures[5] }, EndPortal.Type.Right, previous.X_Pos + 25, previous.Y_Pos - 100, x_Speed, y_Speed);
+                            
+                            tiles[index, size - 1].RDiv = temp;
+                            endPortal = temp;
+                            continueLoop = false;
+                        }
+                        break;
+                    case 2: //Left
+                        if (!tiles[index, 0].VoidTile)
+                        {
+                            TileDivider previous = tiles[index, 0].VDiv;
+                            EndPortal temp = new EndPortal(new Texture2D[] { endPortalTextures[0], endPortalTextures[1] }, EndPortal.Type.Left, previous.X_Pos - 275, previous.Y_Pos - 100, x_Speed, y_Speed);
+                            
+                            tiles[index, 0].VDiv = temp;
+                            endPortal = temp;
+                            continueLoop = false;
+                        }
+                        break;
+                    case 3: //Bottom
+                        if (!tiles[size - 1, index].VoidTile)
+                        {
+                            TileDivider previous = tiles[size - 1, index].BDiv;
+                            EndPortal temp = new EndPortal(new Texture2D[] { endPortalTextures[6], endPortalTextures[6] }, EndPortal.Type.Bottom, previous.X_Pos, previous.Y_Pos, x_Speed, y_Speed);
+
+                            tiles[size - 1, index].BDiv = temp;
+                            endPortal = temp;
+                            continueLoop = false;
+                        }
+                        break;
+                }
+            }
         }
 
         /// <summary>
@@ -521,5 +575,11 @@ namespace MazeGame.Classes
                 }
             }
         }
+
+        public EndPortal EndPortal
+        {
+            get { return endPortal; }
+        }
+
     }
 }

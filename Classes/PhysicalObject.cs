@@ -19,7 +19,7 @@ namespace MazeGame.Classes
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public virtual bool checkCollision(PhysicalObject other)
+        public virtual bool CheckCollision(PhysicalObject other)
         {
             Rectangle myRect = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), Convert.ToInt32(texture.Width), Convert.ToInt32(texture.Height)); //Own object
             Rectangle otherRect = new Rectangle(Convert.ToInt32(other.X_Pos), Convert.ToInt32(other.Y_Pos), Convert.ToInt32(other.Width), Convert.ToInt32(other.Height)); //Other object
