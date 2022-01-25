@@ -20,11 +20,29 @@ namespace MazeGame.Classes
         }
 
         /// <summary>
-        /// Checks if player has won.
+        /// Checks if player has won by checking if player intersects portal.
         /// </summary>
         public bool CheckWin(Player player)
         {
-            return false;
+            Rectangle myRect = new Rectangle();
+            Rectangle otherRect = new Rectangle((int)player.X_Pos, (int)player.Y_Pos, (int)player.Width, (int)player.Height);
+            switch(type)
+            {
+                case Type.Top:
+                    myRect = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height - 250);
+                    break;
+                case Type.Right:
+                    myRect = new Rectangle((int)position.X + 190, (int)position.Y, texture.Width - 190, texture.Height);
+                    break;
+                case Type.Left:
+                    myRect = new Rectangle((int)position.X, (int)position.Y, texture.Width - 190, texture.Height);
+                    break;
+                case Type.Bottom:
+                    myRect = new Rectangle((int)position.X, (int)position.Y + 255, texture.Width, texture.Height - 255); 
+                    break;
+            }
+
+            return myRect.Intersects(otherRect);
         }
 
         /// <summary>

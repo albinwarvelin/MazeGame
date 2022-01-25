@@ -235,7 +235,7 @@ namespace MazeGame.Classes
                         if (!tiles[size - 1, index].VoidTile)
                         {
                             TileDivider previous = tiles[size - 1, index].BDiv;
-                            EndPortal temp = new EndPortal(new Texture2D[] { endPortalTextures[6], endPortalTextures[6] }, EndPortal.Type.Bottom, previous.X_Pos, previous.Y_Pos, x_Speed, y_Speed);
+                            EndPortal temp = new EndPortal(new Texture2D[] { endPortalTextures[6], endPortalTextures[7] }, EndPortal.Type.Bottom, previous.X_Pos, previous.Y_Pos + 25, x_Speed, y_Speed);
 
                             tiles[size - 1, index].BDiv = temp;
                             endPortal = temp;

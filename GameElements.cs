@@ -27,7 +27,7 @@ namespace MazeGame
         private static Texture2D[] hDivTextures = new Texture2D[4];
         private static Texture2D[] vDivTextures = new Texture2D[4];
         private static Texture2D[] playerTextures = new Texture2D[9];
-        private static Texture2D[] endPortalTextures = new Texture2D[7];
+        private static Texture2D[] endPortalTextures = new Texture2D[8];
 
         public static void Initialize()
         {
@@ -55,7 +55,7 @@ namespace MazeGame
             {
                 playerTextures[i] = content.Load<Texture2D>("assets/player/player" + i);
             }
-            for(int i = 0; i < 7; i++)
+            for(int i = 0; i < 8; i++)
             {
                 endPortalTextures[i] = content.Load<Texture2D>("assets/level/endPortal" + i);
             }
@@ -95,7 +95,15 @@ namespace MazeGame
             List<Level.Direction> directions = player.Update(window);
             level.Update(directions, player); //Updates player first, then uses the enum list provided by method to update 
             background.Update(directions);
-            return State.Run;
+
+            if(level.EndPortal.CheckWin(player))
+            {
+                return State.Cleared;
+            }
+            else
+            {
+                return State.Run;
+            }
         }
 
         public static void RunDraw(SpriteBatch spriteBatch, GameWindow window) //Draws run
