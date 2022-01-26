@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace MazeGame.Classes
+namespace MazeGame
 {
     /// <summary>
     /// MovingObject is a subclass of GameObject, used for all moving objects in game. Contains a 2d speed vector.

@@ -28,7 +28,7 @@ namespace MazeGame
             _graphics.PreferredBackBufferHeight = 1080; //Window height
             _graphics.ApplyChanges();
 
-            GameElements.currentState = GameElements.State.Reset;
+            GameElements.currentState = GameElements.State.Run;
             GameElements.Initialize();
 
             base.Initialize();
@@ -52,28 +52,39 @@ namespace MazeGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            GameElements.State temp;
+
             switch (GameElements.currentState)
             {
                 case GameElements.State.Menu:
-                    GameElements.currentState = GameElements.MenuUpdate();
+                    temp = GameElements.MenuUpdate();
+                    GameElements.lastState = GameElements.currentState;
+                    GameElements.currentState = temp;
                     break;
                 case GameElements.State.HighScore:
-                    GameElements.currentState = GameElements.HighScoreUpdate();
-                    break;
-                case GameElements.State.Reset:
-                    GameElements.currentState = GameElements.Reset(Window, gameTime);
+                    temp = GameElements.HighScoreUpdate();
+                    GameElements.lastState = GameElements.currentState;
+                    GameElements.currentState = temp;
                     break;
                 case GameElements.State.Run:
-                    GameElements.currentState = GameElements.RunUpdate(Window);
+                    temp = GameElements.RunUpdate(Window, gameTime);
+                    GameElements.lastState = GameElements.currentState;
+                    GameElements.currentState = temp;
                     break;
                 case GameElements.State.Paused:
-                    GameElements.currentState = GameElements.PausedUpdate();
+                    temp = GameElements.PausedUpdate();
+                    GameElements.lastState = GameElements.currentState;
+                    GameElements.currentState = temp;
                     break;
                 case GameElements.State.Cleared:
-                    GameElements.currentState = GameElements.ClearedUpdate();
+                    temp = GameElements.ClearedUpdate(Window);
+                    GameElements.lastState = GameElements.currentState;
+                    GameElements.currentState = temp;
                     break;
                 case GameElements.State.Failed:
-                    GameElements.currentState = GameElements.FailedUpdate();
+                    temp = GameElements.FailedUpdate();
+                    GameElements.lastState = GameElements.currentState;
+                    GameElements.currentState = temp;
                     break;
                 case GameElements.State.Quit:
                     this.Exit();
@@ -92,16 +103,13 @@ namespace MazeGame
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
 
-            switch (GameElements.currentState)
+            switch (GameElements.lastState)
             {
                 case GameElements.State.Menu:
                     GameElements.MenuDraw(_spriteBatch);
                     break;
                 case GameElements.State.HighScore:
                     GameElements.HighScoreDraw(_spriteBatch);
-                    break;
-                case GameElements.State.Reset:
-                    GameElements.MenuDraw(_spriteBatch);
                     break;
                 case GameElements.State.Run:
                     GameElements.RunDraw(_spriteBatch, Window);
@@ -110,7 +118,7 @@ namespace MazeGame
                     GameElements.PausedDraw(_spriteBatch);
                     break;
                 case GameElements.State.Cleared:
-                    GameElements.ClearedDraw(_spriteBatch);
+                    GameElements.ClearedDraw(_spriteBatch, Window);
                     break;
                 case GameElements.State.Failed:
                     GameElements.FailedDraw(_spriteBatch);

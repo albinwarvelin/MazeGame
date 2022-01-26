@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using MazeGame.Classes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace MazeGame.Classes
+namespace MazeGame
 {
     class Background : MovingObject
     {
@@ -27,6 +26,10 @@ namespace MazeGame.Classes
             y_Size = (window.ClientBounds.Height / texture.Height) + 2;
         }
 
+        /// <summary>
+        /// Updates and moves background according to enums provided.
+        /// </summary>
+        /// <param name="directions"></param>
         public void Update(List<Level.Direction> directions)
         {
             foreach(Level.Direction direction in directions)
@@ -67,6 +70,10 @@ namespace MazeGame.Classes
             }
         }
 
+        /// <summary>
+        /// Draws background.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             for(int x = 0; x < x_Size; x++)

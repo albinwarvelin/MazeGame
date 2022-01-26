@@ -25,6 +25,20 @@
 /processorParam:TextureFormat=Color
 /build:assets/background/sky.png
 
+#begin assets/fonts/publicpixel20pt.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:assets/fonts/publicpixel20pt.spritefont
+
+#begin assets/fonts/publicpixel24pt.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:assets/fonts/publicpixel24pt.spritefont
+
 #begin assets/level/endportal0.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -277,6 +291,18 @@
 /processorParam:TextureFormat=Color
 /build:assets/level/horizontalHedge3.png
 
+#begin assets/level/timerbackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:assets/level/timerbackground.png
+
 #begin assets/level/verticalHedge0.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -324,6 +350,54 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:assets/level/verticalHedge3.png
+
+#begin assets/menus/block350.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:assets/menus/block350.png
+
+#begin assets/menus/block400.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:assets/menus/block400.png
+
+#begin assets/menus/greyedout.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:assets/menus/greyedout.png
+
+#begin assets/menus/levelcleared.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:assets/menus/levelcleared.png
 
 #begin assets/player/player0.png
 /importer:TextureImporter

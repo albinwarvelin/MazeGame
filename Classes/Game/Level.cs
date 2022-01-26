@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace MazeGame.Classes
+namespace MazeGame
 {
     class Level : MovingObject
     {
@@ -14,6 +14,7 @@ namespace MazeGame.Classes
         private Tile[,] tiles; //Two dimensional array: y, x
         private int size;
         private EndPortal endPortal;
+        private Timer timer;
 
         /// <summary>
         /// Generates new random level. Size shall not be less than 4.
@@ -25,8 +26,10 @@ namespace MazeGame.Classes
         /// <param name="window"></param>
         /// <param name="x_Speed"></param>
         /// <param name="y_Speed"></param>
-        public Level(Texture2D[] tileTextures, Texture2D[] hDivTextures, Texture2D[] vDivTexture, Texture2D[] endPortalTextures, int size, double voidTilePercentage, GameWindow window, double x_Speed, double y_Speed) : base(null, 0, 0, x_Speed, y_Speed) //Level position not used, each tile has its own position
+        public Level(GameWindow window, GameTime gameTime, Texture2D[] tileTextures, Texture2D[] hDivTextures, Texture2D[] vDivTexture, Texture2D[] endPortalTextures, Texture2D timerTexture, SpriteFont font, int size, double voidTilePercentage, double x_Speed, double y_Speed) : base(null, 0, 0, x_Speed, y_Speed) //Level position not used, each tile has its own position
         {
+            timer = new Timer(gameTime, timerTexture, font, (20 + size * 2), 20, 20); //Sets new timer
+
             this.size = size;
             Random rnd = new Random(); //Used throughout method
 
@@ -476,8 +479,10 @@ namespace MazeGame.Classes
         /// </summary>
         /// <param name="toMove"></param>
         /// <param name="player"></param>
-        public void Update(List<Direction> toMove, Player player)
+        public void Update(GameTime gameTime, List<Direction> toMove, Player player)
         {
+            timer.Update(gameTime);
+
             List<TileDivider> surroundingDividers = new List<TileDivider>();
 
             foreach (Tile tile in tiles)
@@ -576,9 +581,19 @@ namespace MazeGame.Classes
             }
         }
 
+        public void DrawTimer(SpriteBatch spriteBatch)
+        {
+            timer.Draw(spriteBatch);
+        }
+
         public EndPortal EndPortal
         {
             get { return endPortal; }
+        }
+
+        public Timer Timer
+        {
+            get { return timer; }
         }
 
     }
