@@ -9,8 +9,8 @@ namespace MazeGame
 {
     class PrintText
     {
-        private SpriteFont font;
-        private readonly Vector2 position;
+        private readonly SpriteFont font;
+        private Vector2 position;
 
         public PrintText(SpriteFont font, int x_Pos, int y_Pos)
         {
@@ -21,6 +21,12 @@ namespace MazeGame
         public void Print(string text, SpriteBatch spriteBatch, Color color)
         {
             spriteBatch.DrawString(font, text, position, color);
+        }
+
+        public int X_Pos
+        {
+            get { return (int)position.X; }
+            set { position.X = value; }
         }
     }
 }

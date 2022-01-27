@@ -24,11 +24,12 @@ namespace MazeGame
         /// </summary>
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferWidth = 1920; //Window width
-            _graphics.PreferredBackBufferHeight = 1080; //Window height
+            _graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width; //Window width
+            _graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height; //Window height
+            Window.IsBorderless = true;
             _graphics.ApplyChanges();
 
-            GameElements.currentState = GameElements.State.Run;
+            GameElements.currentState = GameElements.State.Menu;
             GameElements.Initialize();
 
             base.Initialize();
@@ -57,12 +58,22 @@ namespace MazeGame
             switch (GameElements.currentState)
             {
                 case GameElements.State.Menu:
-                    temp = GameElements.MenuUpdate();
+                    temp = GameElements.MenuUpdate(Window);
                     GameElements.lastState = GameElements.currentState;
                     GameElements.currentState = temp;
                     break;
                 case GameElements.State.HighScore:
-                    temp = GameElements.HighScoreUpdate();
+                    temp = GameElements.HighScoreUpdate(Window);
+                    GameElements.lastState = GameElements.currentState;
+                    GameElements.currentState = temp;
+                    break;
+                case GameElements.State.Settings:
+                    temp = GameElements.SettingsUpdate();
+                    GameElements.lastState = GameElements.currentState;
+                    GameElements.currentState = temp;
+                    break;
+                case GameElements.State.NameChoosing:
+                    temp = GameElements.NameChoosingUpdate(Window);
                     GameElements.lastState = GameElements.currentState;
                     GameElements.currentState = temp;
                     break;
@@ -82,7 +93,7 @@ namespace MazeGame
                     GameElements.currentState = temp;
                     break;
                 case GameElements.State.Failed:
-                    temp = GameElements.FailedUpdate();
+                    temp = GameElements.FailedUpdate(Window);
                     GameElements.lastState = GameElements.currentState;
                     GameElements.currentState = temp;
                     break;
@@ -95,7 +106,7 @@ namespace MazeGame
         }
 
         /// <summary>
-        /// Draws all entities
+        /// Draws all entities.
         /// </summary>
         /// <param name="gameTime"></param>
         protected override void Draw(GameTime gameTime)
@@ -111,6 +122,12 @@ namespace MazeGame
                 case GameElements.State.HighScore:
                     GameElements.HighScoreDraw(_spriteBatch);
                     break;
+                case GameElements.State.Settings:
+                    GameElements.SettingsDraw(_spriteBatch);
+                    break;
+                case GameElements.State.NameChoosing:
+                    GameElements.NameChoosingDraw(_spriteBatch);
+                    break;
                 case GameElements.State.Run:
                     GameElements.RunDraw(_spriteBatch, Window);
                     break;
@@ -121,13 +138,25 @@ namespace MazeGame
                     GameElements.ClearedDraw(_spriteBatch, Window);
                     break;
                 case GameElements.State.Failed:
-                    GameElements.FailedDraw(_spriteBatch);
+                    GameElements.FailedDraw(_spriteBatch, Window);
                     break;
             }
 
             _spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        /// <summary>
+        /// Method to run on exit. Saves highscores at end of game.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        protected override void OnExiting(Object sender, EventArgs args)
+        {
+            HighScore.SaveHighScores();
+
+            base.OnExiting(sender, args);
         }
     }
 }

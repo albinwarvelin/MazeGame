@@ -10,20 +10,20 @@ namespace MazeGame
 {
     static class GameElements
     {
-        public enum State { Startup, Menu, HighScore, Run, Paused, Cleared, Failed, Quit };
+        public enum State { Startup, Menu, NameChoosing, Settings, HighScore, Run, Paused, Cleared, Failed, Quit };
 
         public static State currentState; //Current gamestate
         public static State lastState = State.Startup; //Last gamestate, used when switching states, if not equal to current state methods will most likely initialize the new state
 
-        public static Menu currentMenu;
+        private static Menu currentMenu;
 
-        static int x_Sp_Player; //General speed for game
-        static int y_Sp_Player; //General speed for game
+        private static int x_Sp_Player = 11; //General speed for game
+        private static int y_Sp_Player = 11; //General speed for game
 
         private static Background background;
         private static Level level; //Games level
         private static Player player; //Player
-
+        
         private static Texture2D skyTexture;
         private static Texture2D timerTexture;
         private static Texture2D[] tileTextures = new Texture2D[9];
@@ -31,17 +31,17 @@ namespace MazeGame
         private static Texture2D[] vDivTextures = new Texture2D[4];
         private static Texture2D[] playerTextures = new Texture2D[9];
         private static Texture2D[] endPortalTextures = new Texture2D[8];
-        private static Texture2D[] menuItemTextures = new Texture2D[2];
-        private static Texture2D[] menuBannerTextures = new Texture2D[1];
+        private static Texture2D[] menuItemTextures = new Texture2D[7];
+        private static Texture2D[] menuControlTextures = new Texture2D[2];
+        private static Texture2D[] menuBannerTextures = new Texture2D[4];
+        private static Texture2D[] listTextures = new Texture2D[3];
         private static Texture2D greyedOut;
-        private static Texture2D levelCleared;
         private static SpriteFont publicPixel20pt;
         private static SpriteFont publicPixel24pt;
 
         public static void Initialize()
         {
-            x_Sp_Player = 11;
-            y_Sp_Player = 11;
+            HighScore.LoadHighScores();
         }
 
         public static void LoadContent(ContentManager content, GameWindow window)
@@ -52,9 +52,21 @@ namespace MazeGame
             timerTexture = content.Load<Texture2D>("assets/level/timerbackground");
             menuItemTextures[0] = content.Load<Texture2D>("assets/menus/block350");
             menuItemTextures[1] = content.Load<Texture2D>("assets/menus/block400");
+            menuItemTextures[2] = content.Load<Texture2D>("assets/menus/block500");
+            menuItemTextures[3] = content.Load<Texture2D>("assets/menus/block600");
+            menuItemTextures[4] = content.Load<Texture2D>("assets/menus/block700");
+            menuItemTextures[5] = content.Load<Texture2D>("assets/menus/block1200");
+            menuItemTextures[6] = content.Load<Texture2D>("assets/menus/block1400");
+            menuControlTextures[0] = content.Load <Texture2D>("assets/menus/blockarrowright");
+            menuControlTextures[1] = content.Load<Texture2D>("assets/menus/blockarrowleft");
             menuBannerTextures[0] = content.Load<Texture2D>("assets/menus/levelcleared");
+            menuBannerTextures[1] = content.Load<Texture2D>("assets/menus/mainmenu");
+            menuBannerTextures[2] = content.Load<Texture2D>("assets/menus/levelfailed");
+            menuBannerTextures[3] = content.Load<Texture2D>("assets/menus/highscores");
+            listTextures[0] = content.Load<Texture2D>("assets/menus/highscorelisttop");
+            listTextures[1] = content.Load<Texture2D>("assets/menus/highscorelistmid");
+            listTextures[2] = content.Load<Texture2D>("assets/menus/highscorelistbottom");
             greyedOut = content.Load<Texture2D>("assets/menus/greyedout");
-            levelCleared = content.Load<Texture2D>("assets/menus/levelcleared");
 
             for (int i = 0; i < 9; i++) //Loads tiles
             {
@@ -78,24 +90,59 @@ namespace MazeGame
             }
         }
 
-        public static State MenuUpdate() //Updates menu state
+        public static State MenuUpdate(GameWindow window) //Updates menu state
         {
-            return State.Menu;
+            if (lastState != State.Menu)
+            {
+                currentMenu = new MainMenu(window, publicPixel24pt, menuItemTextures, menuBannerTextures[1], skyTexture);
+            }
+
+            return currentMenu.Update();
         }
 
         public static void MenuDraw(SpriteBatch spriteBatch) //Draws menu
         {
-
+            currentMenu.Draw(spriteBatch);
         }
 
-        public static State HighScoreUpdate() //Updates highscore state
+        public static State HighScoreUpdate(GameWindow window) //Updates highscore state
         {
-            return State.HighScore;
+            if (lastState != State.HighScore)
+            {
+                currentMenu = new HighScoreMenu(window, publicPixel24pt, publicPixel20pt, menuItemTextures, listTextures, menuControlTextures, menuBannerTextures[3], skyTexture);
+            }
+
+            return currentMenu.Update();
         }
 
         public static void HighScoreDraw(SpriteBatch spriteBatch) //Draws highscore
         {
+            currentMenu.Draw(spriteBatch);
+        }
 
+        public static State SettingsUpdate()
+        {
+            return State.Settings;
+        }
+
+        public static void SettingsDraw(SpriteBatch spriteBatch)
+        {
+
+        }
+
+        public static State NameChoosingUpdate(GameWindow window)
+        {
+            if (lastState != State.NameChoosing)
+            {
+                currentMenu = new NameChoosingMenu(window, publicPixel24pt, menuItemTextures, menuControlTextures, skyTexture, HighScore.RecentPlayers);
+            }
+
+            return currentMenu.Update();
+        }
+
+        public static void NameChoosingDraw(SpriteBatch spriteBatch)
+        {
+            currentMenu.Draw(spriteBatch);
         }
 
         public static State RunUpdate(GameWindow window, GameTime gameTime) //Updates run state
@@ -103,7 +150,7 @@ namespace MazeGame
             if(lastState != State.Run)
             {
                 background = new Background(window, skyTexture, 9, 9);
-                level = new Level(window, gameTime, tileTextures, hDivTextures, vDivTextures, endPortalTextures, timerTexture, publicPixel20pt, 7, 0.17, x_Sp_Player, y_Sp_Player); //TODO change speed to player speed
+                level = new Level(window, gameTime, tileTextures, hDivTextures, vDivTextures, endPortalTextures, timerTexture, publicPixel20pt, 5 + HighScore.CurrentScore.Points, 0.17, x_Sp_Player, y_Sp_Player); //TODO change speed to player speed
                 player = new Player(playerTextures, gameTime, (window.ClientBounds.Width / 2) - (playerTextures[0].Width / 2), (window.ClientBounds.Height / 2) - (playerTextures[0].Height / 2), x_Sp_Player, y_Sp_Player); //Change texture
             }
 
@@ -113,6 +160,7 @@ namespace MazeGame
 
             if(level.EndPortal.CheckWin(player))
             {
+                HighScore.CurrentScore.Points++;
                 return State.Cleared;
             }
             else if(level.Timer.HasEnded)
@@ -148,7 +196,7 @@ namespace MazeGame
         {
             if(lastState != State.Cleared)
             {
-                currentMenu = new ClearedMenu(window, publicPixel24pt, menuItemTextures, menuBannerTextures[0], greyedOut, 0);
+                currentMenu = new ClearedMenu(window, publicPixel24pt, menuItemTextures, menuBannerTextures[0], greyedOut, HighScore.CurrentScore.Points);
             }
 
             return currentMenu.Update();
@@ -162,19 +210,28 @@ namespace MazeGame
             currentMenu.Draw(spriteBatch);
         }
 
-        public static State FailedUpdate() //Updates failed
+        public static State FailedUpdate(GameWindow window) //Updates failed
         {
-            return State.Failed;
+            if (lastState != State.Failed)
+            {
+                currentMenu = new FailedMenu(window, publicPixel24pt, menuItemTextures, menuBannerTextures[2], greyedOut, HighScore.CurrentScore.Points);
+            }
+
+            return currentMenu.Update();
         }
 
-        public static void FailedDraw(SpriteBatch spriteBatch) //Draws failed
+        public static void FailedDraw(SpriteBatch spriteBatch, GameWindow window) //Draws failed
         {
-
+            background.Draw(spriteBatch);
+            level.Draw(spriteBatch, window);
+            level.EndPortal.DrawTop(spriteBatch);
+            currentMenu.Draw(spriteBatch);
         }
 
         public static Level Level
         {
             get { return level; }   
         }
+
     }
 }

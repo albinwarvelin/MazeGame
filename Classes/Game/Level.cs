@@ -28,7 +28,7 @@ namespace MazeGame
         /// <param name="y_Speed"></param>
         public Level(GameWindow window, GameTime gameTime, Texture2D[] tileTextures, Texture2D[] hDivTextures, Texture2D[] vDivTexture, Texture2D[] endPortalTextures, Texture2D timerTexture, SpriteFont font, int size, double voidTilePercentage, double x_Speed, double y_Speed) : base(null, 0, 0, x_Speed, y_Speed) //Level position not used, each tile has its own position
         {
-            timer = new Timer(gameTime, timerTexture, font, (20 + size * 2), 20, 20); //Sets new timer
+            timer = new Timer(gameTime, timerTexture, font, 20 + (size * 5), 20, 20); //Sets new timer
 
             this.size = size;
             Random rnd = new Random(); //Used throughout method
@@ -143,7 +143,7 @@ namespace MazeGame
 
             /* Calls random-path-generator, if not all tiles have been checked in generation checked booleans are reset, neighboring voidtile of any non-checked tile is set
              * normal tile and process is repeated until all tiles are checked in level generating process. This is done to prevent any lone islands in specific cases. */
-            List<Tile> nonCheckedTiles = new List<Tile>();
+            List<Tile> nonCheckedTiles;
             do
             {
                 nonCheckedTiles = new List<Tile>(); //Resets list

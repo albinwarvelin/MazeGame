@@ -9,16 +9,38 @@ namespace MazeGame
 {
     class MenuItem : GameObject
     {
-        private readonly string text;
+        public enum Alignment { Left, Mid }
+
+        private string text;
+        private SpriteFont font;
         private PrintText printText;
         bool beenPressed = false;
         private Color color = Color.White;
 
-        public MenuItem(Texture2D texture, SpriteFont font, string text, int x_Pos, int y_Pos):base(texture, x_Pos, y_Pos)
+        public MenuItem(Texture2D texture, SpriteFont font, string text, Alignment alignment, int x_Pos, int y_Pos) : base(texture, x_Pos, y_Pos)
         {
             this.text = text;
-            Vector2 textSize = font.MeasureString(text);
-            printText = new PrintText(font,(int)(x_Pos + (texture.Width / 2) - (textSize.X / 2)),(int)(y_Pos + (texture.Height / 2) - (textSize.Y / 2)));
+            this.font = font;
+
+            Vector2 textSize;
+            if (text != "")
+            {
+                textSize = font.MeasureString(text);
+            }
+            else
+            {
+                textSize = font.MeasureString("a");
+            }
+
+            if(alignment == Alignment.Left)
+            {
+                printText = new PrintText(font, (int)(x_Pos + 100), (int)(y_Pos + (texture.Height / 2) - (textSize.Y / 2)));
+            }
+            else
+            {
+                printText = new PrintText(font, (int)(x_Pos + (texture.Width / 2) - (textSize.X / 2)), (int)(y_Pos + (texture.Height / 2) - (textSize.Y / 2)));
+            }
+            
         }
 
         public bool CheckPress(MouseState mouseState)
@@ -31,6 +53,7 @@ namespace MazeGame
                 }
                 if (mouseState.LeftButton == ButtonState.Released && beenPressed)
                 {
+                    beenPressed = false;
                     return true;
                 }
 
@@ -45,10 +68,31 @@ namespace MazeGame
             return false;
         }
 
+        public void ReCenterText()
+        {
+            Vector2 textSize;
+            if (text != "")
+            {
+                textSize = font.MeasureString(text);
+            }
+            else
+            {
+                textSize = font.MeasureString("a");
+            }
+
+            printText.X_Pos = (int)(position.X + (texture.Width / 2) - (textSize.X / 2));
+        }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, position, color);
-            printText.Print(text, spriteBatch, Color.Black); 
+            printText.Print(text, spriteBatch, Color.Black);
+        }
+
+        public string Text
+        {
+            get { return text; }
+            set { text = value; }
         }
     }
 }
