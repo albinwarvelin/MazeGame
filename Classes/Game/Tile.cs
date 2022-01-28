@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MazeGame
 {
-    class Tile : MovingObject
+    class Tile : MovingObject, ISetSpeed
     {
         public enum TileType { Standard, Right, Bottom, Corner } //Used when determining if tile needs divider in bottom or right position
 
@@ -90,6 +90,29 @@ namespace MazeGame
             if (toMove.Contains(Level.Direction.Down))
             {
                 position.Y += speed.Y;
+            }
+        }
+
+        public void SetSpeed(double x_Speed, double y_Speed)
+        {
+            speed.X = (float) x_Speed;
+            speed.Y = (float) y_Speed;
+
+            if(vDiv != null)
+            {
+                vDiv.SetSpeed(x_Speed, y_Speed);
+            }
+            if (hDiv != null)
+            {
+                hDiv.SetSpeed(x_Speed, y_Speed);
+            }
+            if (rDiv != null)
+            {
+                rDiv.SetSpeed(x_Speed, y_Speed);
+            }
+            if (bDiv != null)
+            {
+                bDiv.SetSpeed(x_Speed, y_Speed);
             }
         }
 

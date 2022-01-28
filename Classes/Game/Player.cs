@@ -7,26 +7,38 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MazeGame
 {
-    class Player : PhysicalObject
+    class Player : PhysicalObject, ISetSpeed
     {
         private enum Direction { Up, Down, Left, Right, Still }; //Used to determine texture
 
         private List<TileDivider> surroundingDividers; //Updated every frame to contain current surrounding dividers
         private const int colliderMargin = 15; //How much player should be allowed to overlap dividers, makes collission rectangle smaller.
 
-        private readonly InfiniteAnimation up, down, left, right;
+        private readonly InfiniteAnimation up, down, left, right, superspeedUp, superspeedDown, superspeedLeft, superspeedRight, superspeedStill;
         private readonly Texture2D stillTexture;
         private Direction currentDir = Direction.Right; //Default, overwritten in first frame.
+
+        private bool superSpeed = false;
+        private int superSpeedTimer = 0;
+        private Texture2D currentSuperSpeedTexture;
         
-        public Player(Texture2D[] textures, GameTime gameTime, double x_Pos, double y_Pos, double x_Speed, double y_Speed) : base(textures[0], x_Pos, y_Pos, x_Speed, y_Speed)
+        public Player(Texture2D[] textures, Texture2D[] superSpeedTextures, GameTime gameTime, double x_Pos, double y_Pos, double x_Speed, double y_Speed) : base(textures[0], x_Pos, y_Pos, x_Speed, y_Speed)
         {
             up = new InfiniteAnimation(this, gameTime, new Texture2D[] { textures[4], textures[5] }, 10);
             right = new InfiniteAnimation(this, gameTime, new Texture2D[] { textures[1], textures[2] }, 10);
             left = new InfiniteAnimation(this, gameTime, new Texture2D[] { textures[0], textures[3] }, 10);
             down = new InfiniteAnimation(this, gameTime, new Texture2D[] { textures[7], textures[8] }, 10);
             stillTexture = textures[6];
+
+            currentSuperSpeedTexture = superSpeedTextures[0];
+
+            superspeedUp = new InfiniteAnimation(gameTime, new Texture2D[] { superSpeedTextures[21], superSpeedTextures[22], superSpeedTextures[23], superSpeedTextures[24], superSpeedTextures[25] }, 5);
+            superspeedRight = new InfiniteAnimation(gameTime, new Texture2D[] {superSpeedTextures[7], superSpeedTextures[8] , superSpeedTextures[9] , superSpeedTextures[10] , superSpeedTextures[11] , superSpeedTextures[12] , superSpeedTextures[13] }, 5);
+            superspeedLeft = new InfiniteAnimation(gameTime, new Texture2D[] { superSpeedTextures[0], superSpeedTextures[1], superSpeedTextures[2], superSpeedTextures[3], superSpeedTextures[4], superSpeedTextures[5], superSpeedTextures[6] }, 5);
+            superspeedDown = new InfiniteAnimation(gameTime, new Texture2D[] { superSpeedTextures[14], superSpeedTextures[15], superSpeedTextures[16], superSpeedTextures[17], superSpeedTextures[18], superSpeedTextures[19], superSpeedTextures[20] }, 5);
+            superspeedStill = new InfiniteAnimation(gameTime, new Texture2D[] { superSpeedTextures[14], superSpeedTextures[15], superSpeedTextures[16], superSpeedTextures[17], superSpeedTextures[18], superSpeedTextures[19], superSpeedTextures[20] }, 5);
         }
-         
+
         /// <summary>
         /// Updates player. Checks if player collides with any dividers and stops player if there's collission, if
         /// player moves outside of specified window area level is given new direction to move. If player moves 
@@ -36,11 +48,31 @@ namespace MazeGame
         /// <returns></returns>
         public List<Level.Direction> Update(GameWindow window)
         {
+            
+
             List<Level.Direction> directions = new List<Level.Direction>();
 
             currentDir = Direction.Still; //Direction is set to still if there's no movement.
 
             KeyboardState keyboardInput = Keyboard.GetState();
+            if (keyboardInput.IsKeyDown(Keys.Space) && GameElements.SuperSpeedsLeft != 0 && !superSpeed)
+            {
+                superSpeedTimer = 7 * 60;
+                superSpeed = true;
+                GameElements.SuperSpeedsLeft--;
+            }
+            if (superSpeedTimer <= 0)
+            {
+                superSpeed = false;
+                SetSpeed(GameElements.X_Sp_Player, GameElements.Y_Sp_Player);
+                GameElements.Level.SetSpeed(GameElements.X_Sp_Player, GameElements.Y_Sp_Player);
+            }
+            else
+            {
+                superSpeedTimer--;
+                SetSpeed(GameElements.X_Sp_Player + 7, GameElements.Y_Sp_Player + 7);
+                GameElements.Level.SetSpeed(GameElements.X_Sp_Player + 7, GameElements.Y_Sp_Player + 7);
+            }
             if (keyboardInput.IsKeyDown(Keys.W) && !keyboardInput.IsKeyDown(Keys.S) && !keyboardInput.IsKeyDown(Keys.Down) || keyboardInput.IsKeyDown(Keys.Up) && !keyboardInput.IsKeyDown(Keys.Down) && !keyboardInput.IsKeyDown(Keys.S))
             {
                 position.Y -= speed.Y;
@@ -169,8 +201,15 @@ namespace MazeGame
                     currentDir = Direction.Right;
                 }
             }
+            
 
             return directions;
+        }
+
+        public void SetSpeed(double x_Speed, double y_Speed)
+        {
+            speed.X = (float) x_Speed;
+            speed.Y = (float) y_Speed;
         }
 
         public override bool CheckCollision(PhysicalObject other)
@@ -219,24 +258,30 @@ namespace MazeGame
         {
             switch(currentDir)
             {
-                case Direction.Left: //Uses textures 0 and 3
-                    left.Update(spriteBatch);
-                    break;
-                case Direction.Right: //Uses textires 1 and 2
-                    right.Update(spriteBatch);
-                    break;
-                case Direction.Up:
-                    up.Update(spriteBatch);
-                    break;
-                case Direction.Down:
-                    down.Update(spriteBatch);
-                    break;
-                case Direction.Still:
-                    texture = stillTexture;
-                    break;
+                case Direction.Left: { left.Update(); } break; //Uses textures 0 and 3
+                case Direction.Right: { right.Update(); } break; //Uses textires 1 and 2
+                case Direction.Up: { up.Update(); } break;
+                case Direction.Down: { down.Update(); } break;
+                case Direction.Still: { texture = stillTexture; break; }
             }
 
             base.Draw(spriteBatch);
+
+            if(superSpeed)
+            {
+                Vector2 superSpeedPos = new Vector2();
+
+                switch (currentDir)
+                {
+                    case Direction.Left: { superspeedLeft.Update(out currentSuperSpeedTexture); superSpeedPos = new Vector2(position.X, position.Y + 110); } break; //Uses textures 0 and 3
+                    case Direction.Right: { superspeedRight.Update(out currentSuperSpeedTexture); superSpeedPos = new Vector2(position.X - 35, position.Y + 110); } break; //Uses textires 1 and 2
+                    case Direction.Up: { superspeedUp.Update(out currentSuperSpeedTexture); superSpeedPos = new Vector2(position.X - 5, position.Y + 110); } break;
+                    case Direction.Down: { superspeedDown.Update(out currentSuperSpeedTexture); superSpeedPos = new Vector2(position.X - 5, position.Y + 110); } break;
+                    case Direction.Still: { superspeedStill.Update(out currentSuperSpeedTexture); superSpeedPos = new Vector2(position.X - 5, position.Y + 110); } break;
+                }
+
+                spriteBatch.Draw(currentSuperSpeedTexture, superSpeedPos, Color.White);
+            }
         }
 
         /// <summary>

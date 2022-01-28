@@ -34,23 +34,37 @@ namespace MazeGame
             this.textures = textures;
             this.interval = interval;
         }
+        protected Animation(GameTime gameTime, Texture2D[] textures, int interval)
+        {
+            this.gameTime = gameTime;
+            this.textures = textures;
+            this.interval = interval;
+        }
 
         /// <summary>
         /// Updates cycle.
         /// </summary>
         /// <param name="spriteBatch"></param>
-        public virtual void Update(SpriteBatch spriteBatch)
+        public virtual void Update()
         {
-            if (elapsedFrames > interval)
+            if(gameObject == null)
             {
-                currentIndex++;
-
-                elapsedFrames = 0;
+                throw new InvalidOperationException("Cannot invoke this method without assigning GameObject through constructor.");
             }
+            else
+            {
+                if (elapsedFrames > interval)
+                {
+                    currentIndex++;
 
-            gameObject.Texture = textures[currentIndex];
-            elapsedFrames++;
-            lastGameTime = gameTime.TotalGameTime.TotalMilliseconds;
+                    elapsedFrames = 0;
+                }
+
+                gameObject.Texture = textures[currentIndex];
+
+                elapsedFrames++;
+                lastGameTime = gameTime.TotalGameTime.TotalMilliseconds;
+            }
         }
     }
 }

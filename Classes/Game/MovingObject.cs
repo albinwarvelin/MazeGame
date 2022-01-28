@@ -27,5 +27,17 @@ namespace MazeGame
             speed.X = (float)x_Speed;
             speed.Y = (float)y_Speed;
         }       
+
+        public double X_Speed
+        {
+            get { return speed.X; }
+            set { speed.X = (float) value; }
+        }
+
+        public double Y_Speed
+        {
+            get { return speed.Y; }
+            set { speed.Y = (float) value; }
+        }
     }
 }

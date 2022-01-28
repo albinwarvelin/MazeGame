@@ -24,12 +24,14 @@ namespace MazeGame
         private static Level level; //Games level
         private static int remainingTime = 0;
         private static Player player; //Player
-        
+        private static int superSpeedsLeft = 1; // How many superspeeds player has left.
+
         private static Texture2D skyTexture;
         private static Texture2D[] tileTextures = new Texture2D[9];
         private static Texture2D[] hDivTextures = new Texture2D[4];
         private static Texture2D[] vDivTextures = new Texture2D[4];
         private static Texture2D[] playerTextures = new Texture2D[9];
+        private static Texture2D[] fireTextures = new Texture2D[26];
         private static Texture2D[] endPortalTextures = new Texture2D[8];
         private static Texture2D[] menuItemTextures = new Texture2D[7];
         private static Texture2D[] menuControlTextures = new Texture2D[2];
@@ -92,13 +94,17 @@ namespace MazeGame
             {
                 endPortalTextures[i] = content.Load<Texture2D>("assets/level/endPortal" + i);
             }
+            for (int i = 0; i < 26; i++)
+            {
+                fireTextures[i] = content.Load<Texture2D>("assets/player/fire" + i);
+            }
         }
 
         public static State MenuUpdate(GameWindow window) //Updates menu state
         {
             if (lastState != State.Menu)
             {
-                GameElements.RemainingTime = 0;
+                remainingTime = 0;
                 currentMenu = new MainMenu(window, publicPixel24pt, menuItemTextures, menuBannerTextures[1], skyTexture);
             }
 
@@ -161,7 +167,7 @@ namespace MazeGame
             {
                 background = new Background(window, skyTexture, 9, 9);
                 level = new Level(window, gameTime, tileTextures, hDivTextures, vDivTextures, endPortalTextures, menuItemTextures[2], publicPixel24pt, remainingTime, 5 + HighScore.CurrentScore.Points, 0.17, x_Sp_Player, y_Sp_Player); //TODO change speed to player speed
-                player = new Player(playerTextures, gameTime, (window.ClientBounds.Width / 2) - (playerTextures[0].Width / 2), (window.ClientBounds.Height / 2) - (playerTextures[0].Height / 2), x_Sp_Player, y_Sp_Player); //Change texture
+                player = new Player(playerTextures, fireTextures, gameTime, (window.ClientBounds.Width / 2) - (playerTextures[0].Width / 2), (window.ClientBounds.Height / 2) - (playerTextures[0].Height / 2), x_Sp_Player, y_Sp_Player); //Change texture
 
                 level.Update(gameTime, new List<Level.Direction>(), player); //Runs single levelupdate. To prevent bug where player update tries to get dividers from level that have not yet been initialized.
             }
@@ -173,6 +179,7 @@ namespace MazeGame
             if(level.EndPortal.CheckWin(player))
             {
                 HighScore.CurrentScore.Points++;
+                
                 return State.Cleared;
             }
             else if(level.Timer.HasEnded)
@@ -191,7 +198,7 @@ namespace MazeGame
             level.Draw(spriteBatch, window);
             player.Draw(spriteBatch);
             level.EndPortal.DrawTop(spriteBatch);
-            level.DrawTimer(spriteBatch);
+            level.DrawOverlay(spriteBatch);
         }
 
         public static State PausedUpdate() //Updates paused
@@ -248,6 +255,22 @@ namespace MazeGame
         public static int RemainingTime
         {
             set { remainingTime = value; }
+        }
+
+        public static int SuperSpeedsLeft
+        {
+            set { superSpeedsLeft = value; }
+            get { return superSpeedsLeft; }
+        }
+
+        public static int Y_Sp_Player
+        {
+            get { return y_Sp_Player;}
+        }
+
+        public static int X_Sp_Player
+        {
+            get { return x_Sp_Player; }
         }
     }
 }

@@ -7,12 +7,10 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MazeGame
 {
-    class Timer : GameObject
+    class Timer : MenuItem
     {
         private readonly long limit;
         private long currentTime = 0;
-        SpriteFont font;
-        PrintText printText;
         private bool hasEnded;
         
         /// <summary>
@@ -24,12 +22,9 @@ namespace MazeGame
         /// <param name="seconds"></param>
         /// <param name="x_Pos"></param>
         /// <param name="y_Pos"></param>
-        public Timer(GameTime gameTime, Texture2D texture, SpriteFont font, int seconds, int x_Pos, int y_Pos) : base(texture, x_Pos , y_Pos)
+        public Timer(GameTime gameTime, Texture2D texture, SpriteFont font, int seconds, int x_Pos, int y_Pos) : base(texture, font, "Time left:", Alignment.Mid, x_Pos , y_Pos)
         {
             limit = (long) gameTime.TotalGameTime.TotalSeconds + seconds;
-            this.font = font;
-            Vector2 textSize = font.MeasureString("a"); //Center vertically
-            printText = new PrintText(font, (int)(x_Pos + 20), (int)(y_Pos + (texture.Height / 2) - (textSize.Y / 2)));
         }
 
         /// <summary>
@@ -56,8 +51,10 @@ namespace MazeGame
         /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, new Vector2(position.X, position.Y), Color.White);
-            printText.Print("Time left:" + (limit - currentTime), spriteBatch, Color.Black);
+            spriteBatch.Draw(texture, position, Color.White);
+            text = "Time left:" + (limit - currentTime);
+            ReCenterText();
+            printText.Print(text, spriteBatch, Color.Black);
         }
 
         /// <summary>

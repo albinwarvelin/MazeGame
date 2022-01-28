@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MazeGame
 {
-    class Level : MovingObject
+    class Level : MovingObject, ISetSpeed
     {
         public enum Direction { Up, Down, Left, Right }; //Used to return what direction level should move
 
@@ -15,6 +15,7 @@ namespace MazeGame
         private int size;
         private EndPortal endPortal;
         private Timer timer;
+        private MenuItem superSpeedMenuItem;
 
         /// <summary>
         /// Generates new random level. Size shall not be less than 4.
@@ -28,7 +29,9 @@ namespace MazeGame
         /// <param name="y_Speed"></param>
         public Level(GameWindow window, GameTime gameTime, Texture2D[] tileTextures, Texture2D[] hDivTextures, Texture2D[] vDivTexture, Texture2D[] endPortalTextures, Texture2D timerTexture, SpriteFont font, int remainingTime, int size, double voidTilePercentage, double x_Speed, double y_Speed) : base(null, 0, 0, x_Speed, y_Speed) //Level position not used, each tile has its own position
         {
-            timer = new Timer(gameTime, timerTexture, font, 20 + remainingTime / 2 + size * 3, 20, 20); //Sets new timer
+            timer = new Timer(gameTime, timerTexture, font, 35 + remainingTime / 2 + size * 3, 20, 20); //Sets new timer
+            superSpeedMenuItem = new MenuItem(timerTexture, font, "Superspeed:" + GameElements.SuperSpeedsLeft, MenuItem.Alignment.Mid, window.ClientBounds.Width - timerTexture.Width - 20, 20);
+
 
             this.size = size;
             Random rnd = new Random(); //Used throughout method
@@ -181,6 +184,7 @@ namespace MazeGame
             } while (nonCheckedTiles.Count != 0);
 
             /* Removes treetile */
+            Texture2D tempTexture = tileTextures[4];
             tileTextures[4] = tileTextures[0]; //Removes treetile from list of texturechoices, treetile has index 4.
 
             for (int y = 0; y < size -1; y++)
@@ -193,6 +197,8 @@ namespace MazeGame
                     }
                 }
             }
+
+            tileTextures[4] = tempTexture;
 
             /* Sets random border to endPortal */
             bool continueLoop = true;
@@ -533,6 +539,17 @@ namespace MazeGame
             player.SurroundingDividers = surroundingDividers;
         }
 
+        public void SetSpeed(double x_Speed, double y_Speed)
+        {
+            speed.X = (float)x_Speed;
+            speed.Y = (float)y_Speed;
+
+            foreach (Tile tile in tiles)
+            {
+                tile.SetSpeed(x_Speed, y_Speed);
+            }
+        }
+
         /// <summary>
         /// Draws level, overrides method in gameobject.
         /// </summary>
@@ -581,9 +598,11 @@ namespace MazeGame
             }
         }
 
-        public void DrawTimer(SpriteBatch spriteBatch)
+        public void DrawOverlay(SpriteBatch spriteBatch)
         {
             timer.Draw(spriteBatch);
+            superSpeedMenuItem.Text = "Superspeed:" + GameElements.SuperSpeedsLeft;
+            superSpeedMenuItem.Draw(spriteBatch);
         }
 
         public EndPortal EndPortal

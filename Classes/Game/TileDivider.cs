@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MazeGame
 {
-    class TileDivider : PhysicalObject
+    class TileDivider : PhysicalObject, ISetSpeed
     {
         /// <summary>
         /// Constructor, passes variables to Moving object
@@ -44,6 +44,12 @@ namespace MazeGame
             {
                 position.Y += speed.Y;
             }
+        }
+
+        public void SetSpeed(double x_Speed, double y_Speed)
+        {
+            speed.X = (float) x_Speed;
+            speed.Y = (float) y_Speed;
         }
     }
 }

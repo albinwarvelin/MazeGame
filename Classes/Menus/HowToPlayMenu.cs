@@ -18,8 +18,8 @@ namespace MazeGame
             string[] rows = new string[9];
             rows[0] = "Goal: finish as many levels as ";
             rows[1] = "possible.";
-            rows[2] = "Walk around with WASD or Arrow keys";
-            rows[3] = "";
+            rows[2] = "Walk around with WASD or Arrow keys.";
+            rows[3] = "Activate superspeed by pressing space.";
             rows[4] = "Levels are finished by finding the";
             rows[5] = "end portal before time is up.";
             rows[6] = "Each level gets increasingly more";

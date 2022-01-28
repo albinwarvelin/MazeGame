@@ -20,15 +20,15 @@ namespace MazeGame
         /// Updates cycle if animation has not ended.
         /// </summary>
         /// <param name="spriteBatch"></param>
-        public override void Update(SpriteBatch spriteBatch)
+        public override void Update()
         {
             if(!hasEnded && lastGameTime > gameTime.TotalGameTime.TotalMilliseconds - 17 && !(elapsedFrames > interval && currentIndex >= textures.Length - 1))
             {
-                base.Update(spriteBatch);
+                base.Update();
             }
             else if(lastGameTime == 0) //Exception when on first frame
             {
-                base.Update(spriteBatch);
+                base.Update();
             }
             else
             {
@@ -36,7 +36,7 @@ namespace MazeGame
             }
         }
 
-        public void reset()
+        public void Reset()
         {
             currentIndex = 0;
             hasEnded = false;

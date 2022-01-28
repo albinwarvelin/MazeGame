@@ -23,6 +23,7 @@ namespace MazeGame
             if (menuItems[2].CheckPress(mouseState))
             {
                 HighScore.SaveScore();
+                GameElements.SuperSpeedsLeft = 1;
                 return GameElements.State.Menu;
             }
             
