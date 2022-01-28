@@ -23,6 +23,7 @@ namespace MazeGame
 
             if (menuItems[2].CheckPress(mouseState))
             {
+                GameElements.RemainingTime = GameElements.Level.Timer.TimeLeft;
                 return GameElements.State.Run;
             }
             if(menuItems[3].CheckPress(mouseState))

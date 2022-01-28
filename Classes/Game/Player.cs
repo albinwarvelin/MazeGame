@@ -118,7 +118,7 @@ namespace MazeGame
                         break;
                     }
                 }
-                if(collider == GameElements.Level.EndPortal) //Easier solution but not the most elegant. Player tends not not end up exactly 15 pixels within portal.
+                if(collider == GameElements.Level.EndPortal) //Easier solution but not the most elegant. Player tends to not end up exactly 15 pixels within portal.
                 {
                     position.X += speed.X;
                 }

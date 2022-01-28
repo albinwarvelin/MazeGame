@@ -26,9 +26,9 @@ namespace MazeGame
         /// <param name="window"></param>
         /// <param name="x_Speed"></param>
         /// <param name="y_Speed"></param>
-        public Level(GameWindow window, GameTime gameTime, Texture2D[] tileTextures, Texture2D[] hDivTextures, Texture2D[] vDivTexture, Texture2D[] endPortalTextures, Texture2D timerTexture, SpriteFont font, int size, double voidTilePercentage, double x_Speed, double y_Speed) : base(null, 0, 0, x_Speed, y_Speed) //Level position not used, each tile has its own position
+        public Level(GameWindow window, GameTime gameTime, Texture2D[] tileTextures, Texture2D[] hDivTextures, Texture2D[] vDivTexture, Texture2D[] endPortalTextures, Texture2D timerTexture, SpriteFont font, int remainingTime, int size, double voidTilePercentage, double x_Speed, double y_Speed) : base(null, 0, 0, x_Speed, y_Speed) //Level position not used, each tile has its own position
         {
-            timer = new Timer(gameTime, timerTexture, font, 20 + (size * 5), 20, 20); //Sets new timer
+            timer = new Timer(gameTime, timerTexture, font, 20 + remainingTime / 2 + size * 3, 20, 20); //Sets new timer
 
             this.size = size;
             Random rnd = new Random(); //Used throughout method
@@ -552,7 +552,7 @@ namespace MazeGame
             {
                 for (int x = 0; x < size; x++)
                 {
-                    if (tiles[y, x].X_Pos > -300 && tiles[y, x].Y_Pos > -300 && tiles[y, x].X_Pos < window.ClientBounds.Width && tiles[y, x].Y_Pos < window.ClientBounds.Height) //Does not draw tiles outside window to optimize game
+                    if (tiles[y, x].X_Pos > -300 && tiles[y, x].Y_Pos > -300 && tiles[y, x].X_Pos < window.ClientBounds.Width && tiles[y, x].Y_Pos < window.ClientBounds.Height + 100) //Does not draw tiles outside window to optimize game
                     {
                         if (tiles[y, x].HDiv != null)
                         {
@@ -570,7 +570,7 @@ namespace MazeGame
                 }
                 for(int x = 0; x < size; x++)
                 {
-                    if (tiles[y, x].X_Pos > -300 && tiles[y, x].Y_Pos > -300 && tiles[y, x].X_Pos < window.ClientBounds.Width && tiles[y, x].Y_Pos < window.ClientBounds.Height) //Does not draw tiles outside window to optimize game
+                    if (tiles[y, x].X_Pos > -300 && tiles[y, x].Y_Pos > -300 && tiles[y, x].X_Pos < window.ClientBounds.Width && tiles[y, x].Y_Pos < window.ClientBounds.Height + 100) //Does not draw tiles outside window to optimize game
                     {
                         if (tiles[y, x].BDiv != null)
                         {
@@ -595,6 +595,5 @@ namespace MazeGame
         {
             get { return timer; }
         }
-
     }
 }

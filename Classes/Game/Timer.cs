@@ -28,7 +28,8 @@ namespace MazeGame
         {
             limit = (long) gameTime.TotalGameTime.TotalSeconds + seconds;
             this.font = font;
-            printText = new PrintText(font, (int) position.X + 10, (int) position.Y + 10);
+            Vector2 textSize = font.MeasureString("a"); //Center vertically
+            printText = new PrintText(font, (int)(x_Pos + 20), (int)(y_Pos + (texture.Height / 2) - (textSize.Y / 2)));
         }
 
         /// <summary>
@@ -65,6 +66,11 @@ namespace MazeGame
         public bool HasEnded
         {
             get { return hasEnded; }
+        }
+
+        public int TimeLeft
+        {
+            get { return (int)(limit - currentTime); }
         }
     }
 }

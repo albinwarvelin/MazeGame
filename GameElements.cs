@@ -22,10 +22,10 @@ namespace MazeGame
 
         private static Background background;
         private static Level level; //Games level
+        private static int remainingTime = 0;
         private static Player player; //Player
         
         private static Texture2D skyTexture;
-        private static Texture2D timerTexture;
         private static Texture2D[] tileTextures = new Texture2D[9];
         private static Texture2D[] hDivTextures = new Texture2D[4];
         private static Texture2D[] vDivTextures = new Texture2D[4];
@@ -50,7 +50,6 @@ namespace MazeGame
             skyTexture = content.Load<Texture2D>("assets/background/sky");
             publicPixel20pt = content.Load<SpriteFont>("assets/fonts/publicpixel20pt");
             publicPixel24pt = content.Load<SpriteFont>("assets/fonts/publicpixel24pt");
-            timerTexture = content.Load<Texture2D>("assets/level/timerbackground");
             menuItemTextures[0] = content.Load<Texture2D>("assets/menus/block350");
             menuItemTextures[1] = content.Load<Texture2D>("assets/menus/block400");
             menuItemTextures[2] = content.Load<Texture2D>("assets/menus/block500");
@@ -99,6 +98,7 @@ namespace MazeGame
         {
             if (lastState != State.Menu)
             {
+                GameElements.RemainingTime = 0;
                 currentMenu = new MainMenu(window, publicPixel24pt, menuItemTextures, menuBannerTextures[1], skyTexture);
             }
 
@@ -160,8 +160,10 @@ namespace MazeGame
             if(lastState != State.Run)
             {
                 background = new Background(window, skyTexture, 9, 9);
-                level = new Level(window, gameTime, tileTextures, hDivTextures, vDivTextures, endPortalTextures, timerTexture, publicPixel20pt, 5 + HighScore.CurrentScore.Points, 0.17, x_Sp_Player, y_Sp_Player); //TODO change speed to player speed
+                level = new Level(window, gameTime, tileTextures, hDivTextures, vDivTextures, endPortalTextures, menuItemTextures[2], publicPixel24pt, remainingTime, 5 + HighScore.CurrentScore.Points, 0.17, x_Sp_Player, y_Sp_Player); //TODO change speed to player speed
                 player = new Player(playerTextures, gameTime, (window.ClientBounds.Width / 2) - (playerTextures[0].Width / 2), (window.ClientBounds.Height / 2) - (playerTextures[0].Height / 2), x_Sp_Player, y_Sp_Player); //Change texture
+
+                level.Update(gameTime, new List<Level.Direction>(), player); //Runs single levelupdate. To prevent bug where player update tries to get dividers from level that have not yet been initialized.
             }
 
             List<Level.Direction> directions = player.Update(window);
@@ -243,5 +245,9 @@ namespace MazeGame
             get { return level; }   
         }
 
+        public static int RemainingTime
+        {
+            set { remainingTime = value; }
+        }
     }
 }
