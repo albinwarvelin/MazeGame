@@ -14,7 +14,7 @@ namespace MazeGame
             menuItems.Add(new MenuItem(bannerTexture, font, "", MenuItem.Alignment.Mid, (window.ClientBounds.Width / 2) - (bannerTexture.Width / 2), (window.ClientBounds.Height / 4) - (bannerTexture.Height / 2)));
             menuItems.Add(new MenuItem(menuItemTextures[1], font, "Play", MenuItem.Alignment.Mid, (window.ClientBounds.Width / 2) - (menuItemTextures[1].Width / 2), (int)menuItems[0].Y_Pos + 280));
             menuItems.Add(new MenuItem(menuItemTextures[3], font, "View highscores", MenuItem.Alignment.Mid, (window.ClientBounds.Width / 2) - (menuItemTextures[3].Width / 2), (int)menuItems[0].Y_Pos + 370));
-            menuItems.Add(new MenuItem(menuItemTextures[1], font, "Settings", MenuItem.Alignment.Mid, (window.ClientBounds.Width / 2) - (menuItemTextures[1].Width / 2), (int)menuItems[0].Y_Pos + 460));
+            menuItems.Add(new MenuItem(menuItemTextures[2], font, "How to play", MenuItem.Alignment.Mid, (window.ClientBounds.Width / 2) - (menuItemTextures[2].Width / 2), (int)menuItems[0].Y_Pos + 460));
             menuItems.Add(new MenuItem(menuItemTextures[1], font, "Quit game", MenuItem.Alignment.Mid, (window.ClientBounds.Width / 2) - (menuItemTextures[1].Width / 2), (int)menuItems[0].Y_Pos + 550));
         }
 
@@ -32,7 +32,7 @@ namespace MazeGame
             }
             if (menuItems[3].CheckPress(mouseState))
             {
-                return GameElements.State.Settings;
+                return GameElements.State.HowTo;
             }
             if (menuItems[4].CheckPress(mouseState))
             {

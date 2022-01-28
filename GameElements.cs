@@ -10,7 +10,7 @@ namespace MazeGame
 {
     static class GameElements
     {
-        public enum State { Startup, Menu, NameChoosing, Settings, HighScore, Run, Paused, Cleared, Failed, Quit };
+        public enum State { Startup, Menu, NameChoosing, HowTo, HighScore, Run, Paused, Cleared, Failed, Quit };
 
         public static State currentState; //Current gamestate
         public static State lastState = State.Startup; //Last gamestate, used when switching states, if not equal to current state methods will most likely initialize the new state
@@ -33,8 +33,9 @@ namespace MazeGame
         private static Texture2D[] endPortalTextures = new Texture2D[8];
         private static Texture2D[] menuItemTextures = new Texture2D[7];
         private static Texture2D[] menuControlTextures = new Texture2D[2];
-        private static Texture2D[] menuBannerTextures = new Texture2D[4];
+        private static Texture2D[] menuBannerTextures = new Texture2D[5];
         private static Texture2D[] listTextures = new Texture2D[3];
+        private static Texture2D[] textBoxTextures = new Texture2D[3];
         private static Texture2D greyedOut;
         private static SpriteFont publicPixel20pt;
         private static SpriteFont publicPixel24pt;
@@ -63,9 +64,13 @@ namespace MazeGame
             menuBannerTextures[1] = content.Load<Texture2D>("assets/menus/mainmenu");
             menuBannerTextures[2] = content.Load<Texture2D>("assets/menus/levelfailed");
             menuBannerTextures[3] = content.Load<Texture2D>("assets/menus/highscores");
+            menuBannerTextures[4] = content.Load<Texture2D>("assets/menus/howtoplay");
             listTextures[0] = content.Load<Texture2D>("assets/menus/highscorelisttop");
             listTextures[1] = content.Load<Texture2D>("assets/menus/highscorelistmid");
             listTextures[2] = content.Load<Texture2D>("assets/menus/highscorelistbottom");
+            textBoxTextures[0] = content.Load<Texture2D>("assets/menus/textboxtop");
+            textBoxTextures[1] = content.Load<Texture2D>("assets/menus/textboxmid");
+            textBoxTextures[2] = content.Load<Texture2D>("assets/menus/textboxbottom");
             greyedOut = content.Load<Texture2D>("assets/menus/greyedout");
 
             for (int i = 0; i < 9; i++) //Loads tiles
@@ -120,14 +125,19 @@ namespace MazeGame
             currentMenu.Draw(spriteBatch);
         }
 
-        public static State SettingsUpdate()
+        public static State HowToPlayUpdate(GameWindow window)
         {
-            return State.Settings;
+            if (lastState != State.HowTo)
+            {
+                currentMenu = new HowToPlayMenu(window, publicPixel24pt, publicPixel20pt, menuControlTextures, textBoxTextures, menuBannerTextures[4], skyTexture);
+            }
+
+            return currentMenu.Update();
         }
 
-        public static void SettingsDraw(SpriteBatch spriteBatch)
+        public static void HowToPlayDraw(SpriteBatch spriteBatch)
         {
-
+            currentMenu.Draw(spriteBatch);
         }
 
         public static State NameChoosingUpdate(GameWindow window)

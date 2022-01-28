@@ -41,7 +41,7 @@ namespace MazeGame
             currentDir = Direction.Still; //Direction is set to still if there's no movement.
 
             KeyboardState keyboardInput = Keyboard.GetState();
-            if (keyboardInput.IsKeyDown(Keys.W) && !keyboardInput.IsKeyDown(Keys.S))
+            if (keyboardInput.IsKeyDown(Keys.W) && !keyboardInput.IsKeyDown(Keys.S) && !keyboardInput.IsKeyDown(Keys.Down) || keyboardInput.IsKeyDown(Keys.Up) && !keyboardInput.IsKeyDown(Keys.Down) && !keyboardInput.IsKeyDown(Keys.S))
             {
                 position.Y -= speed.Y;
                 TileDivider collider = null;
@@ -73,7 +73,7 @@ namespace MazeGame
                     currentDir = Direction.Up;
                 }
             }
-            if (keyboardInput.IsKeyDown(Keys.S) && !keyboardInput.IsKeyDown(Keys.W))
+            if (keyboardInput.IsKeyDown(Keys.S) && !keyboardInput.IsKeyDown(Keys.W) && !keyboardInput.IsKeyDown(Keys.Up) || keyboardInput.IsKeyDown(Keys.Down) && !keyboardInput.IsKeyDown(Keys.Up) && !keyboardInput.IsKeyDown(Keys.W))
             {
                 position.Y += speed.Y;
                 TileDivider collider = null;
@@ -105,7 +105,7 @@ namespace MazeGame
                     currentDir = Direction.Down;
                 }
             }
-            if (keyboardInput.IsKeyDown(Keys.A) && !keyboardInput.IsKeyDown(Keys.D))
+            if (keyboardInput.IsKeyDown(Keys.A) && !keyboardInput.IsKeyDown(Keys.D) && !keyboardInput.IsKeyDown(Keys.Right) || keyboardInput.IsKeyDown(Keys.Left) && !keyboardInput.IsKeyDown(Keys.Right) && !keyboardInput.IsKeyDown(Keys.D))
             {
                 position.X -= speed.X;
                 TileDivider collider = null;
@@ -137,7 +137,7 @@ namespace MazeGame
                     currentDir = Direction.Left;
                 }
             }
-            if (keyboardInput.IsKeyDown(Keys.D) && !keyboardInput.IsKeyDown(Keys.A))
+            if (keyboardInput.IsKeyDown(Keys.D) && !keyboardInput.IsKeyDown(Keys.A) && !keyboardInput.IsKeyDown(Keys.Left) || keyboardInput.IsKeyDown(Keys.Right) && !keyboardInput.IsKeyDown(Keys.Left) && !keyboardInput.IsKeyDown(Keys.A))
             {
                 position.X += speed.X;
                 TileDivider collider = null;

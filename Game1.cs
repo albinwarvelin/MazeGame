@@ -69,8 +69,8 @@ namespace MazeGame
                     GameElements.lastState = GameElements.currentState;
                     GameElements.currentState = temp;
                     break;
-                case GameElements.State.Settings:
-                    temp = GameElements.SettingsUpdate();
+                case GameElements.State.HowTo:
+                    temp = GameElements.HowToPlayUpdate(Window);
                     GameElements.lastState = GameElements.currentState;
                     GameElements.currentState = temp;
                     break;
@@ -124,8 +124,8 @@ namespace MazeGame
                 case GameElements.State.HighScore:
                     GameElements.HighScoreDraw(_spriteBatch);
                     break;
-                case GameElements.State.Settings:
-                    GameElements.SettingsDraw(_spriteBatch);
+                case GameElements.State.HowTo:
+                    GameElements.HowToPlayDraw(_spriteBatch);
                     break;
                 case GameElements.State.NameChoosing:
                     GameElements.NameChoosingDraw(_spriteBatch);
