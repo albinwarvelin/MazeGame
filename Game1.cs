@@ -29,6 +29,8 @@ namespace MazeGame
             Window.IsBorderless = true;
             _graphics.ApplyChanges();
 
+            Window.TextInput += InputText.ProcessTextInput;
+
             GameElements.currentState = GameElements.State.Menu;
             GameElements.Initialize();
 

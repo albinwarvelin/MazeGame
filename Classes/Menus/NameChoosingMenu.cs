@@ -61,31 +61,31 @@ namespace MazeGame
                 }
 
                 markerDelay--;
+
+                /* Take text input */
+                if (InputText.TryConvertKeyboardInput(keyboardState, oldKeyboardstate, out toAdd))
+                {
+                    if (toAdd == 8)
+                    {
+                        if (menuItems[2].Text.Length > 0)
+                        {
+                            menuItems[2].Text = menuItems[2].Text.Remove(menuItems[2].Text.Length - 1);
+                        }
+                    }
+                    else
+                    {
+                        if (menuItems[2].Text.Length < 18)
+                        {
+                            menuItems[2].Text += toAdd;
+                        }
+                    }
+                }
+                oldKeyboardstate = keyboardState;
             }
             else
             {
                 displayMarker = false;
             }
-
-            /* Take text input */
-            if (InputText.TryConvertKeyboardInput(keyboardState, oldKeyboardstate, out toAdd))
-            {
-                if(toAdd == 8)
-                {
-                    if(menuItems[2].Text.Length > 0)
-                    {
-                        menuItems[2].Text = menuItems[2].Text.Remove(menuItems[2].Text.Length - 1);
-                    }
-                }
-                else
-                {
-                    if(menuItems[2].Text.Length < 18)
-                    {
-                        menuItems[2].Text += toAdd;
-                    }
-                }
-            }
-            oldKeyboardstate = keyboardState;
 
             /* Recalculate textposition of input field */
             menuItems[2].ReCenterText();

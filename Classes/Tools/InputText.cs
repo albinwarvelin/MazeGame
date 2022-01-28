@@ -9,6 +9,10 @@ namespace MazeGame
 {
     class InputText
     {
+        private enum SpecialKey { Å, Ä, Ö, None};
+
+        private static SpecialKey specialKey = SpecialKey.None;
+
         /// <summary>
         /// Method to input text into XNA. Found on XNA forums.
         /// </summary>
@@ -80,11 +84,51 @@ namespace MazeGame
                     //Special keys
                     case Keys.Back: key = (char)8; return true;
                     case Keys.Space: key = ' '; return true;
+
+                    
+                    case Keys.None:
+                    {
+                        switch(specialKey)
+                        {
+                            case SpecialKey.Å: if (shift) { key = 'Å'; } else { key = 'å'; } return true;
+                            case SpecialKey.Ä: if (shift) { key = 'Ä'; } else { key = 'ä'; } return true;
+                            case SpecialKey.Ö: if (shift) { key = 'Ö'; } else { key = 'ö'; } return true;
+                                default: key = (char)0; return false;
+                        }
+                    }
                 }
             }
 
             key = (char)0;
             return false;
+        }
+
+        public static void ProcessTextInput(object sender, TextInputEventArgs e)
+        {
+            switch(e.Character)
+            {
+                case 'å':
+                    specialKey = SpecialKey.Å;
+                    break;
+                case 'Å':
+                    specialKey = SpecialKey.Å;
+                    break;
+                case 'ä':
+                    specialKey = SpecialKey.Ä;
+                    break;
+                case 'Ä':
+                    specialKey = SpecialKey.Ä;
+                    break;
+                case 'ö':
+                    specialKey = SpecialKey.Ö;
+                    break;
+                case 'Ö':
+                    specialKey = SpecialKey.Ö;
+                    break;
+                default:
+                    specialKey = SpecialKey.None;
+                    break;
+            }
         }
     }
 }
