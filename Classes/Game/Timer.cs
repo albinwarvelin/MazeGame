@@ -22,20 +22,20 @@ namespace MazeGame
         /// <param name="seconds"></param>
         /// <param name="x_Pos"></param>
         /// <param name="y_Pos"></param>
-        public Timer(GameTime gameTime, Texture2D texture, SpriteFont font, int seconds, int x_Pos, int y_Pos) : base(texture, font, "Time left:", Alignment.Mid, x_Pos , y_Pos)
+        public Timer(Texture2D texture, SpriteFont font, int seconds, int x_Pos, int y_Pos) : base(texture, font, "Time left:", Alignment.Mid, x_Pos , y_Pos)
         {
-            limit = (long) gameTime.TotalGameTime.TotalSeconds + seconds;
+            limit = 60 * seconds;
         }
 
         /// <summary>
         /// Updates timer, returns true if timer has ended.
         /// </summary>
         /// <param name="gameTime"></param>
-        public void Update(GameTime gameTime)
+        public void Update()
         {
-            currentTime = (long) gameTime.TotalGameTime.TotalSeconds;
+            currentTime++;
 
-            if(gameTime.TotalGameTime.TotalSeconds > limit)
+            if(currentTime > limit)
             {
                 hasEnded = true;
             }
@@ -52,7 +52,7 @@ namespace MazeGame
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, position, Color.White);
-            text = "Time left:" + (limit - currentTime);
+            text = "Time left:" + (limit - currentTime) / 60;
             ReCenterText();
             printText.Print(text, spriteBatch, Color.Black);
         }

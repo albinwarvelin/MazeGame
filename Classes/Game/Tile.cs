@@ -12,9 +12,9 @@ namespace MazeGame
         public enum TileType { Standard, Right, Bottom, Corner } //Used when determining if tile needs divider in bottom or right position
 
         /* Parameters, stored to use if tile is reset */
-        private Texture2D hDivTexture;
-        private Texture2D vDivTexture;
-        private TileType tileType;
+        private readonly Texture2D hDivTexture;
+        private readonly Texture2D vDivTexture;
+        private readonly TileType tileType;
 
         /* When neighbor is added to list, its origin direction is also added.
         If neighbor is added multiple times multiple origin directions are added. 

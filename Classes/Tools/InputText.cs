@@ -84,7 +84,7 @@ namespace MazeGame
                     //Special keys
                     case Keys.Back: key = (char)8; return true;
                     case Keys.Space: key = ' '; return true;
-
+                    case Keys.Escape: key = (char)27; return true;
                     
                     case Keys.None:
                     {
@@ -103,32 +103,18 @@ namespace MazeGame
             return false;
         }
 
-        public static void ProcessTextInput(object sender, TextInputEventArgs e)
+        public static void ProcessTextInput(object _, TextInputEventArgs e)
         {
-            switch(e.Character)
+            specialKey = e.Character switch
             {
-                case 'å':
-                    specialKey = SpecialKey.Å;
-                    break;
-                case 'Å':
-                    specialKey = SpecialKey.Å;
-                    break;
-                case 'ä':
-                    specialKey = SpecialKey.Ä;
-                    break;
-                case 'Ä':
-                    specialKey = SpecialKey.Ä;
-                    break;
-                case 'ö':
-                    specialKey = SpecialKey.Ö;
-                    break;
-                case 'Ö':
-                    specialKey = SpecialKey.Ö;
-                    break;
-                default:
-                    specialKey = SpecialKey.None;
-                    break;
-            }
+                'å' => SpecialKey.Å,
+                'Å' => SpecialKey.Å,
+                'ä' => SpecialKey.Ä,
+                'Ä' => SpecialKey.Ä,
+                'ö' => SpecialKey.Ö,
+                'Ö' => SpecialKey.Ö,
+                _ => SpecialKey.None,
+            };
         }
     }
 }

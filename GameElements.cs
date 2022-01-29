@@ -14,11 +14,12 @@ namespace MazeGame
 
         public static State currentState; //Current gamestate
         public static State lastState = State.Startup; //Last gamestate, used when switching states, if not equal to current state methods will most likely initialize the new state
+        private static KeyboardState oldKeyboardstate = new KeyboardState();
 
         private static Menu currentMenu;
 
-        private static int x_Sp_Player = 11; //General speed for game
-        private static int y_Sp_Player = 11; //General speed for game
+        private static readonly int x_Sp_Player = 11; //General speed for game
+        private static readonly int y_Sp_Player = 11; //General speed for game
 
         private static Background background;
         private static Level level; //Games level
@@ -27,17 +28,17 @@ namespace MazeGame
         private static int superSpeedsLeft = 1; // How many superspeeds player has left.
 
         private static Texture2D skyTexture;
-        private static Texture2D[] tileTextures = new Texture2D[9];
-        private static Texture2D[] hDivTextures = new Texture2D[4];
-        private static Texture2D[] vDivTextures = new Texture2D[4];
-        private static Texture2D[] playerTextures = new Texture2D[9];
-        private static Texture2D[] fireTextures = new Texture2D[26];
-        private static Texture2D[] endPortalTextures = new Texture2D[8];
-        private static Texture2D[] menuItemTextures = new Texture2D[7];
-        private static Texture2D[] menuControlTextures = new Texture2D[2];
-        private static Texture2D[] menuBannerTextures = new Texture2D[5];
-        private static Texture2D[] listTextures = new Texture2D[3];
-        private static Texture2D[] textBoxTextures = new Texture2D[3];
+        private static readonly Texture2D[] tileTextures = new Texture2D[9];
+        private static readonly Texture2D[] hDivTextures = new Texture2D[4];
+        private static readonly Texture2D[] vDivTextures = new Texture2D[4];
+        private static readonly Texture2D[] playerTextures = new Texture2D[9];
+        private static readonly Texture2D[] fireTextures = new Texture2D[26];
+        private static readonly Texture2D[] endPortalTextures = new Texture2D[8];
+        private static readonly Texture2D[] menuItemTextures = new Texture2D[7];
+        private static readonly Texture2D[] menuControlTextures = new Texture2D[2];
+        private static readonly Texture2D[] menuBannerTextures = new Texture2D[6];
+        private static readonly Texture2D[] listTextures = new Texture2D[3];
+        private static readonly Texture2D[] textBoxTextures = new Texture2D[3];
         private static Texture2D greyedOut;
         private static SpriteFont publicPixel20pt;
         private static SpriteFont publicPixel24pt;
@@ -47,7 +48,7 @@ namespace MazeGame
             HighScore.LoadHighScores();
         }
 
-        public static void LoadContent(ContentManager content, GameWindow window)
+        public static void LoadContent(ContentManager content)
         {
             skyTexture = content.Load<Texture2D>("assets/background/sky");
             publicPixel20pt = content.Load<SpriteFont>("assets/fonts/publicpixel20pt");
@@ -66,6 +67,7 @@ namespace MazeGame
             menuBannerTextures[2] = content.Load<Texture2D>("assets/menus/levelfailed");
             menuBannerTextures[3] = content.Load<Texture2D>("assets/menus/highscores");
             menuBannerTextures[4] = content.Load<Texture2D>("assets/menus/howtoplay");
+            menuBannerTextures[5] = content.Load<Texture2D>("assets/menus/paused");
             listTextures[0] = content.Load<Texture2D>("assets/menus/highscorelisttop");
             listTextures[1] = content.Load<Texture2D>("assets/menus/highscorelistmid");
             listTextures[2] = content.Load<Texture2D>("assets/menus/highscorelistbottom");
@@ -166,17 +168,25 @@ namespace MazeGame
             if(lastState != State.Run)
             {
                 background = new Background(window, skyTexture, 9, 9);
-                level = new Level(window, gameTime, tileTextures, hDivTextures, vDivTextures, endPortalTextures, menuItemTextures[2], publicPixel24pt, remainingTime, 5 + HighScore.CurrentScore.Points, 0.17, x_Sp_Player, y_Sp_Player); //TODO change speed to player speed
+                level = new Level(window, tileTextures, hDivTextures, vDivTextures, endPortalTextures, menuItemTextures[2], publicPixel24pt, remainingTime / 60, 5 + HighScore.CurrentScore.Points, 0.17, x_Sp_Player, y_Sp_Player); //TODO change speed to player speed
                 player = new Player(playerTextures, fireTextures, gameTime, (window.ClientBounds.Width / 2) - (playerTextures[0].Width / 2), (window.ClientBounds.Height / 2) - (playerTextures[0].Height / 2), x_Sp_Player, y_Sp_Player); //Change texture
 
-                level.Update(gameTime, new List<Level.Direction>(), player); //Runs single levelupdate. To prevent bug where player update tries to get dividers from level that have not yet been initialized.
+                level.Update(new List<Level.Direction>(), player); //Runs single levelupdate. To prevent bug where player update tries to get dividers from level that have not yet been initialized.
             }
 
             List<Level.Direction> directions = player.Update(window);
-            level.Update(gameTime, directions, player); //Updates player first, then uses the enum list provided by method to update 
+            level.Update(directions, player); //Updates player first, then uses the enum list provided by method to update 
             background.Update(directions);
+            
 
-            if(level.EndPortal.CheckWin(player))
+            InputText.TryConvertKeyboardInput(Keyboard.GetState(), oldKeyboardstate, out char key);
+            oldKeyboardstate = Keyboard.GetState();
+
+            if (key == (char)27) //Escape key
+            {
+                return State.Paused;
+            }
+            else if(level.EndPortal.CheckWin(player))
             {
                 HighScore.CurrentScore.Points++;
                 
@@ -201,14 +211,22 @@ namespace MazeGame
             level.DrawOverlay(spriteBatch);
         }
 
-        public static State PausedUpdate() //Updates paused
+        public static State PausedUpdate(GameWindow window) //Updates paused
         {
-            return State.Paused;
+            if (lastState != State.Paused)
+            {
+                currentMenu = new PausedMenu(window, publicPixel24pt, menuItemTextures, menuBannerTextures[5], greyedOut);
+            }
+
+            return currentMenu.Update();
         }
 
-        public static void PausedDraw(SpriteBatch spriteBatch) //Draws paused
+        public static void PausedDraw(SpriteBatch spriteBatch, GameWindow window) //Draws paused
         {
-
+            background.Draw(spriteBatch);
+            level.Draw(spriteBatch, window);
+            spriteBatch.Draw(player.Texture, new Vector2((float) player.X_Pos, (float) player.Y_Pos), Color.White); //Draws player frozen
+            currentMenu.Draw(spriteBatch);
         }
 
         public static State ClearedUpdate(GameWindow window) //Updates cleared

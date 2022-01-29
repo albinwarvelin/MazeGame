@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MazeGame
 {
-    abstract class Animation
+    class Animation
     {
         protected readonly GameObject gameObject;
 
@@ -19,22 +19,15 @@ namespace MazeGame
 
         protected readonly int interval;
         protected int elapsedFrames = 0;
-        
-        /// <summary>
-        /// Base animation class, cycles through textures with specified interval by calling update(). Only changes texture, does not draw texture..
-        /// </summary>
-        /// <param name="gameObject"></param>
-        /// <param name="gameTime"></param>
-        /// <param name="textures"></param>
-        /// <param name="interval"></param>
-        protected Animation(GameObject gameObject, GameTime gameTime, Texture2D[] textures, int interval)
+
+        public Animation(GameObject gameObject, GameTime gameTime, Texture2D[] textures, int interval)
         {
             this.gameObject = gameObject;
             this.gameTime = gameTime;
             this.textures = textures;
             this.interval = interval;
         }
-        protected Animation(GameTime gameTime, Texture2D[] textures, int interval)
+        public Animation(GameTime gameTime, Texture2D[] textures, int interval)
         {
             this.gameTime = gameTime;
             this.textures = textures;
@@ -42,29 +35,51 @@ namespace MazeGame
         }
 
         /// <summary>
-        /// Updates cycle.
+        /// Updates and resets animation if interrupted.
         /// </summary>
         /// <param name="spriteBatch"></param>
-        public virtual void Update()
+        public void Update()
         {
-            if(gameObject == null)
+            /* Reset */
+            if(lastGameTime < gameTime.TotalGameTime.TotalMilliseconds - 20 || (elapsedFrames > interval && currentIndex >= textures.Length - 1))
             {
-                throw new InvalidOperationException("Cannot invoke this method without assigning GameObject through constructor.");
+                currentIndex = 0;
+
+                elapsedFrames = 0;
             }
-            else
+
+            /* Update */
+            if (elapsedFrames > interval)
             {
-                if (elapsedFrames > interval)
-                {
-                    currentIndex++;
+                currentIndex++;
 
-                    elapsedFrames = 0;
-                }
-
-                gameObject.Texture = textures[currentIndex];
-
-                elapsedFrames++;
-                lastGameTime = gameTime.TotalGameTime.TotalMilliseconds;
+                elapsedFrames = 0;
             }
+
+            gameObject.Texture = textures[currentIndex];
+
+            elapsedFrames++;
+            lastGameTime = gameTime.TotalGameTime.TotalMilliseconds;
+        }
+
+        /// <summary>
+        /// Returns texture that switches to random texture after interval length.
+        /// </summary>
+        /// <param name="outTexture"></param>
+        public void Update(out Texture2D outTexture)
+        {
+            Random rnd = new Random();
+
+            if (elapsedFrames > interval)
+            {
+                currentIndex = rnd.Next(textures.Length);
+                elapsedFrames = 0;
+            }
+
+            outTexture = textures[currentIndex];
+
+            elapsedFrames++;
+            lastGameTime = gameTime.TotalGameTime.TotalMilliseconds;
         }
     }
 }

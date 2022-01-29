@@ -14,7 +14,7 @@ namespace MazeGame
         private List<TileDivider> surroundingDividers; //Updated every frame to contain current surrounding dividers
         private const int colliderMargin = 15; //How much player should be allowed to overlap dividers, makes collission rectangle smaller.
 
-        private readonly InfiniteAnimation up, down, left, right, superspeedUp, superspeedDown, superspeedLeft, superspeedRight, superspeedStill;
+        private readonly Animation up, down, left, right, superspeedUp, superspeedDown, superspeedLeft, superspeedRight, superspeedStill;
         private readonly Texture2D stillTexture;
         private Direction currentDir = Direction.Right; //Default, overwritten in first frame.
 
@@ -24,19 +24,19 @@ namespace MazeGame
         
         public Player(Texture2D[] textures, Texture2D[] superSpeedTextures, GameTime gameTime, double x_Pos, double y_Pos, double x_Speed, double y_Speed) : base(textures[0], x_Pos, y_Pos, x_Speed, y_Speed)
         {
-            up = new InfiniteAnimation(this, gameTime, new Texture2D[] { textures[4], textures[5] }, 10);
-            right = new InfiniteAnimation(this, gameTime, new Texture2D[] { textures[1], textures[2] }, 10);
-            left = new InfiniteAnimation(this, gameTime, new Texture2D[] { textures[0], textures[3] }, 10);
-            down = new InfiniteAnimation(this, gameTime, new Texture2D[] { textures[7], textures[8] }, 10);
+            up = new Animation(this, gameTime, new Texture2D[] { textures[4], textures[5] }, 10);
+            right = new Animation(this, gameTime, new Texture2D[] { textures[1], textures[2] }, 10);
+            left = new Animation(this, gameTime, new Texture2D[] { textures[0], textures[3] }, 10);
+            down = new Animation(this, gameTime, new Texture2D[] { textures[7], textures[8] }, 10);
             stillTexture = textures[6];
 
             currentSuperSpeedTexture = superSpeedTextures[0];
 
-            superspeedUp = new InfiniteAnimation(gameTime, new Texture2D[] { superSpeedTextures[21], superSpeedTextures[22], superSpeedTextures[23], superSpeedTextures[24], superSpeedTextures[25] }, 5);
-            superspeedRight = new InfiniteAnimation(gameTime, new Texture2D[] {superSpeedTextures[7], superSpeedTextures[8] , superSpeedTextures[9] , superSpeedTextures[10] , superSpeedTextures[11] , superSpeedTextures[12] , superSpeedTextures[13] }, 5);
-            superspeedLeft = new InfiniteAnimation(gameTime, new Texture2D[] { superSpeedTextures[0], superSpeedTextures[1], superSpeedTextures[2], superSpeedTextures[3], superSpeedTextures[4], superSpeedTextures[5], superSpeedTextures[6] }, 5);
-            superspeedDown = new InfiniteAnimation(gameTime, new Texture2D[] { superSpeedTextures[14], superSpeedTextures[15], superSpeedTextures[16], superSpeedTextures[17], superSpeedTextures[18], superSpeedTextures[19], superSpeedTextures[20] }, 5);
-            superspeedStill = new InfiniteAnimation(gameTime, new Texture2D[] { superSpeedTextures[14], superSpeedTextures[15], superSpeedTextures[16], superSpeedTextures[17], superSpeedTextures[18], superSpeedTextures[19], superSpeedTextures[20] }, 5);
+            superspeedUp = new Animation(gameTime, new Texture2D[] { superSpeedTextures[21], superSpeedTextures[22], superSpeedTextures[23], superSpeedTextures[24], superSpeedTextures[25] }, 5);
+            superspeedRight = new Animation(gameTime, new Texture2D[] {superSpeedTextures[7], superSpeedTextures[8] , superSpeedTextures[9] , superSpeedTextures[10] , superSpeedTextures[11] , superSpeedTextures[12] , superSpeedTextures[13] }, 5);
+            superspeedLeft = new Animation(gameTime, new Texture2D[] { superSpeedTextures[0], superSpeedTextures[1], superSpeedTextures[2], superSpeedTextures[3], superSpeedTextures[4], superSpeedTextures[5], superSpeedTextures[6] }, 5);
+            superspeedDown = new Animation(gameTime, new Texture2D[] { superSpeedTextures[14], superSpeedTextures[15], superSpeedTextures[16], superSpeedTextures[17], superSpeedTextures[18], superSpeedTextures[19], superSpeedTextures[20] }, 5);
+            superspeedStill = new Animation(gameTime, new Texture2D[] { superSpeedTextures[14], superSpeedTextures[15], superSpeedTextures[16], superSpeedTextures[17], superSpeedTextures[18], superSpeedTextures[19], superSpeedTextures[20] }, 5);
         }
 
         /// <summary>
@@ -48,8 +48,6 @@ namespace MazeGame
         /// <returns></returns>
         public List<Level.Direction> Update(GameWindow window)
         {
-            
-
             List<Level.Direction> directions = new List<Level.Direction>();
 
             currentDir = Direction.Still; //Direction is set to still if there's no movement.

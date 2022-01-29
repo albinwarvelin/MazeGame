@@ -12,7 +12,7 @@ namespace MazeGame
         public enum Alignment { Left, Mid }
 
         protected string text;
-        private SpriteFont font;
+        private readonly SpriteFont font;
         protected PrintText printText;
         bool beenPressed = false;
         private Color color = Color.White;

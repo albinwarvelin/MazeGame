@@ -10,8 +10,8 @@ namespace MazeGame
 {
     class Background : MovingObject
     {
-        int x_Size;
-        int y_Size;
+        private readonly int x_Size;
+        private readonly int y_Size;
 
         /// <summary>
         /// Creates a background that automatically scales to window size. Background can be moved
@@ -80,9 +80,7 @@ namespace MazeGame
             {
                 for(int y = 0; y < y_Size; y++)
                 {
-                    Vector2 texturePos = new Vector2();
-                    texturePos.X = position.X + (x * texture.Width);
-                    texturePos.Y = position.Y + (y * texture.Height);
+                    Vector2 texturePos = new Vector2(position.X + (x * texture.Width), position.Y + (y * texture.Height));
 
                     spriteBatch.Draw(texture, texturePos, Color.White);
                 }

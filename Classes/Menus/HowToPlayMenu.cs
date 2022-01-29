@@ -33,7 +33,7 @@ namespace MazeGame
                 menuItems.Add(new MenuItem(textBoxTextures[1], fontSmall, rows[i], MenuItem.Alignment.Left, (window.ClientBounds.Width / 2) - (textBoxTextures[2].Width / 2), (int)menuItems[2].Y_Pos + i * 70));
             }
 
-            menuItems.Add(new MenuItem(textBoxTextures[2], fontSmall, rows[rows.Length - 1], MenuItem.Alignment.Left, (window.ClientBounds.Width / 2) - (textBoxTextures[2].Width / 2), (int)menuItems[2].Y_Pos + (rows.Length - 1) * 70 ));
+            menuItems.Add(new MenuItem(textBoxTextures[2], fontSmall, rows[^1], MenuItem.Alignment.Left, (window.ClientBounds.Width / 2) - (textBoxTextures[2].Width / 2), (int)menuItems[2].Y_Pos + (rows.Length - 1) * 70 ));
         }
 
         public override GameElements.State Update()

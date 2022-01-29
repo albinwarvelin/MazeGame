@@ -11,11 +11,11 @@ namespace MazeGame
     {
         public enum Direction { Up, Down, Left, Right }; //Used to return what direction level should move
 
-        private Tile[,] tiles; //Two dimensional array: y, x
-        private int size;
-        private EndPortal endPortal;
-        private Timer timer;
-        private MenuItem superSpeedMenuItem;
+        private readonly Tile[,] tiles; //Two dimensional array: y, x
+        private readonly int size;
+        private readonly EndPortal endPortal;
+        private readonly Timer timer;
+        private readonly MenuItem superSpeedMenuItem;
 
         /// <summary>
         /// Generates new random level. Size shall not be less than 4.
@@ -27,9 +27,9 @@ namespace MazeGame
         /// <param name="window"></param>
         /// <param name="x_Speed"></param>
         /// <param name="y_Speed"></param>
-        public Level(GameWindow window, GameTime gameTime, Texture2D[] tileTextures, Texture2D[] hDivTextures, Texture2D[] vDivTexture, Texture2D[] endPortalTextures, Texture2D timerTexture, SpriteFont font, int remainingTime, int size, double voidTilePercentage, double x_Speed, double y_Speed) : base(null, 0, 0, x_Speed, y_Speed) //Level position not used, each tile has its own position
+        public Level(GameWindow window, Texture2D[] tileTextures, Texture2D[] hDivTextures, Texture2D[] vDivTexture, Texture2D[] endPortalTextures, Texture2D timerTexture, SpriteFont font, int remainingTime, int size, double voidTilePercentage, double x_Speed, double y_Speed) : base(null, 0, 0, x_Speed, y_Speed) //Level position not used, each tile has its own position
         {
-            timer = new Timer(gameTime, timerTexture, font, 35 + remainingTime / 2 + size * 3, 20, 20); //Sets new timer
+            timer = new Timer(timerTexture, font, 35 + remainingTime / 2 + size * 3, 20, 20); //Sets new timer
             superSpeedMenuItem = new MenuItem(timerTexture, font, "Superspeed:" + GameElements.SuperSpeedsLeft, MenuItem.Alignment.Mid, window.ClientBounds.Width - timerTexture.Width - 20, 20);
 
 
@@ -485,9 +485,9 @@ namespace MazeGame
         /// </summary>
         /// <param name="toMove"></param>
         /// <param name="player"></param>
-        public void Update(GameTime gameTime, List<Direction> toMove, Player player)
+        public void Update(List<Direction> toMove, Player player)
         {
-            timer.Update(gameTime);
+            timer.Update();
 
             List<TileDivider> surroundingDividers = new List<TileDivider>();
 

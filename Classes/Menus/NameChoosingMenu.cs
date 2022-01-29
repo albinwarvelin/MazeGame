@@ -34,10 +34,9 @@ namespace MazeGame
         {
             MouseState mouseState = Mouse.GetState();
             KeyboardState keyboardState = Keyboard.GetState();
-            char toAdd;
 
             /* Remove marker */
-            if(menuItems[2].Text.Length != 0)
+            if (menuItems[2].Text.Length != 0)
             {
                 if (menuItems[2].Text[menuItems[2].Text.Length - 1] == '|')
                 {
@@ -63,7 +62,7 @@ namespace MazeGame
                 markerDelay--;
 
                 /* Take text input */
-                if (InputText.TryConvertKeyboardInput(keyboardState, oldKeyboardstate, out toAdd))
+                if (InputText.TryConvertKeyboardInput(keyboardState, oldKeyboardstate, out char toAdd))
                 {
                     if (toAdd == 8)
                     {

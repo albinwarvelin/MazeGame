@@ -9,7 +9,7 @@ namespace MazeGame
 {
     public class Game1 : Game
     {
-        private GraphicsDeviceManager _graphics;
+        private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
         public Game1()
@@ -43,7 +43,7 @@ namespace MazeGame
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            GameElements.LoadContent(Content, Window);
+            GameElements.LoadContent(Content);
         }
 
         /// <summary>
@@ -52,9 +52,6 @@ namespace MazeGame
         /// <param name="gameTime"></param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
             GameElements.State temp;
 
             switch (GameElements.currentState)
@@ -85,8 +82,15 @@ namespace MazeGame
                     GameElements.currentState = temp;
                     break;
                 case GameElements.State.Paused:
-                    temp = GameElements.PausedUpdate();
-                    GameElements.lastState = GameElements.currentState;
+                    temp = GameElements.PausedUpdate(Window);
+                    if(temp == GameElements.State.Run) //To prevent pause menu from resetting level.
+                    {
+                        GameElements.lastState = GameElements.State.Run;
+                    }
+                    else
+                    {
+                        GameElements.lastState = GameElements.currentState;
+                    }
                     GameElements.currentState = temp;
                     break;
                 case GameElements.State.Cleared:
@@ -134,7 +138,7 @@ namespace MazeGame
                     GameElements.RunDraw(_spriteBatch, Window);
                     break;
                 case GameElements.State.Paused:
-                    GameElements.PausedDraw(_spriteBatch);
+                    GameElements.PausedDraw(_spriteBatch, Window);
                     break;
                 case GameElements.State.Cleared:
                     GameElements.ClearedDraw(_spriteBatch, Window);
