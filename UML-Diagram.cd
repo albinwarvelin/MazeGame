@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MazeGame.EndPortal">
+    <Position X="12.25" Y="16.25" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="MazeGame.EndPortal.Type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Classes\Game\EndPortal.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAABAAAAAAQgAAAEAAA=</HashCode>
+      <FileName>Classes\Game\EndPortal.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.GameObject">
+    <Position X="9.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEABAACAgAAAAAAIEAAAAAAAgAAAAIAAAAAAAA=</HashCode>
+      <FileName>Classes\Game\GameObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.Level">
+    <Position X="7.75" Y="12" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="MazeGame.Level.Direction" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Classes\Game\Level.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAABAAgAAAIAAgBCAAgAAAAAAAAAAIAAEACA=</HashCode>
+      <FileName>Classes\Game\Level.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MazeGame.MovingObject">
+    <Position X="7.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Game\MovingObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.PhysicalObject">
+    <Position X="11" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Game\PhysicalObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.Player">
+    <Position X="9.75" Y="14" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="MazeGame.Player.Direction" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Classes\Game\Player.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAAiAAAhAiAgCAAAEAABAAAAAIAACBAIBAIkAAgAA=</HashCode>
+      <FileName>Classes\Game\Player.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MazeGame.Tile">
+    <Position X="3.25" Y="12" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="MazeGame.Tile.TileType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Classes\Game\Tile.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>BARAAAEAACABCgAgIAQiBBAEAAQoAAAAIAACAAQAQAA=</HashCode>
+      <FileName>Classes\Game\Tile.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MazeGame.TileDivider">
+    <Position X="12.25" Y="14" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Game\TileDivider.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MazeGame.Timer">
+    <Position X="14" Y="14" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAgAAAAAgAAAAAAAAAAAAEABACAACAAAAAAAAA=</HashCode>
+      <FileName>Classes\Game\Timer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.ClearedMenu">
+    <Position X="11.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Menus\ClearedMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.FailedMenu">
+    <Position X="14" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Menus\FailedMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.HighScoreMenu">
+    <Position X="2.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Menus\HighScoreMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.HowToPlayMenu">
+    <Position X="7.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Menus\HowToPlayMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.MainMenu">
+    <Position X="9.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Menus\MainMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.Menu">
+    <Position X="9.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAAAAAAAAAAgAAAAAQAAAAAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>Classes\Menus\Menu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.MenuItem">
+    <Position X="14" Y="9.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="MazeGame.MenuItem.Alignment" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Classes\Menus\MenuItem.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>YAIAAAAAEAAAAgAAAAAAAAAAAAAAAACIAAAICAAAAAA=</HashCode>
+      <FileName>Classes\Menus\MenuItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.NameChoosingMenu">
+    <Position X="16.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAABCAAAAAAAAAAAAARAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Menus\NameChoosingMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.PausedMenu">
+    <Position X="5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Menus\PausedMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.Animation">
+    <Position X="18.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAEgAAAmAAAAAAACAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Classes\Tools\Animation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.Background">
+    <Position X="5.5" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAhAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Tools\Background.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.HighScore">
+    <Position X="18.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAIAABAAAgAAAQIAAAAAQAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Tools\HighScore.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.InputText">
+    <Position X="20.25" Y="4.5" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="MazeGame.InputText.SpecialKey" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Classes\Tools\InputText.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASACAAAAAAA=</HashCode>
+      <FileName>Classes\Tools\InputText.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.PrintText">
+    <Position X="20.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAACAAAAAAAAIAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Classes\Tools\PrintText.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.Score" BaseTypeListCollapsed="true">
+    <Position X="20.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQEAAAIAAQAAAAEAAABAAAgAQAAAAA=</HashCode>
+      <FileName>Classes\Tools\Score.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MazeGame.Game1">
+    <Position X="20.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AASAAAAAAAAAAwAAAAAAAAAAAAAAAAACAIAAAAAAAAQ=</HashCode>
+      <FileName>Game1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.GameElements">
+    <Position X="22" Y="1.25" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="MazeGame.GameElements.State" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>GameElements.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAgAhAAwsACDATAQIJAQhAAABAGIADQJFIYIARIQIAw=</HashCode>
+      <FileName>GameElements.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MazeGame.Program">
+    <Position X="18.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="MazeGame.ISetSpeed">
+    <Position X="18.5" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Game\ISetSpeed.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

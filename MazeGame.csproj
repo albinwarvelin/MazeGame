@@ -15,6 +15,7 @@
     <None Remove="Content\Level\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="ClassDiagram1.cd" />
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
   </ItemGroup>
