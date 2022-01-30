@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace MazeGame
 {
@@ -48,15 +44,33 @@ namespace MazeGame
             spriteBatch.Draw(texture, position, Color.White);
         }
 
-        //Properties
-        public Texture2D Texture 
+        /// <summary>
+        /// Texture2D property.
+        /// </summary>
+        public Texture2D Texture
         {
             get { return texture; }
             set { texture = value; }
         }
+
+        /// <summary>
+        /// X Position property.
+        /// </summary>
         public double X_Pos { get { return position.X; } }
+
+        /// <summary>
+        /// Y Position property.
+        /// </summary>
         public double Y_Pos { get { return position.Y; } }
+
+        /// <summary>
+        /// Texture width property.
+        /// </summary>
         public double Width { get { return texture.Width; } }
+
+        /// <summary>
+        /// Texture height property.
+        /// </summary>
         public double Height { get { return texture.Height; } }
     }
 }

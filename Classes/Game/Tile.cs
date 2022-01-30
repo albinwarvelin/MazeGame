@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace MazeGame
 {
+    /// <summary>
+    /// Tile class, contains tile textures, references to neighboring tiles and up to four Tile dividers.
+    /// </summary>
     class Tile : MovingObject, ISetSpeed
     {
         public enum TileType { Standard, Right, Bottom, Corner } //Used when determining if tile needs divider in bottom or right position
@@ -19,7 +18,7 @@ namespace MazeGame
         /* When neighbor is added to list, its origin direction is also added.
         If neighbor is added multiple times multiple origin directions are added. 
         When removing a wall, a random direction is chosen. */
-        List<Tile> originTile = new List<Tile>(); 
+        List<Tile> originTile = new List<Tile>();
 
         private bool beenChecked = false;
         private bool voidTile = false; //If tile is void it doesn't have any ground (texture), and player shall not be able to
@@ -29,19 +28,20 @@ namespace MazeGame
         private TileDivider rDiv; //Right, only used for right side tiles
         private TileDivider bDiv; //Bottom, only used for bottom tiles
 
+        /* Neighboring tiles */
         protected Tile[] neighbors; //0 = Top, 1 = Right, 2 = Left, 3 = Bottom
 
         /// <summary>
         /// Constructor, assigns dividers to tile according to parameters. Stores parameters if needed for resetting tile.
         /// </summary>
-        /// <param name="tileTexture"></param>
-        /// <param name="hDivTexture"></param>
-        /// <param name="vDivTexture"></param>
+        /// <param name="tileTexture">Texture2D of tile, ground texture.</param>
+        /// <param name="hDivTexture">Texture2D of horizontal dividers.</param>
+        /// <param name="vDivTexture">Texture2D of vertical dividers.</param>
         /// <param name="x_Pos"></param>
         /// <param name="y_Pos"></param>
         /// <param name="x_Speed"></param>
         /// <param name="y_Speed"></param>
-        public Tile(Texture2D tileTexture, Texture2D hDivTexture, Texture2D vDivTexture, TileType tileType, double x_Pos, double y_Pos, double x_Speed, double y_Speed):base(tileTexture, x_Pos, y_Pos, x_Speed, y_Speed)
+        public Tile(Texture2D tileTexture, Texture2D hDivTexture, Texture2D vDivTexture, TileType tileType, double x_Pos, double y_Pos, double x_Speed, double y_Speed) : base(tileTexture, x_Pos, y_Pos, x_Speed, y_Speed)
         {
             this.hDivTexture = hDivTexture;
             this.vDivTexture = vDivTexture;
@@ -73,9 +73,13 @@ namespace MazeGame
             }
         }
 
+        /// <summary>
+        /// Updates tile, moves in given directions.
+        /// </summary>
+        /// <param name="toMove"></param>
         public void Update(List<Level.Direction> toMove) //toMove contains enums for direction level should move, opposite to player movement
         {
-            if(toMove.Contains(Level.Direction.Up))
+            if (toMove.Contains(Level.Direction.Up))
             {
                 position.Y -= speed.Y;
             }
@@ -93,12 +97,17 @@ namespace MazeGame
             }
         }
 
+        /// <summary>
+        /// Sets speed of tile and it's tiledividers.
+        /// </summary>
+        /// <param name="x_Speed"></param>
+        /// <param name="y_Speed"></param>
         public void SetSpeed(double x_Speed, double y_Speed)
         {
-            speed.X = (float) x_Speed;
-            speed.Y = (float) y_Speed;
+            speed.X = (float)x_Speed;
+            speed.Y = (float)y_Speed;
 
-            if(vDiv != null)
+            if (vDiv != null)
             {
                 vDiv.SetSpeed(x_Speed, y_Speed);
             }
@@ -116,9 +125,13 @@ namespace MazeGame
             }
         }
 
+        /// <summary>
+        /// Draws tile.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if(!voidTile)
+            if (!voidTile)
             {
                 base.Draw(spriteBatch);
             }

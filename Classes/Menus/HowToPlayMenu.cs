@@ -1,15 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 
 namespace MazeGame
 {
+    /// <summary>
+    /// How to play menu, contains text that explains game.
+    /// </summary>
     class HowToPlayMenu : Menu
     {
+        /// <summary>
+        /// Creates menu with textbox that explains game.
+        /// </summary>
+        /// <param name="window"></param>
+        /// <param name="fontBig"></param>
+        /// <param name="fontSmall"></param>
+        /// <param name="menuControlTextures"></param>
+        /// <param name="textBoxTextures"></param>
+        /// <param name="bannerTexture"></param>
+        /// <param name="backgroundTexture"></param>
         public HowToPlayMenu(GameWindow window, SpriteFont fontBig, SpriteFont fontSmall, Texture2D[] menuControlTextures, Texture2D[] textBoxTextures, Texture2D bannerTexture, Texture2D backgroundTexture) : base(window, fontBig, backgroundTexture)
         {
             menuItems.Add(new MenuItem(bannerTexture, fontBig, "", MenuItem.Alignment.Mid, (window.ClientBounds.Width / 2) - (bannerTexture.Width / 2), (window.ClientBounds.Height / 8) - (bannerTexture.Height / 2)));
@@ -27,15 +37,19 @@ namespace MazeGame
             rows[8] = "exponentially.";
 
             menuItems.Add(new MenuItem(textBoxTextures[0], fontSmall, rows[0], MenuItem.Alignment.Left, (window.ClientBounds.Width / 2) - (textBoxTextures[0].Width / 2), (int)menuItems[0].Y_Pos + 250));
-            
-            for(int i = 1; i < rows.Length - 1; i++)
+
+            for (int i = 1; i < rows.Length - 1; i++)
             {
                 menuItems.Add(new MenuItem(textBoxTextures[1], fontSmall, rows[i], MenuItem.Alignment.Left, (window.ClientBounds.Width / 2) - (textBoxTextures[2].Width / 2), (int)menuItems[2].Y_Pos + i * 70));
             }
 
-            menuItems.Add(new MenuItem(textBoxTextures[2], fontSmall, rows[^1], MenuItem.Alignment.Left, (window.ClientBounds.Width / 2) - (textBoxTextures[2].Width / 2), (int)menuItems[2].Y_Pos + (rows.Length - 1) * 70 ));
+            menuItems.Add(new MenuItem(textBoxTextures[2], fontSmall, rows[^1], MenuItem.Alignment.Left, (window.ClientBounds.Width / 2) - (textBoxTextures[2].Width / 2), (int)menuItems[2].Y_Pos + (rows.Length - 1) * 70));
         }
 
+        /// <summary>
+        /// Updates menu, checks for menuitem presses.
+        /// </summary>
+        /// <returns></returns>
         public override GameElements.State Update()
         {
             MouseState mouseState = Mouse.GetState();
@@ -44,7 +58,7 @@ namespace MazeGame
             {
                 return GameElements.State.Menu;
             }
-            
+
             return GameElements.State.HowTo;
         }
     }

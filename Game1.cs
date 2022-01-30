@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace MazeGame
 {
+    /// <summary>
+    /// Main game class. Part of Monogame.
+    /// </summary>
     public class Game1 : Game
     {
         private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        /// <summary>
+        /// Creates game.
+        /// </summary>
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -83,7 +86,7 @@ namespace MazeGame
                     break;
                 case GameElements.State.Paused:
                     temp = GameElements.PausedUpdate(Window);
-                    if(temp == GameElements.State.Run) //To prevent pause menu from resetting level.
+                    if (temp == GameElements.State.Run) //To prevent pause menu from resetting level.
                     {
                         GameElements.lastState = GameElements.State.Run;
                     }

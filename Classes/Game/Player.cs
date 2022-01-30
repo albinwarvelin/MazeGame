@@ -1,27 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
 
 namespace MazeGame
 {
+    /// <summary>
+    /// Player class, creates player that can move around level and check collissions with dividers. Holds superspeeds.
+    /// </summary>
     class Player : PhysicalObject, ISetSpeed
     {
-        private enum Direction { Up, Down, Left, Right, Still }; //Used to determine texture
+        public enum Direction { Up, Down, Left, Right, Still }; //Used to determine texture
 
-        private List<TileDivider> surroundingDividers; //Updated every frame to contain current surrounding dividers
+        private List<TileDivider> surroundingDividers; //Updated by level every frame to contain current surrounding dividers, used to optimize collission checking to minimize lag in bigger levels.
         private const int colliderMargin = 15; //How much player should be allowed to overlap dividers, makes collission rectangle smaller.
 
+        /* Player animations */
         private readonly Animation up, down, left, right, superspeedUp, superspeedDown, superspeedLeft, superspeedRight, superspeedStill;
         private readonly Texture2D stillTexture;
         private Direction currentDir = Direction.Right; //Default, overwritten in first frame.
 
+        /* Superspeed animations */
         private bool superSpeed = false;
         private int superSpeedTimer = 0;
         private Texture2D currentSuperSpeedTexture;
-        
+
+        /// <summary>
+        /// Creates new player with given parameters. Assigns new animations.
+        /// </summary>
+        /// <param name="textures">Player textures for animation.</param>
+        /// <param name="superSpeedTextures">Superpeed textures for animation.</param>
+        /// <param name="gameTime"></param>
+        /// <param name="x_Pos"></param>
+        /// <param name="y_Pos"></param>
+        /// <param name="x_Speed"></param>
+        /// <param name="y_Speed"></param>
         public Player(Texture2D[] textures, Texture2D[] superSpeedTextures, GameTime gameTime, double x_Pos, double y_Pos, double x_Speed, double y_Speed) : base(textures[0], x_Pos, y_Pos, x_Speed, y_Speed)
         {
             up = new Animation(this, gameTime, new Texture2D[] { textures[4], textures[5] }, 10);
@@ -33,16 +47,18 @@ namespace MazeGame
             currentSuperSpeedTexture = superSpeedTextures[0];
 
             superspeedUp = new Animation(gameTime, new Texture2D[] { superSpeedTextures[21], superSpeedTextures[22], superSpeedTextures[23], superSpeedTextures[24], superSpeedTextures[25] }, 5);
-            superspeedRight = new Animation(gameTime, new Texture2D[] {superSpeedTextures[7], superSpeedTextures[8] , superSpeedTextures[9] , superSpeedTextures[10] , superSpeedTextures[11] , superSpeedTextures[12] , superSpeedTextures[13] }, 5);
+            superspeedRight = new Animation(gameTime, new Texture2D[] { superSpeedTextures[7], superSpeedTextures[8], superSpeedTextures[9], superSpeedTextures[10], superSpeedTextures[11], superSpeedTextures[12], superSpeedTextures[13] }, 5);
             superspeedLeft = new Animation(gameTime, new Texture2D[] { superSpeedTextures[0], superSpeedTextures[1], superSpeedTextures[2], superSpeedTextures[3], superSpeedTextures[4], superSpeedTextures[5], superSpeedTextures[6] }, 5);
             superspeedDown = new Animation(gameTime, new Texture2D[] { superSpeedTextures[14], superSpeedTextures[15], superSpeedTextures[16], superSpeedTextures[17], superSpeedTextures[18], superSpeedTextures[19], superSpeedTextures[20] }, 5);
             superspeedStill = new Animation(gameTime, new Texture2D[] { superSpeedTextures[14], superSpeedTextures[15], superSpeedTextures[16], superSpeedTextures[17], superSpeedTextures[18], superSpeedTextures[19], superSpeedTextures[20] }, 5);
         }
 
         /// <summary>
-        /// Updates player. Checks if player collides with any dividers and stops player if there's collission, if
-        /// player moves outside of specified window area level is given new direction to move. If player moves 
-        /// directions are returned which draw-method later uses to determine texture.
+        /// Updates player by checking keyboard input. 
+        /// Checks if player collides with any nearby dividers and stops player if there's collission, if player moves outside of specified window area
+        /// Level-Directions are returned for level to process.
+        /// Current direction is updated for Draw method to utilize in texture updating.
+        /// If superspeed input is given superspeed bool is updated and speed of player and level is updated.
         /// </summary>
         /// <param name="window"></param>
         /// <returns></returns>
@@ -62,14 +78,14 @@ namespace MazeGame
             if (superSpeedTimer <= 0)
             {
                 superSpeed = false;
-                SetSpeed(GameElements.X_Sp_Player, GameElements.Y_Sp_Player);
-                GameElements.Level.SetSpeed(GameElements.X_Sp_Player, GameElements.Y_Sp_Player);
+                SetSpeed(GameElements.MainXSpeed, GameElements.MainYSpeed);
+                GameElements.Level.SetSpeed(GameElements.MainXSpeed, GameElements.MainYSpeed);
             }
             else
             {
                 superSpeedTimer--;
-                SetSpeed(GameElements.X_Sp_Player + 7, GameElements.Y_Sp_Player + 7);
-                GameElements.Level.SetSpeed(GameElements.X_Sp_Player + 7, GameElements.Y_Sp_Player + 7);
+                SetSpeed(GameElements.MainXSpeed + 7, GameElements.MainYSpeed + 7);
+                GameElements.Level.SetSpeed(GameElements.MainXSpeed + 7, GameElements.MainYSpeed + 7);
             }
             if (keyboardInput.IsKeyDown(Keys.W) && !keyboardInput.IsKeyDown(Keys.S) && !keyboardInput.IsKeyDown(Keys.Down) || keyboardInput.IsKeyDown(Keys.Up) && !keyboardInput.IsKeyDown(Keys.Down) && !keyboardInput.IsKeyDown(Keys.S))
             {
@@ -148,7 +164,7 @@ namespace MazeGame
                         break;
                     }
                 }
-                if(collider == GameElements.Level.EndPortal) //Easier solution but not the most elegant. Player tends to not end up exactly 15 pixels within portal.
+                if (collider == GameElements.Level.EndPortal) //Easier solution but not the most elegant. Player tends to not end up exactly 15 pixels within portal.
                 {
                     position.X += speed.X;
                 }
@@ -199,17 +215,27 @@ namespace MazeGame
                     currentDir = Direction.Right;
                 }
             }
-            
+
 
             return directions;
         }
 
+        /// <summary>
+        /// Sets speed of player.
+        /// </summary>
+        /// <param name="x_Speed"></param>
+        /// <param name="y_Speed"></param>
         public void SetSpeed(double x_Speed, double y_Speed)
         {
-            speed.X = (float) x_Speed;
-            speed.Y = (float) y_Speed;
+            speed.X = (float)x_Speed;
+            speed.Y = (float)y_Speed;
         }
 
+        /// <summary>
+        /// Checks collission with any other PhysicalObject, returns bool.
+        /// </summary>
+        /// <param name="other">PhysicalObject to check collission with.</param>
+        /// <returns></returns>
         public override bool CheckCollision(PhysicalObject other)
         {
             Rectangle myRect = new Rectangle(Convert.ToInt32(position.X + colliderMargin), Convert.ToInt32(position.Y + colliderMargin), Convert.ToInt32(texture.Width - (colliderMargin * 2)), Convert.ToInt32(texture.Height - (colliderMargin * 2))); //Own object, with room on each side.
@@ -249,12 +275,12 @@ namespace MazeGame
         }
 
         /// <summary>
-        /// Updates texture before drawing.
+        /// Runs animation updates before drawing playertexture and superspeedtextures.
         /// </summary>
         /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
         {
-            switch(currentDir)
+            switch (currentDir)
             {
                 case Direction.Left: { left.Update(); } break; //Uses textures 0 and 3
                 case Direction.Right: { right.Update(); } break; //Uses textires 1 and 2
@@ -265,7 +291,7 @@ namespace MazeGame
 
             base.Draw(spriteBatch);
 
-            if(superSpeed)
+            if (superSpeed)
             {
                 Vector2 superSpeedPos = new Vector2();
 

@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace MazeGame
 {
+    /// <summary>
+    /// Controls gameflow and switches states of game. Contains gamewide variables, loads textures and initializes states.
+    /// </summary>
     static class GameElements
     {
         public enum State { Startup, Menu, NameChoosing, HowTo, HighScore, Run, Paused, Cleared, Failed, Quit };
@@ -16,7 +17,7 @@ namespace MazeGame
         public static State lastState = State.Startup; //Last gamestate, used when switching states, if not equal to current state methods will most likely initialize the new state
         private static KeyboardState oldKeyboardstate = new KeyboardState();
 
-        private static Menu currentMenu;
+        private static Menu currentMenu; //Current menu displayed
 
         private static readonly int x_Sp_Player = 11; //General speed for game
         private static readonly int y_Sp_Player = 11; //General speed for game
@@ -27,6 +28,7 @@ namespace MazeGame
         private static Player player; //Player
         private static int superSpeedsLeft = 1; // How many superspeeds player has left.
 
+        /* All textures */
         private static Texture2D skyTexture;
         private static readonly Texture2D[] tileTextures = new Texture2D[9];
         private static readonly Texture2D[] hDivTextures = new Texture2D[4];
@@ -43,11 +45,18 @@ namespace MazeGame
         private static SpriteFont publicPixel20pt;
         private static SpriteFont publicPixel24pt;
 
+        /// <summary>
+        /// Run on first startup.
+        /// </summary>
         public static void Initialize()
         {
             HighScore.LoadHighScores();
         }
 
+        /// <summary>
+        /// Run on first startup, loads textures. 
+        /// </summary>
+        /// <param name="content"></param>
         public static void LoadContent(ContentManager content)
         {
             skyTexture = content.Load<Texture2D>("assets/background/sky");
@@ -60,7 +69,7 @@ namespace MazeGame
             menuItemTextures[4] = content.Load<Texture2D>("assets/menus/block700");
             menuItemTextures[5] = content.Load<Texture2D>("assets/menus/block1200");
             menuItemTextures[6] = content.Load<Texture2D>("assets/menus/block1400");
-            menuControlTextures[0] = content.Load <Texture2D>("assets/menus/blockarrowright");
+            menuControlTextures[0] = content.Load<Texture2D>("assets/menus/blockarrowright");
             menuControlTextures[1] = content.Load<Texture2D>("assets/menus/blockarrowleft");
             menuBannerTextures[0] = content.Load<Texture2D>("assets/menus/levelcleared");
             menuBannerTextures[1] = content.Load<Texture2D>("assets/menus/mainmenu");
@@ -84,15 +93,15 @@ namespace MazeGame
             {
                 hDivTextures[i] = content.Load<Texture2D>("assets/level/horizontalHedge" + i);
             }
-            for(int i = 0; i < 4; i++) //Loads vertical dividers
+            for (int i = 0; i < 4; i++) //Loads vertical dividers
             {
                 vDivTextures[i] = content.Load<Texture2D>("assets/level/verticalHedge" + i);
             }
-            for(int i = 0; i < 9; i++) //Loads player textures
+            for (int i = 0; i < 9; i++) //Loads player textures
             {
                 playerTextures[i] = content.Load<Texture2D>("assets/player/player" + i);
             }
-            for(int i = 0; i < 8; i++)
+            for (int i = 0; i < 8; i++)
             {
                 endPortalTextures[i] = content.Load<Texture2D>("assets/level/endPortal" + i);
             }
@@ -102,6 +111,11 @@ namespace MazeGame
             }
         }
 
+        /// <summary>
+        /// Updates main menu.
+        /// </summary>
+        /// <param name="window"></param>
+        /// <returns></returns>
         public static State MenuUpdate(GameWindow window) //Updates menu state
         {
             if (lastState != State.Menu)
@@ -113,11 +127,20 @@ namespace MazeGame
             return currentMenu.Update();
         }
 
+        /// <summary>
+        /// Draws main menu.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public static void MenuDraw(SpriteBatch spriteBatch) //Draws menu
         {
             currentMenu.Draw(spriteBatch);
         }
 
+        /// <summary>
+        /// Updates highscore menu.
+        /// </summary>
+        /// <param name="window"></param>
+        /// <returns></returns>
         public static State HighScoreUpdate(GameWindow window) //Updates highscore state
         {
             if (lastState != State.HighScore)
@@ -128,11 +151,20 @@ namespace MazeGame
             return currentMenu.Update();
         }
 
+        /// <summary>
+        /// Draws highscore menu.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public static void HighScoreDraw(SpriteBatch spriteBatch) //Draws highscore
         {
             currentMenu.Draw(spriteBatch);
         }
 
+        /// <summary>
+        /// Updates how to play menu.
+        /// </summary>
+        /// <param name="window"></param>
+        /// <returns></returns>
         public static State HowToPlayUpdate(GameWindow window)
         {
             if (lastState != State.HowTo)
@@ -143,11 +175,20 @@ namespace MazeGame
             return currentMenu.Update();
         }
 
+        /// <summary>
+        /// Draws how to play menu.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public static void HowToPlayDraw(SpriteBatch spriteBatch)
         {
             currentMenu.Draw(spriteBatch);
         }
 
+        /// <summary>
+        /// Updates namechoosing menu.
+        /// </summary>
+        /// <param name="window"></param>
+        /// <returns></returns>
         public static State NameChoosingUpdate(GameWindow window)
         {
             if (lastState != State.NameChoosing)
@@ -158,26 +199,36 @@ namespace MazeGame
             return currentMenu.Update();
         }
 
+        /// <summary>
+        /// Draws namechoosing menu.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public static void NameChoosingDraw(SpriteBatch spriteBatch)
         {
             currentMenu.Draw(spriteBatch);
         }
 
+        /// <summary>
+        /// Updates level and player.
+        /// </summary>
+        /// <param name="window"></param>
+        /// <param name="gameTime"></param>
+        /// <returns></returns>
         public static State RunUpdate(GameWindow window, GameTime gameTime) //Updates run state
         {
-            if(lastState != State.Run)
+            if (lastState != State.Run)
             {
                 background = new Background(window, skyTexture, 9, 9);
-                level = new Level(window, tileTextures, hDivTextures, vDivTextures, endPortalTextures, menuItemTextures[2], publicPixel24pt, remainingTime / 60, 5 + HighScore.CurrentScore.Points, 0.17, x_Sp_Player, y_Sp_Player); //TODO change speed to player speed
+                level = new Level(window, tileTextures, hDivTextures, vDivTextures, endPortalTextures, menuItemTextures[2], publicPixel24pt, remainingTime, 5 + HighScore.CurrentScore.Value, 0.17, x_Sp_Player, y_Sp_Player); //TODO change speed to player speed
                 player = new Player(playerTextures, fireTextures, gameTime, (window.ClientBounds.Width / 2) - (playerTextures[0].Width / 2), (window.ClientBounds.Height / 2) - (playerTextures[0].Height / 2), x_Sp_Player, y_Sp_Player); //Change texture
 
                 level.Update(new List<Level.Direction>(), player); //Runs single levelupdate. To prevent bug where player update tries to get dividers from level that have not yet been initialized.
             }
 
             List<Level.Direction> directions = player.Update(window);
-            level.Update(directions, player); //Updates player first, then uses the enum list provided by method to update 
+            player.SurroundingDividers = level.Update(directions, player); //Updates player first, then uses the enum list provided by method to update 
             background.Update(directions);
-            
+
 
             InputText.TryConvertKeyboardInput(Keyboard.GetState(), oldKeyboardstate, out char key);
             oldKeyboardstate = Keyboard.GetState();
@@ -186,13 +237,13 @@ namespace MazeGame
             {
                 return State.Paused;
             }
-            else if(level.EndPortal.CheckWin(player))
+            else if (level.EndPortal.CheckWin(player))
             {
-                HighScore.CurrentScore.Points++;
-                
+                HighScore.CurrentScore.Value++;
+
                 return State.Cleared;
             }
-            else if(level.Timer.HasEnded)
+            else if (level.Timer.HasEnded)
             {
                 return State.Failed;
             }
@@ -202,6 +253,11 @@ namespace MazeGame
             }
         }
 
+        /// <summary>
+        /// Draws level and player.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="window"></param>
         public static void RunDraw(SpriteBatch spriteBatch, GameWindow window) //Draws run
         {
             background.Draw(spriteBatch);
@@ -211,6 +267,11 @@ namespace MazeGame
             level.DrawOverlay(spriteBatch);
         }
 
+        /// <summary>
+        /// Updates pause menu.
+        /// </summary>
+        /// <param name="window"></param>
+        /// <returns></returns>
         public static State PausedUpdate(GameWindow window) //Updates paused
         {
             if (lastState != State.Paused)
@@ -221,24 +282,39 @@ namespace MazeGame
             return currentMenu.Update();
         }
 
+        /// <summary>
+        /// Draws pause menu.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="window"></param>
         public static void PausedDraw(SpriteBatch spriteBatch, GameWindow window) //Draws paused
         {
             background.Draw(spriteBatch);
             level.Draw(spriteBatch, window);
-            spriteBatch.Draw(player.Texture, new Vector2((float) player.X_Pos, (float) player.Y_Pos), Color.White); //Draws player frozen
+            spriteBatch.Draw(player.Texture, new Vector2((float)player.X_Pos, (float)player.Y_Pos), Color.White); //Draws player frozen
             currentMenu.Draw(spriteBatch);
         }
 
+        /// <summary>
+        /// Updates level cleared menu.
+        /// </summary>
+        /// <param name="window"></param>
+        /// <returns></returns>
         public static State ClearedUpdate(GameWindow window) //Updates cleared
         {
-            if(lastState != State.Cleared)
+            if (lastState != State.Cleared)
             {
-                currentMenu = new ClearedMenu(window, publicPixel24pt, menuItemTextures, menuBannerTextures[0], greyedOut, HighScore.CurrentScore.Points);
+                currentMenu = new ClearedMenu(window, publicPixel24pt, menuItemTextures, menuBannerTextures[0], greyedOut, HighScore.CurrentScore.Value);
             }
 
             return currentMenu.Update();
         }
 
+        /// <summary>
+        /// Draws level cleared menu.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="window"></param>
         public static void ClearedDraw(SpriteBatch spriteBatch, GameWindow window) //Draws cleared
         {
             background.Draw(spriteBatch);
@@ -247,16 +323,26 @@ namespace MazeGame
             currentMenu.Draw(spriteBatch);
         }
 
+        /// <summary>
+        /// Updates level failed menu.
+        /// </summary>
+        /// <param name="window"></param>
+        /// <returns></returns>
         public static State FailedUpdate(GameWindow window) //Updates failed
         {
             if (lastState != State.Failed)
             {
-                currentMenu = new FailedMenu(window, publicPixel24pt, menuItemTextures, menuBannerTextures[2], greyedOut, HighScore.CurrentScore.Points);
+                currentMenu = new FailedMenu(window, publicPixel24pt, menuItemTextures, menuBannerTextures[2], greyedOut, HighScore.CurrentScore.Value);
             }
 
             return currentMenu.Update();
         }
 
+        /// <summary>
+        /// Draws level failed menu.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="window"></param>
         public static void FailedDraw(SpriteBatch spriteBatch, GameWindow window) //Draws failed
         {
             background.Draw(spriteBatch);
@@ -265,28 +351,42 @@ namespace MazeGame
             currentMenu.Draw(spriteBatch);
         }
 
+        /// <summary>
+        /// Level property, returns current level.
+        /// </summary>
         public static Level Level
         {
-            get { return level; }   
+            get { return level; }
         }
 
+        /// <summary>
+        /// Remaining time property, returns remaining time in level in seconds..
+        /// </summary>
         public static int RemainingTime
         {
             set { remainingTime = value; }
         }
 
+        /// <summary>
+        /// Returns amount of superspeeds left.
+        /// </summary>
         public static int SuperSpeedsLeft
         {
             set { superSpeedsLeft = value; }
             get { return superSpeedsLeft; }
         }
 
-        public static int Y_Sp_Player
+        /// <summary>
+        /// Returns gamewide main y speed.
+        /// </summary>
+        public static int MainYSpeed
         {
-            get { return y_Sp_Player;}
+            get { return y_Sp_Player; }
         }
-
-        public static int X_Sp_Player
+        /// <summary>
+        /// Returns gamewide main x speed.
+        /// </summary>
+        public static int MainXSpeed
         {
             get { return x_Sp_Player; }
         }

@@ -1,24 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace MazeGame
 {
+    /// <summary>
+    /// Used to get input from keyboard.
+    /// </summary>
     class InputText
     {
-        private enum SpecialKey { Å, Ä, Ö, None};
+        private enum SpecialKey { Å, Ä, Ö, None };
 
         private static SpecialKey specialKey = SpecialKey.None;
 
         /// <summary>
-        /// Method to input text into XNA. Found on XNA forums.
+        /// Method to input text into XNA. Original method found on XNA forums.
+        /// Returns bool if any key is input. Uses referencing to give char out, contains first key of pressed keys.
         /// </summary>
-        /// <param name="keyboard"></param>
-        /// <param name="oldKeyboard"></param>
-        /// <param name="key"></param>
+        /// <param name="keyboard">Current keyboardstate.</param>
+        /// <param name="oldKeyboard">Old keyboardstate</param>
+        /// <param name="key">Out key, sets variable to result of processed keys.</param>
         /// <returns></returns>
         public static bool TryConvertKeyboardInput(KeyboardState keyboard, KeyboardState oldKeyboard, out char key)
         {
@@ -85,17 +85,17 @@ namespace MazeGame
                     case Keys.Back: key = (char)8; return true;
                     case Keys.Space: key = ' '; return true;
                     case Keys.Escape: key = (char)27; return true;
-                    
+
                     case Keys.None:
-                    {
-                        switch(specialKey)
                         {
-                            case SpecialKey.Å: if (shift) { key = 'Å'; } else { key = 'å'; } return true;
-                            case SpecialKey.Ä: if (shift) { key = 'Ä'; } else { key = 'ä'; } return true;
-                            case SpecialKey.Ö: if (shift) { key = 'Ö'; } else { key = 'ö'; } return true;
+                            switch (specialKey)
+                            {
+                                case SpecialKey.Å: if (shift) { key = 'Å'; } else { key = 'å'; } return true;
+                                case SpecialKey.Ä: if (shift) { key = 'Ä'; } else { key = 'ä'; } return true;
+                                case SpecialKey.Ö: if (shift) { key = 'Ö'; } else { key = 'ö'; } return true;
                                 default: key = (char)0; return false;
+                            }
                         }
-                    }
                 }
             }
 
@@ -103,6 +103,13 @@ namespace MazeGame
             return false;
         }
 
+        /// <summary>
+        /// Run everytime a textinput event is fired. If character is any scandinavian key 
+        /// special key is updated. This is a workaround to the lack of native layout support
+        /// in XNA.
+        /// </summary>
+        /// <param name="_"></param>
+        /// <param name="e"></param>
         public static void ProcessTextInput(object _, TextInputEventArgs e)
         {
             specialKey = e.Character switch

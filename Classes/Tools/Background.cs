@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace MazeGame
 {
+    /// <summary>
+    /// Background class, creates a updateable background that scales to cover whole window.
+    /// </summary>
     class Background : MovingObject
     {
         private readonly int x_Size;
         private readonly int y_Size;
 
         /// <summary>
-        /// Creates a background that automatically scales to window size. Background can be moved
+        /// Creates a background that automatically scales to window size.
         /// </summary>
         /// <param name="window"></param>
         /// <param name="texture"></param>
@@ -32,9 +31,9 @@ namespace MazeGame
         /// <param name="directions"></param>
         public void Update(List<Level.Direction> directions)
         {
-            foreach(Level.Direction direction in directions)
+            foreach (Level.Direction direction in directions)
             {
-                switch(direction)
+                switch (direction)
                 {
                     case Level.Direction.Left:
                         position.X -= speed.X;
@@ -51,7 +50,7 @@ namespace MazeGame
                 }
             }
 
-            if(position.X < -texture.Width)
+            if (position.X < -texture.Width)
             {
                 position.X += texture.Width;
             }
@@ -76,9 +75,9 @@ namespace MazeGame
         /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
         {
-            for(int x = 0; x < x_Size; x++)
+            for (int x = 0; x < x_Size; x++)
             {
-                for(int y = 0; y < y_Size; y++)
+                for (int y = 0; y < y_Size; y++)
                 {
                     Vector2 texturePos = new Vector2(position.X + (x * texture.Width), position.Y + (y * texture.Height));
 

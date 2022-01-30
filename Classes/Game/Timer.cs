@@ -1,41 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace MazeGame
 {
+    /// <summary>
+    /// Timer class holds countdown timer that has to be updated every frame.
+    /// </summary>
     class Timer : MenuItem
     {
         private readonly long limit;
         private long currentTime = 0;
         private bool hasEnded;
-        
+
         /// <summary>
-        /// Creates new timer with texture, font, text and length in seconds.
+        /// Creates a new timer with specified parameters.
         /// </summary>
-        /// <param name="gameTime"></param>
-        /// <param name="texture"></param>
-        /// <param name="font"></param>
-        /// <param name="seconds"></param>
+        /// <param name="texture">Background texture of timer.</param>
+        /// <param name="font">Spritefont of text in timer.</param>
+        /// <param name="seconds">Length of countdown in seconds.</param>
         /// <param name="x_Pos"></param>
         /// <param name="y_Pos"></param>
-        public Timer(Texture2D texture, SpriteFont font, int seconds, int x_Pos, int y_Pos) : base(texture, font, "Time left:", Alignment.Mid, x_Pos , y_Pos)
+        public Timer(Texture2D texture, SpriteFont font, int seconds, int x_Pos, int y_Pos) : base(texture, font, "Time left:", Alignment.Mid, x_Pos, y_Pos)
         {
             limit = 60 * seconds;
         }
 
         /// <summary>
-        /// Updates timer, returns true if timer has ended.
+        /// Updates timer, if timer has ended object boolean is updated.
         /// </summary>
-        /// <param name="gameTime"></param>
         public void Update()
         {
             currentTime++;
 
-            if(currentTime > limit)
+            if (currentTime > limit)
             {
                 hasEnded = true;
             }
@@ -53,7 +50,7 @@ namespace MazeGame
         {
             spriteBatch.Draw(texture, position, Color.White);
             text = "Time left:" + (limit - currentTime) / 60;
-            ReCenterText();
+            ReCenterText(); //Recenters text in textbox, called because text and textsize is changed.
             printText.Print(text, spriteBatch, Color.Black);
         }
 
@@ -65,9 +62,13 @@ namespace MazeGame
             get { return hasEnded; }
         }
 
+
+        /// <summary>
+        /// Timeleft property, returns time left in seconds.
+        /// </summary>
         public int TimeLeft
         {
-            get { return (int)(limit - currentTime); }
+            get { return (int)(limit - currentTime) / 60; }
         }
     }
 }

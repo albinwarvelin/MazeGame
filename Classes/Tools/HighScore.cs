@@ -1,23 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace MazeGame
 {
+    /// <summary>
+    /// Contains highscores.
+    /// </summary>
     static class HighScore
     {
         private static Score currentScore;
         private static List<Score> allScores;
 
+        /// <summary>
+        /// Loads highscores from file.
+        /// </summary>
         public static void LoadHighScores()
         {
             try
             {
-                StreamReader sr = new StreamReader("highscores.txt");
+                StreamReader sr = new StreamReader("highscores.csv");
 
                 allScores = new List<Score>();
 
@@ -31,44 +33,53 @@ namespace MazeGame
                     }
                 }
             }
-            catch(FileNotFoundException)
+            catch (FileNotFoundException)
             {
                 allScores = new List<Score>();
             }
         }
 
+        /// <summary>
+        /// Saves highscores to file.
+        /// </summary>
         public static void SaveHighScores()
         {
-            StreamWriter sw = new StreamWriter("highscores.txt");
+            StreamWriter sw = new StreamWriter("highscores.csv");
 
-            using(sw)
+            using (sw)
             {
-                foreach(Score score in allScores)
+                foreach (Score score in allScores)
                 {
                     sw.WriteLine(score.ToString());
                 }
             }
         }
 
+        /// <summary>
+        /// Saves current score to highscores list.
+        /// </summary>
         public static void SaveScore()
         {
             allScores.Add(currentScore);
             currentScore = null;
         }
 
+        /// <summary>
+        /// Recent players property, returns recent unique players.
+        /// </summary>
         public static List<string> RecentPlayers
         {
             get
             {
                 List<string> list = new List<string>();
 
-                for(int i = allScores.Count - 1; i >= 0; i--)
+                for (int i = allScores.Count - 1; i >= 0; i--)
                 {
-                    if(!list.Contains(allScores[i].Name))
+                    if (!list.Contains(allScores[i].Name))
                     {
                         list.Add(allScores[i].Name);
                     }
-                    if(list.Count == 3)
+                    if (list.Count == 3)
                     {
                         break;
                     }
@@ -78,6 +89,9 @@ namespace MazeGame
             }
         }
 
+        /// <summary>
+        /// Highscore list property, returns top 10 highscores in string form optimized for viewing in highscore list.
+        /// </summary>
         public static List<string> HighscoreList
         {
             get
@@ -88,11 +102,11 @@ namespace MazeGame
 
                 List<String> toReturn = new List<String>();
 
-                for(int i = 0; i < 10; i++)
+                for (int i = 0; i < 10; i++)
                 {
                     string tempString = "";
 
-                    if(i < temp.Count)
+                    if (i < temp.Count)
                     {
                         tempString += temp[i].Name;
 
@@ -101,9 +115,9 @@ namespace MazeGame
                             tempString += " ";
                         }
 
-                        tempString += temp[i].Points;
+                        tempString += temp[i].Value;
 
-                        for (int a = temp[i].Points.ToString().Length; a < 12; a++)
+                        for (int a = temp[i].Value.ToString().Length; a < 12; a++)
                         {
                             tempString += " ";
                         }
@@ -118,11 +132,9 @@ namespace MazeGame
             }
         }
 
-        public static List<Score> AllScores
-        {
-            get { return allScores; }
-        }
-
+        /// <summary>
+        /// Returns current score.
+        /// </summary>
         public static Score CurrentScore
         {
             get { return currentScore; }

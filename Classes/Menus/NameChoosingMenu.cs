@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
 
 namespace MazeGame
 {
+    /// <summary>
+    /// Name choosing menu.
+    /// </summary>
     class NameChoosingMenu : Menu
     {
         private bool isWriting = false;
@@ -14,6 +16,15 @@ namespace MazeGame
         private bool displayMarker = false;
         KeyboardState oldKeyboardstate = new KeyboardState();
 
+        /// <summary>
+        /// Creates name choosing menu, displays recent names aswell as input textbox.
+        /// </summary>
+        /// <param name="window"GameWindow.></param>
+        /// <param name="font">Text font for all menuitems.</param>
+        /// <param name="menuItemTextures">All menuitem textures.</param>
+        /// <param name="menuControlTextures">All menucontrol textures.</param>
+        /// <param name="backgroundTexture">Background texture.</param>
+        /// <param name="recentNames">List of recent names, uses the 3 most recent names.</param>
         public NameChoosingMenu(GameWindow window, SpriteFont font, Texture2D[] menuItemTextures, Texture2D[] menuControlTextures, Texture2D backgroundTexture, List<string> recentNames) : base(window, font, backgroundTexture)
         {
             menuItems.Add(new MenuItem(menuItemTextures[6], font, "Create new player or choose recent player", MenuItem.Alignment.Mid, (window.ClientBounds.Width / 2) - (menuItemTextures[6].Width / 2), (window.ClientBounds.Height / 6) - (menuItemTextures[5].Height / 2)));
@@ -30,6 +41,10 @@ namespace MazeGame
             menuItems.Add(new MenuItem(menuItemTextures[0], font, "Back", MenuItem.Alignment.Mid, (window.ClientBounds.Width / 2) - (menuItemTextures[0].Width / 2), (int)menuItems[0].Y_Pos + 750));
         }
 
+        /// <summary>
+        /// Updates menu, updates inputbox and checks for button presses.
+        /// </summary>
+        /// <returns></returns>
         public override GameElements.State Update()
         {
             MouseState mouseState = Mouse.GetState();
@@ -92,7 +107,7 @@ namespace MazeGame
             /* Checks presses */
             if (menuItems[3].CheckPress(mouseState))
             {
-                if(menuItems[2].Text != "" )
+                if (menuItems[2].Text != "")
                 {
                     HighScore.CurrentScore = new Score(menuItems[2].Text, 0, DateTime.Now);
 
@@ -101,7 +116,7 @@ namespace MazeGame
             }
             for (int i = 5; i < menuItems.Count - 1; i++)
             {
-                if(menuItems[i].CheckPress(mouseState))
+                if (menuItems[i].CheckPress(mouseState))
                 {
                     HighScore.CurrentScore = new Score(menuItems[i].Text, 0, DateTime.Now);
 

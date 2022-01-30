@@ -1,15 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace MazeGame
 {
+    /// <summary>
+    /// Abstract physical object, used in cases where object needs to be collission checked.
+    /// </summary>
     abstract class PhysicalObject : MovingObject
     {
-        public PhysicalObject(Texture2D texture, double x_Pos, double y_Pos, double x_Speed, double y_Speed) :base(texture, x_Pos, y_Pos, x_Speed, y_Speed)
+        /// <summary>
+        /// Creates physicalobject, passes variables to baseclasses.
+        /// </summary>
+        /// <param name="texture"></param>
+        /// <param name="x_Pos"></param>
+        /// <param name="y_Pos"></param>
+        /// <param name="x_Speed"></param>
+        /// <param name="y_Speed"></param>
+        public PhysicalObject(Texture2D texture, double x_Pos, double y_Pos, double x_Speed, double y_Speed) : base(texture, x_Pos, y_Pos, x_Speed, y_Speed)
         {
 
         }

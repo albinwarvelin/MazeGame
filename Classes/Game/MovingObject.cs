@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace MazeGame
 {
@@ -17,7 +13,7 @@ namespace MazeGame
         /// <summary>
         /// Constructor, assigns values to speed vector and passes rest to GameObject.
         /// </summary>
-        /// <param name="texture"></param>
+        /// <param name="texture">Texture2D of object.</param>
         /// <param name="x_Pos"></param>
         /// <param name="y_Pos"></param>
         /// <param name="x_Speed"></param>
@@ -26,18 +22,6 @@ namespace MazeGame
         {
             speed.X = (float)x_Speed;
             speed.Y = (float)y_Speed;
-        }       
-
-        public double X_Speed
-        {
-            get { return speed.X; }
-            set { speed.X = (float) value; }
-        }
-
-        public double Y_Speed
-        {
-            get { return speed.Y; }
-            set { speed.Y = (float) value; }
-        }
+        } 
     }
 }

@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
 
 namespace MazeGame
 {
+    /// <summary>
+    /// Level class, used for game.
+    /// </summary>
     class Level : MovingObject, ISetSpeed
     {
         public enum Direction { Up, Down, Left, Right }; //Used to return what direction level should move
@@ -17,49 +18,54 @@ namespace MazeGame
         private readonly Timer timer;
         private readonly MenuItem superSpeedMenuItem;
 
+
         /// <summary>
-        /// Generates new random level. Size shall not be less than 4.
+        /// Creates new level.
         /// </summary>
-        /// <param name="tileTextures"></param>
-        /// <param name="hDivTextures"></param>
-        /// <param name="vDivTexture"></param>
-        /// <param name="size"></param>
-        /// <param name="window"></param>
+        /// <param name="window">GameWindow, used to determine what tiles to draw.</param>
+        /// <param name="tileTextures">All tile textures.</param>
+        /// <param name="hDivTextures">All horizontal divider textures.</param>
+        /// <param name="vDivTexture">All vertical divider textures.</param>
+        /// <param name="endPortalTextures">All endportal textures.</param>
+        /// <param name="timerTexture">Background texture of timer overlay.</param>
+        /// <param name="font">Font of text in overlays.</param>
+        /// <param name="remainingTime">Remaining time from last level in seconds.</param>
+        /// <param name="size">Size of one side. Total tiles in level becomes square of size.</param>
+        /// <param name="voidTilePercentage">Percentage of tiles that should be voidtile. Will often be a little less as levelcreation adjusts so no tiles are non-reachable.</param>
         /// <param name="x_Speed"></param>
         /// <param name="y_Speed"></param>
         public Level(GameWindow window, Texture2D[] tileTextures, Texture2D[] hDivTextures, Texture2D[] vDivTexture, Texture2D[] endPortalTextures, Texture2D timerTexture, SpriteFont font, int remainingTime, int size, double voidTilePercentage, double x_Speed, double y_Speed) : base(null, 0, 0, x_Speed, y_Speed) //Level position not used, each tile has its own position
         {
-            timer = new Timer(timerTexture, font, 35 + remainingTime / 2 + size * 3, 20, 20); //Sets new timer
-            superSpeedMenuItem = new MenuItem(timerTexture, font, "Superspeed:" + GameElements.SuperSpeedsLeft, MenuItem.Alignment.Mid, window.ClientBounds.Width - timerTexture.Width - 20, 20);
-
-
             this.size = size;
             Random rnd = new Random(); //Used throughout method
 
-            Vector2 startTilePos = new Vector2((int)(rnd.NextDouble() * 4 + (size / 2 - 2)), (int)(rnd.NextDouble() * 4 + (size / 2 - 2))); //Start tile position
+            timer = new Timer(timerTexture, font, 35 + remainingTime / 2 + size * 3, 20, 20); //Sets new timer
+            superSpeedMenuItem = new MenuItem(timerTexture, font, "Superspeed:" + GameElements.SuperSpeedsLeft, MenuItem.Alignment.Mid, window.ClientBounds.Width - timerTexture.Width - 20, 20);
 
-            int x_Start = (int)((window.ClientBounds.Width / 2) - 150 - (startTilePos.X * 300));
-            int y_Start = (int)((window.ClientBounds.Height / 2) - 150 - (startTilePos.Y * 300));
+            Vector2 startTilePos = new Vector2((int)(rnd.NextDouble() * 4 + (size / 2 - 2)), (int)(rnd.NextDouble() * 4 + (size / 2 - 2))); //Determines what tile should be starting tile.
+
+            int x_Start = (int)((window.ClientBounds.Width / 2) - 150 - (startTilePos.X * 300)); //Position of top left tile on screen.
+            int y_Start = (int)((window.ClientBounds.Height / 2) - 150 - (startTilePos.Y * 300)); //Position of top left tile on screen.
             tiles = new Tile[size, size];
 
             /* Assigns tiles to all values in tiles array */
             for (int y = 0; y < size; y++)
             {
-                for(int x = 0; x < size; x++)
+                for (int x = 0; x < size; x++)
                 {
-                    if(y == size - 1 && x == size - 1) //Bottom corner tile
+                    if (y == size - 1 && x == size - 1) //Bottom corner tile
                     {
                         tiles[y, x] = new Tile(tileTextures[rnd.Next(0, tileTextures.Length)], hDivTextures[rnd.Next(0, hDivTextures.Length)], vDivTexture[rnd.Next(0, vDivTexture.Length)], Tile.TileType.Corner, x_Start + (x * 300), y_Start + (y * 300), x_Speed, y_Speed);
                     }
-                    else if (x == size - 1)
+                    else if (x == size - 1) //Right side tiles
                     {
                         tiles[y, x] = new Tile(tileTextures[rnd.Next(0, tileTextures.Length)], hDivTextures[rnd.Next(0, hDivTextures.Length)], vDivTexture[rnd.Next(0, vDivTexture.Length)], Tile.TileType.Right, x_Start + (x * 300), y_Start + (y * 300), x_Speed, y_Speed);
                     }
-                    else if (y == size - 1)
+                    else if (y == size - 1) //Bottom tiles
                     {
                         tiles[y, x] = new Tile(tileTextures[rnd.Next(0, tileTextures.Length)], hDivTextures[rnd.Next(0, hDivTextures.Length)], vDivTexture[rnd.Next(0, vDivTexture.Length)], Tile.TileType.Bottom, x_Start + (x * 300), y_Start + (y * 300), x_Speed, y_Speed);
                     }
-                    else
+                    else //Rest
                     {
                         tiles[y, x] = new Tile(tileTextures[rnd.Next(0, tileTextures.Length)], hDivTextures[rnd.Next(0, hDivTextures.Length)], vDivTexture[rnd.Next(0, vDivTexture.Length)], Tile.TileType.Standard, x_Start + (x * 300), y_Start + (y * 300), x_Speed, y_Speed);
                     }
@@ -152,7 +158,7 @@ namespace MazeGame
                 nonCheckedTiles = new List<Tile>(); //Resets list
 
                 RandomPathGen(startTilePos);
-                
+
                 for (int y = 0; y < size; y++)
                 {
                     for (int x = 0; x < size; x++)
@@ -164,9 +170,9 @@ namespace MazeGame
                     }
                 }
 
-                if(nonCheckedTiles.Count != 0)
+                if (nonCheckedTiles.Count != 0)
                 {
-                    for(;;)
+                    for (; ; )
                     {
                         Tile temp = nonCheckedTiles[rnd.Next(0, nonCheckedTiles.Count)].Neighbors[rnd.Next(0, 4)];
 
@@ -187,11 +193,11 @@ namespace MazeGame
             Texture2D tempTexture = tileTextures[4];
             tileTextures[4] = tileTextures[0]; //Removes treetile from list of texturechoices, treetile has index 4.
 
-            for (int y = 0; y < size -1; y++)
+            for (int y = 0; y < size - 1; y++)
             {
-                for(int x = 0; x < size; x++)
+                for (int x = 0; x < size; x++)
                 {
-                    if(tiles[y + 1, x].HDiv == null)
+                    if (tiles[y + 1, x].HDiv == null)
                     {
                         tiles[y, x].TileTexture = tileTextures[rnd.Next(0, tileTextures.Length)]; //Replaces texture with any non tree texture if tile doesnt have any divider under it 
                     }
@@ -202,7 +208,7 @@ namespace MazeGame
 
             /* Sets random border to endPortal */
             bool continueLoop = true;
-            while(continueLoop)
+            while (continueLoop)
             {
                 int index = rnd.Next(size);
                 switch (rnd.Next(4))
@@ -212,7 +218,7 @@ namespace MazeGame
                         {
                             TileDivider previous = tiles[0, index].HDiv;
                             EndPortal temp = new EndPortal(new Texture2D[] { endPortalTextures[2], endPortalTextures[3] }, EndPortal.Type.Top, previous.X_Pos, previous.Y_Pos - 375, x_Speed, y_Speed);
-                            
+
                             tiles[0, index].HDiv = temp;
                             endPortal = temp;
                             continueLoop = false;
@@ -223,7 +229,7 @@ namespace MazeGame
                         {
                             TileDivider previous = tiles[index, size - 1].RDiv;
                             EndPortal temp = new EndPortal(new Texture2D[] { endPortalTextures[4], endPortalTextures[5] }, EndPortal.Type.Right, previous.X_Pos + 25, previous.Y_Pos - 100, x_Speed, y_Speed);
-                            
+
                             tiles[index, size - 1].RDiv = temp;
                             endPortal = temp;
                             continueLoop = false;
@@ -234,7 +240,7 @@ namespace MazeGame
                         {
                             TileDivider previous = tiles[index, 0].VDiv;
                             EndPortal temp = new EndPortal(new Texture2D[] { endPortalTextures[0], endPortalTextures[1] }, EndPortal.Type.Left, previous.X_Pos - 275, previous.Y_Pos - 100, x_Speed, y_Speed);
-                            
+
                             tiles[index, 0].VDiv = temp;
                             endPortal = temp;
                             continueLoop = false;
@@ -260,7 +266,7 @@ namespace MazeGame
         /// opening in the direction of origintile. Neighbors of this tile is then added to common list. If tile has been checked it's not processed and removed from list.
         /// Runs until list is empty.
         /// </summary>
-        /// <param name="startTilePos"></param>
+        /// <param name="startTilePos">Index of starting tile.</param>
         public void RandomPathGen(Vector2 startTilePos)
         {
             /* Resets from previous run */
@@ -282,22 +288,21 @@ namespace MazeGame
 
             Tile startTile = tiles[(int)startTilePos.Y, (int)startTilePos.X];
             startTile.BeenChecked = true;
- 
+
             leftNeighbors.Add(startTile.Neighbors[2]);
             rightNeighbors.Add(startTile.Neighbors[1]);
             straightNeighbors.Add(startTile.Neighbors[3]); //Put in straight neighbors, only "back-neighbor" to be added to list
             straightNeighbors.Add(startTile.Neighbors[0]);
-            
 
             for (int i = 0; i < 4; i++)
             {
-                if(startTile.Neighbors[i] != null)
+                if (startTile.Neighbors[i] != null)
                 {
                     startTile.Neighbors[i].OriginTile.Add(startTile);
                 }
             }
 
-            /* Random generation. Works by adding neighbors to lists then picking random neighbor to remove wall between it and it's origin */
+            /* Random generation. Works by adding neighbors to lists then picking random neighbor to remove wall between it and it's origin. */
             while (straightNeighbors.Count + rightNeighbors.Count + leftNeighbors.Count != 0)
             {
                 double rndDouble = rnd.NextDouble();
@@ -340,7 +345,7 @@ namespace MazeGame
                     }
                 }
 
-                if(targetTile == null)
+                if (targetTile == null)
                 {
                     continue;
                 }
@@ -481,11 +486,11 @@ namespace MazeGame
         }
 
         /// <summary>
-        /// Updates level.
+        /// Updates level and its tiles and dividers, returns directions player should move.
         /// </summary>
-        /// <param name="toMove"></param>
-        /// <param name="player"></param>
-        public void Update(List<Direction> toMove, Player player)
+        /// <param name="toMove">List of directions level should move.</param>
+        /// <param name="player">Player object.</param>
+        public List<TileDivider> Update(List<Direction> toMove, Player player)
         {
             timer.Update();
 
@@ -499,7 +504,7 @@ namespace MazeGame
                     tile.HDiv.Update(toMove);
 
                     /* Used for collison checking player optimally */
-                    if(tile.HDiv.X_Pos > player.X_Pos - tile.HDiv.Width - player.Width && tile.HDiv.X_Pos < player.X_Pos + tile.HDiv.Width + player.Width && tile.HDiv.Y_Pos > player.Y_Pos - tile.HDiv.Height - player.Height && tile.HDiv.Y_Pos < player.Y_Pos + tile.HDiv.Height + player.Height)
+                    if (tile.HDiv.X_Pos > player.X_Pos - tile.HDiv.Width - player.Width && tile.HDiv.X_Pos < player.X_Pos + tile.HDiv.Width + player.Width && tile.HDiv.Y_Pos > player.Y_Pos - tile.HDiv.Height - player.Height && tile.HDiv.Y_Pos < player.Y_Pos + tile.HDiv.Height + player.Height)
                     {
                         surroundingDividers.Add(tile.HDiv);
                     }
@@ -536,9 +541,14 @@ namespace MazeGame
                 }
             }
 
-            player.SurroundingDividers = surroundingDividers;
+            return surroundingDividers;
         }
 
+        /// <summary>
+        /// Sets level speed.
+        /// </summary>
+        /// <param name="x_Speed"></param>
+        /// <param name="y_Speed"></param>
         public void SetSpeed(double x_Speed, double y_Speed)
         {
             speed.X = (float)x_Speed;
@@ -551,13 +561,14 @@ namespace MazeGame
         }
 
         /// <summary>
-        /// Draws level, overrides method in gameobject.
+        /// Draws tiles and tile dividers, overrides method in gameobject.
         /// </summary>
         /// <param name="spriteBatch"></param>
         /// <param name="window"></param>
         public override void Draw(SpriteBatch spriteBatch, GameWindow window)
         {
-            foreach(Tile tile in tiles)
+            /* Draws tiles */
+            foreach (Tile tile in tiles)
             {
                 if (tile.X_Pos > -300 && tile.Y_Pos > -300 && tile.X_Pos < window.ClientBounds.Width && tile.Y_Pos < window.ClientBounds.Height) //Does not draw tiles outside window to optimize game
                 {
@@ -565,6 +576,7 @@ namespace MazeGame
                 }
             }
 
+            /* Draws tiledividers in optimal way in order to not overlap eachother in unnatural ways. */
             for (int y = 0; y < size; y++)
             {
                 for (int x = 0; x < size; x++)
@@ -585,7 +597,7 @@ namespace MazeGame
                         }
                     }
                 }
-                for(int x = 0; x < size; x++)
+                for (int x = 0; x < size; x++)
                 {
                     if (tiles[y, x].X_Pos > -300 && tiles[y, x].Y_Pos > -300 && tiles[y, x].X_Pos < window.ClientBounds.Width && tiles[y, x].Y_Pos < window.ClientBounds.Height + 100) //Does not draw tiles outside window to optimize game
                     {
@@ -598,6 +610,10 @@ namespace MazeGame
             }
         }
 
+        /// <summary>
+        /// Draws timer and superspeed counter.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public void DrawOverlay(SpriteBatch spriteBatch)
         {
             timer.Draw(spriteBatch);
@@ -605,11 +621,17 @@ namespace MazeGame
             superSpeedMenuItem.Draw(spriteBatch);
         }
 
+        /// <summary>
+        /// Endportal property.
+        /// </summary>
         public EndPortal EndPortal
         {
             get { return endPortal; }
         }
 
+        /// <summary>
+        /// Timer property.
+        /// </summary>
         public Timer Timer
         {
             get { return timer; }

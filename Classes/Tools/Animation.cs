@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace MazeGame
 {
+    /// <summary>
+    /// Animation class, basically a texture switching object, does not draw texture.
+    /// </summary>
     class Animation
     {
         protected readonly GameObject gameObject;
@@ -20,6 +20,13 @@ namespace MazeGame
         protected readonly int interval;
         protected int elapsedFrames = 0;
 
+        /// <summary>
+        /// Constructor with gameobject, using this gameobjects texture is updated when running.
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <param name="gameTime"></param>
+        /// <param name="textures"></param>
+        /// <param name="interval"></param>
         public Animation(GameObject gameObject, GameTime gameTime, Texture2D[] textures, int interval)
         {
             this.gameObject = gameObject;
@@ -27,6 +34,14 @@ namespace MazeGame
             this.textures = textures;
             this.interval = interval;
         }
+
+        /// <summary>
+        /// Constructor without gameobject, using this out texture has to be provided in update method.
+        /// Used in cases where texture isn't tied to gameobject.
+        /// </summary>
+        /// <param name="gameTime"></param>
+        /// <param name="textures"></param>
+        /// <param name="interval"></param>
         public Animation(GameTime gameTime, Texture2D[] textures, int interval)
         {
             this.gameTime = gameTime;
@@ -41,7 +56,7 @@ namespace MazeGame
         public void Update()
         {
             /* Reset */
-            if(lastGameTime < gameTime.TotalGameTime.TotalMilliseconds - 20 || (elapsedFrames > interval && currentIndex >= textures.Length - 1))
+            if (lastGameTime < gameTime.TotalGameTime.TotalMilliseconds - 20 || (elapsedFrames > interval && currentIndex >= textures.Length - 1))
             {
                 currentIndex = 0;
 
